@@ -60,6 +60,17 @@ storeRouter.get('/category/:category_id', async (req, res, next) => {
 });
 
 
+// Get a specific category, ALL products-
+storeRouter.get('/category/:category_id/products', async (req, res, next) => { 
+    try {
+        const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
+        res.status(200).json(result.rows);
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
 // Update a specific category
 storeRouter.put('/category/:category_id', async (req, res, next) => { 
     const { categoryName } = req.body;
