@@ -53,6 +53,9 @@ storeRouter.post('/category', async (req, res, next) => {
 storeRouter.get('/category/:category_id', async (req, res, next) => { 
     try {
         const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'Please choose a different category, this one is not in the system' });
+        }
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -64,6 +67,9 @@ storeRouter.get('/category/:category_id', async (req, res, next) => {
 storeRouter.get('/category/:category_id/products', async (req, res, next) => { 
     try {
         const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'Please choose a different category, this one is not in the system' });
+        }
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -137,6 +143,9 @@ storeRouter.post('/category/:category_id/', async (req, res, next) => {
 storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => { 
     try {
         const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'Please choose a different product, this one is not in the system' });
+        }
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -295,5 +304,53 @@ storeRouter.delete('/cart/:product_id', async (req, res, next) => {
     }
 });
 
+
+// Order
+
+// Get an order
+storeRouter.get('/order', async (req, res, next) => { 
+    try {
+        const result = await pool.query('select * from order_details od join order_items oi on od.id = oi.order_id where od.user_id = $1;', [req.user.id]);
+        res.status(200).json(result.rows);
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+// Post an order
+storeRouter.post('/order', async (req, res, next) => { 
+    const { total, address, products } = req.body;
+    
+    try {
+        const timestamp = new Date(Date.now());
+        const order_id = await pool.query('insert into order_details (user_id, total, shipping_address, created_at) values ($1, $2, $3, $4) returning id;', 
+        [req.user.id, total, address, timestamp]);
+        
+        console.log(products);
+        products.forEach(async element => {
+            await pool.query('insert into order_items (order_id, product_id, quantity, price, created_at) values ($1, $2, $3, $4, $5);', 
+            [order_id.rows[0].id, element.product_id, element.quantity, element.price, timestamp]);
+            console.log(element);
+        });
+        res.status(200).json({msg: 'Added order'});
+    } catch (e) {
+        console.log(e);
+        res.status(500);
+    }
+});
+
+
+// Get a specific order
+storeRouter.get('/order/:order_id', async (req, res, next) => { 
+    try {
+        const result = await pool.query('select * from order_details od join order_items oi on od.id = oi.order_id where od.id = $1;', [req.params.order_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'Please choose a different order, this one is not in the system' });
+        }
+        res.status(200).json(result.rows);
+    } catch (e) {
+        res.status(500);
+    }
+});
 
 module.exports = storeRouter;
