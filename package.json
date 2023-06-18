@@ -1,0 +1,11 @@
+{
+  "name": "e_commerce_site",
+  "version": "1.0.0",
+  "description": "project for Codecademy course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Inbal Gamliel",
+  "license": "ISC"
+}
