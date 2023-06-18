@@ -98,19 +98,9 @@ storeRouter.delete('/category/:category_id', async (req, res, next) => {
 
 
 //Products
-// Get a specific product-
-storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => { 
-    try {
-        const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
-        res.status(200).json(result.rows);
-    } catch (e) {
-        res.status(500);
-    }
-});
-
 
 // Post a specific product-
-storeRouter.post('/category/:category_id/:product_id', async (req, res, next) => { 
+storeRouter.post('/category/:category_id/', async (req, res, next) => { 
     const {   productName, inventoryQuantity, price, discountPercetage} = req.body;
 
     if (productName === undefined || inventoryQuantity === undefined || price === undefined) {
@@ -122,11 +112,61 @@ storeRouter.post('/category/:category_id/:product_id', async (req, res, next) =>
         if (check.rows.length > 0) {
             return res.status(400).json({ msg: 'Please enter a different name this already exist' });
         }
-
+        console.log('here');
         const timestamp = new Date(Date.now());
         await pool.query('insert into products (product_name, inventory_quantity, price, discount_percentage, category_id, created_at) values ($1, $2, $3, $4, $5, $6);', 
         [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
         res.status(200).json({msg: 'Added product'});
+    } catch (e) {
+        console.log(e);
+        res.status(500);
+    }
+});
+
+
+// Get a specific product-
+storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => { 
+    try {
+        const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
+        res.status(200).json(result.rows);
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
+// Update a specific product
+storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => { 
+    const {   productName, inventoryQuantity, price, discountPercetage} = req.body;
+
+    if (productName === undefined || inventoryQuantity === undefined || price === undefined) {
+        return res.status(400).json({ msg: 'All fields must be specified' });
+    };
+    
+    try {
+        const check = await pool.query('select * from products where id = $1', [req.params.product_id]);
+        if (check.rows.length === 0) {
+            return res.status(400).json({ msg: 'Please choose a different product, this one is not in the system' });
+        }
+
+        const timestamp = new Date(Date.now());
+        await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, modified_at = $7 where id = $1;', 
+        [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
+        res.status(200).json({msg: 'Updated product'});
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+// Delete a specific product
+storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) => {
+    try {
+        const check = await pool.query('select * from products where id = $1', [req.params.product_id])
+        if (check.rows.length === 0) {
+            return res.status(400).json({ msg: 'Please choose a different product, this one is not in the system' });
+        }
+        await pool.query('delete from products where id = $1;', [req.params.product_id]);
+        res.status(200).json({ msg: 'Deleted product' });
     } catch (e) {
         res.status(500);
     }
