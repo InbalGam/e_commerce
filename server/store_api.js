@@ -123,13 +123,11 @@ storeRouter.post('/category/:category_id/', async (req, res, next) => {
         if (check.rows.length > 0) {
             return res.status(400).json({ msg: 'Please enter a different name this already exist' });
         }
-        console.log('here');
         const timestamp = new Date(Date.now());
         await pool.query('insert into products (product_name, inventory_quantity, price, discount_percentage, category_id, created_at) values ($1, $2, $3, $4, $5, $6);', 
         [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
         res.status(200).json({msg: 'Added product'});
     } catch (e) {
-        console.log(e);
         res.status(500);
     }
 });
@@ -189,7 +187,7 @@ storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) 
 // Get cart-
 storeRouter.get('/cart', async (req, res, next) => { 
     try {
-        await pool.query('select * from carts where user_id = $1;', [req.user.id]);
+        const result = await pool.query('select * from carts where user_id = $1;', [req.user.id]);
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -209,18 +207,27 @@ storeRouter.post('/cart', async (req, res, next) => {
         }
 
         const product = await pool.query('select * from products where id = $1', [product_id])
-        if (product.rows.inventory_quantity < quantity) {
+        if (product.rows.length === 0) {
+            return res.status(400).json({ msg: 'Product does not exist' });
+        }
+        if (product.rows[0].inventory_quantity - quantity < 0) {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
-        if (product.rows.discount_percetage) {
-           calculatedPrice = (product.rows.price * (product.rows.discount_percetage/100));
+        if (product.rows[0].discount_percentage) {
+            console.log('percentage');
+           calculatedPrice = (product.rows[0].price * quantity * (product.rows[0].discount_percentage/100));
         } else {
-            calculatedPrice = product.rows.price;
+            console.log('no percentage');
+            calculatedPrice = product.rows[0].price;
         }
 
         const timestamp = new Date(Date.now());
         await pool.query('insert into carts (user_id, product_id, quantity, calculated_price, created_at) values ($1, $2, $3, $4, $5);', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
         res.status(200).json({msg: 'Added to cart'});
+
+        const newQuantity = product.rows[0].inventory_quantity - quantity;
+        await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
+        res.status(200).json({msg: 'Updated product'});
     } catch (e) {
         res.status(500);
     }
@@ -251,18 +258,27 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
         }
 
         const product = await pool.query('select * from products where id = $1', [product_id])
-        if (product.rows.inventory_quantity < quantity) {
+        if (product.rows.length === 0) {
+            return res.status(400).json({ msg: 'Product does not exist' });
+        }
+        if (product.rows[0].inventory_quantity - quantity < 0) {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
-        if (product.rows.discount_percetage) {
-           calculatedPrice = (product.rows.price * (product.rows.discount_percetage/100));
+        if (product.rows[0].discount_percentage) {
+            console.log('percentage');
+           calculatedPrice = (product.rows[0].price * quantity * (product.rows[0].discount_percentage/100));
         } else {
-            calculatedPrice = product.rows.price;
+            console.log('no percentage');
+            calculatedPrice = product.rows[0].price;
         }
 
         const timestamp = new Date(Date.now());
         await pool.query('update carts set user_id = $1, product_id = $2, quantity = $3, calculated_price = $4, modified_at = $5 where user_id = $1 and product_id = $2;', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
         res.status(200).json({msg: 'Updated product in cart'});
+
+        const newQuantity = (product.rows[0].inventory_quantity - quantity);
+        await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
+        res.status(200).json({msg: 'Updated product'});
     } catch (e) {
         res.status(500);
     }
