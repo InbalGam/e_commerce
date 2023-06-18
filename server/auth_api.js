@@ -98,10 +98,6 @@ authRouter.put('/profile', async (req, res, next) => {
     };
 
     try {
-        const check = await pool.query('select * from users where id = $1', [req.user.id]);
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'User does not exist, please register first' });
-        }
         const timestamp = new Date(Date.now());
         await pool.query('update users set address = $2, phone = $3, modified_at = $4 where id = $1;', [req.user.id, address, phone, timestamp]);
         res.status(200).json({ msg: 'Updated user' });
