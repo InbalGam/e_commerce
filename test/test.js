@@ -137,7 +137,7 @@ describe('Update profile page', function() {
 // Store routes
 
 // Categories
-describe('Categories routes', function() {
+describe('/category routes', function() {
     it('GET /category returns all categories', function() {
         const agent = request.agent(app);
         return agent
@@ -229,4 +229,108 @@ describe('Categories routes', function() {
 
 });
 
+
+// Category
+describe('/category routes- with products also', function() {
+    it('GET /category/:category_id returns a specific category', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/4')
+            .then((response) => {
+                expect(response.body).to.be.an.instanceOf(Object);
+            })
+        });
+    });
+
+    it('GET /category/:category_id returns a specific category', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/4')
+            .expect(200)
+            .then((response) => {
+                expect(response.body[0]).to.have.ownProperty('id');
+                expect(response.body[0]).to.have.ownProperty('category_name');
+                expect(response.body[0]).to.have.ownProperty('created_at');
+                expect(response.body[0]).to.have.ownProperty('modified_at');
+            });
+        })
+    });
+
+    it('GET /category/:category_id should NOT return a specific category- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/14')
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+            })
+        });
+    });
+
+    // it('POST /category should NOT create a new category- no category name', function () {
+    //     const agent = request.agent(app);
+    //     return agent
+    //     .post('/login')
+    //     .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+    //     .redirects(1)
+    //     .then(() => {
+    //         return agent
+    //         .post('/category')
+    //         .send({categoryName: undefined})
+    //         .expect(400)
+    //         .then((response) => {
+    //             expect(response.body).to.be.deep.equal({msg: 'Please enter a category name'});
+    //         });
+    //     })
+    // });
+
+    // it('POST /category should NOT create a new category- category name exists', function () {
+    //     const agent = request.agent(app);
+    //     return agent
+    //     .post('/login')
+    //     .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+    //     .redirects(1)
+    //     .then(() => {
+    //         return agent
+    //         .post('/category')
+    //         .send({categoryName: 'pants'})
+    //         .expect(400)
+    //         .then((response) => {
+    //             expect(response.body).to.be.deep.equal({msg: 'Please enter a different name this already exist'});
+    //         });
+    //     })
+    // });
+
+    // it('POST /category should create a new category- category name does not exists', function () {
+    //     const agent = request.agent(app);
+    //     return agent
+    //     .post('/login')
+    //     .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+    //     .redirects(1)
+    //     .then(() => {
+    //         return agent
+    //         .post('/category')
+    //         .send({categoryName: 'pantsCheck'})
+    //         .expect(200)
+    //         .then((response) => {
+    //             expect(response.body).to.be.deep.equal({msg: 'Added category'});
+    //         });
+    //     })
+    // });
+
+});
 
