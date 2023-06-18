@@ -4,7 +4,7 @@
   "description": "project for Codecademy course",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env PORT=8000 DB=e_commerce_tests mocha --watch"
   },
   "author": "Inbal Gamliel",
   "license": "ISC",
