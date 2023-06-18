@@ -184,4 +184,100 @@ storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) 
 });
 
 
+// Cart
+
+// Get cart-
+storeRouter.get('/cart', async (req, res, next) => { 
+    try {
+        await pool.query('select * from carts where user_id = $1;', [req.user.id]);
+        res.status(200).json(result.rows);
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
+// Post to cart-
+storeRouter.post('/cart', async (req, res, next) => { 
+    const { product_id, quantity } = req.body;
+    let calculatedPrice;
+    
+    try {
+        const check = await pool.query('select * from carts where user_id = $1 and product_id = $2', [req.user.id, product_id])
+        if (check.rows.length > 0) {
+            return res.status(400).json({ msg: 'Product already exist, please update it' });
+        }
+
+        const product = await pool.query('select * from products where id = $1', [product_id])
+        if (product.rows.inventory_quantity < quantity) {
+            return res.status(400).json({msg: 'Not enough in stock'});
+        }
+        if (product.rows.discount_percetage) {
+           calculatedPrice = (product.rows.price * (product.rows.discount_percetage/100));
+        } else {
+            calculatedPrice = product.rows.price;
+        }
+
+        const timestamp = new Date(Date.now());
+        await pool.query('insert into carts (user_id, product_id, quantity, calculated_price, created_at) values ($1, $2, $3, $4, $5);', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
+        res.status(200).json({msg: 'Added to cart'});
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
+// Delete cart-
+storeRouter.delete('/cart', async (req, res, next) => { 
+    try {
+        await pool.query('delete from carts where user_id = $1;', [req.user.id]);
+        res.status(200).json({msg: 'Deleted cart'});
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
+
+// Update in cart-
+storeRouter.put('/cart/:product_id', async (req, res, next) => { 
+    const { product_id, quantity } = req.body;
+    let calculatedPrice;
+    
+    try {
+        const check = await pool.query('select * from carts where user_id = $1 and product_id = $2', [req.user.id, product_id])
+        if (check.rows.length === 0) {
+            return res.status(400).json({ msg: 'Product does not exist in cart, please add it' });
+        }
+
+        const product = await pool.query('select * from products where id = $1', [product_id])
+        if (product.rows.inventory_quantity < quantity) {
+            return res.status(400).json({msg: 'Not enough in stock'});
+        }
+        if (product.rows.discount_percetage) {
+           calculatedPrice = (product.rows.price * (product.rows.discount_percetage/100));
+        } else {
+            calculatedPrice = product.rows.price;
+        }
+
+        const timestamp = new Date(Date.now());
+        await pool.query('update carts set user_id = $1, product_id = $2, quantity = $3, calculated_price = $4, modified_at = $5 where user_id = $1 and product_id = $2;', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
+        res.status(200).json({msg: 'Updated product in cart'});
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
+// Delete in cart-
+storeRouter.delete('/cart/:product_id', async (req, res, next) => { 
+    try {
+        await pool.query('delete from carts where user_id = $1 and product_id = $2;', [req.user.id, req.params.product_id]);
+        res.status(200).json({msg: 'Deleted product from cart'});
+    } catch (e) {
+        res.status(500);
+    }
+});
+
+
 module.exports = storeRouter;
