@@ -302,8 +302,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.carts (id, user_id, product_id, quantity, calculated_price, created_at, modified_at) FROM stdin;
-9	2	7	3	1.5	2023-06-18 14:13:23.25	\N
-10	2	1	4	\N	2023-06-18 14:13:36.008	2023-06-18 14:14:01.147
 \.
 
 

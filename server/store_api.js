@@ -232,11 +232,10 @@ storeRouter.post('/cart', async (req, res, next) => {
 
         const timestamp = new Date(Date.now());
         await pool.query('insert into carts (user_id, product_id, quantity, calculated_price, created_at) values ($1, $2, $3, $4, $5);', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
-        res.status(200).json({msg: 'Added to cart'});
 
         const newQuantity = product.rows[0].inventory_quantity - quantity;
         await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
-        res.status(200).json({msg: 'Updated product'});
+        res.status(200).json({msg: 'Added to cart and Updated product'});
     } catch (e) {
         res.status(500);
     }
