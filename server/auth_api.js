@@ -7,8 +7,8 @@ const {passwordHash} = require('../hash');
 
 // Registering a user
 authRouter.post("/register", async (req, res, next) => {
-    const { username, password, nickname, firstName, lastName, address, phone } = req.body;
-    if (!username || !password || !nickname || !firstName || !lastName || !address || !phone) {
+    const { username, password, nickname, firstName, lastName, address, phone, is_admin } = req.body;
+    if (!username || !password || !nickname || !firstName || !lastName || !address || !phone || !is_admin) {
         return res.status(400).json({ msg: 'All fields should be specified' });
     };
 
@@ -31,8 +31,8 @@ authRouter.post("/register", async (req, res, next) => {
         }
         const hashedPassword = await passwordHash(password, 10);
         const timestamp = new Date(Date.now());
-        await pool.query('insert into users (username, password, nickname, first_name, last_name, address, phone, created_at) values ($1, $2, $3, $4, $5, $6, $7, $8);', 
-        [username, hashedPassword, nickname, firstName, lastName, address, phone, timestamp]);
+        await pool.query('insert into users (username, password, nickname, first_name, last_name, address, phone, is_admin, created_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9);', 
+        [username, hashedPassword, nickname, firstName, lastName, address, phone, is_admin, timestamp]);
         res.status(201).json({
             msg: "Success creating user"
         })
