@@ -264,11 +264,6 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
         if (check.rows.length === 0) {
             return res.status(400).json({ msg: 'Product does not exist in cart, please add it' });
         }
-
-        const product = await pool.query('select * from products where id = $1', [product_id])
-        if (product.rows.length === 0) {
-            return res.status(400).json({ msg: 'Product does not exist' });
-        }
         if (product.rows[0].inventory_quantity - quantity < 0) {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
