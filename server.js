@@ -7,8 +7,8 @@ const passport = require("passport");
 const session = require("express-session");
 const LocalStrategy = require("passport-local").Strategy;
 const store = new session.MemoryStore();
-const bcrypt = require("bcrypt");
 const {pool} = require('./server/db');
+const {comparePasswords} = require('./hash');
 
 module.exports = app;
 
@@ -38,16 +38,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-const comparePasswords = async (password, hash) => {
-  try {
-    const matchFound = await bcrypt.compare(password, hash);
-    return matchFound;
-  } catch (err) {
-    console.log(err);
-  }
-  return false;
-};
 
 passport.use(
   new LocalStrategy(async function (username, password, done) {

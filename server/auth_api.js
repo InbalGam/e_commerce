@@ -2,24 +2,13 @@ const express = require('express');
 const authRouter = express.Router();
 const {pool} = require('./db');
 const passport = require("passport");
-const bcrypt = require("bcrypt");
+const {passwordHash} = require('../hash');
+
 
 // Registering a user
-const passwordHash = async (password, saltRounds) => {
-    try {
-      const salt = await bcrypt.genSalt(saltRounds);
-      return await bcrypt.hash(password, salt);
-    } catch (err) {
-      console.log(err);
-    }
-    return null;
-};
-
-
 authRouter.post("/register", async (req, res, next) => {
     const { username, password, nickname, firstName, lastName, address, phone } = req.body;
-    if (username === undefined || password === undefined || nickname === undefined
-        || firstName === undefined || lastName === undefined || address === undefined || phone === undefined) {
+    if (!username || !password || !nickname || !firstName || !lastName || !address || !phone) {
         return res.status(400).json({ msg: 'All fields should be specified' });
     };
 
@@ -93,7 +82,7 @@ authRouter.get('/logout', function(req, res, next){
 authRouter.put('/profile', async (req, res, next) => { 
     const { address, phone } = req.body;
 
-    if (address === undefined || phone === undefined) {
+    if (!address || !phone) {
         return res.status(400).json({ msg: 'All fields should be specified' });
     };
 
