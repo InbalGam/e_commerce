@@ -843,3 +843,88 @@ describe('/cart routes', function() {
     });
 
 });
+
+
+// Order
+describe('/cart routes', function() {
+    it('GET /order returns all orders', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/order')
+            .then((response) => {
+                expect(response.body).to.be.an.instanceOf(Array);
+            })
+        });
+    });
+
+    it('POST /order should NOT post an order- no address', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/order')
+            .send({total: 50, address: undefined, products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Address must be specified'});
+            });
+        })
+    });
+
+    it('POST /order should post an order', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/order')
+            .send({total: 50, address: 'check', products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Added order'});
+            });
+        })
+    });
+
+    it('GET /order/:order_id should NOT return a specific order- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/order/22')
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different order, this one is not in the system'});
+            });
+        });
+    });
+
+    it('GET /order/:order_id returns a specific order', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/order/2')
+            .then((response) => {
+                expect(response.body).to.be.an.instanceOf(Object);
+            })
+        });
+    });
+
+});
