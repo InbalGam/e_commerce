@@ -3,9 +3,37 @@ const storeRouter = express.Router();
 const {pool} = require('./db');
 
 
+// Middlewares
 storeRouter.use((req, res, next) => {
     if (!req.user) {
         return res.status(401).json({msg: 'You need to login first'});
+    }
+    next();
+});
+
+
+storeRouter.use('/category/:category_id', async (req, res, next) => {
+    const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'invalid category id' });
+    }
+    next();
+});
+
+
+storeRouter.use('/category/:category_id/products', async (req, res, next) => {
+    const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'invalid category id' });
+    }
+    next();
+});
+
+
+storeRouter.use('/category/:category_id/:product_id', async (req, res, next) => {
+    const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'invalid product id' });
     }
     next();
 });
@@ -28,7 +56,7 @@ storeRouter.get('/category', async (req, res, next) => {
 storeRouter.post('/category', async (req, res, next) => { 
     const { categoryName } = req.body;
 
-    if (categoryName === undefined) {
+    if (!categoryName) {
         return res.status(400).json({ msg: 'Please enter a category name' });
     };
     
@@ -52,10 +80,6 @@ storeRouter.post('/category', async (req, res, next) => {
 // Get a specific category-
 storeRouter.get('/category/:category_id', async (req, res, next) => { 
     try {
-        const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
-        if (result.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different category, this one is not in the system' });
-        }
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -67,9 +91,6 @@ storeRouter.get('/category/:category_id', async (req, res, next) => {
 storeRouter.get('/category/:category_id/products', async (req, res, next) => { 
     try {
         const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
-        if (result.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different category, this one is not in the system' });
-        }
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -81,16 +102,12 @@ storeRouter.get('/category/:category_id/products', async (req, res, next) => {
 storeRouter.put('/category/:category_id', async (req, res, next) => { 
     const { categoryName } = req.body;
 
-    if (categoryName === undefined) {
+    if (!categoryName) {
         return res.status(400).json({ msg: 'Please enter a category name' });
     };
     
     const timestamp = new Date(Date.now());
     try {
-        const check = await pool.query('select * from category where id = $1', [req.params.category_id]);
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different category, this one is not in the system' });
-        }
         await pool.query('update category set category_name = $2, modified_at = $3 where id = $1;', [req.params.category_id, categoryName, timestamp]);
         res.status(200).json({ msg: 'Updated category' });
     } catch(e) {
@@ -102,10 +119,6 @@ storeRouter.put('/category/:category_id', async (req, res, next) => {
 // Delete a specific category
 storeRouter.delete('/category/:category_id', async (req, res, next) => {
     try {
-        const check = await pool.query('select * from category where id = $1', [req.params.category_id])
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different category, this one is not in the system' });
-        }
         await pool.query('delete from category where id = $1;', [req.params.category_id]);
         res.status(200).json({ msg: 'Deleted category' });
     } catch (e) {
@@ -117,10 +130,10 @@ storeRouter.delete('/category/:category_id', async (req, res, next) => {
 //Products
 
 // Post a specific product-
-storeRouter.post('/category/:category_id/', async (req, res, next) => { 
+storeRouter.post('/category/:category_id', async (req, res, next) => { 
     const {   productName, inventoryQuantity, price, discountPercetage} = req.body;
 
-    if (productName === undefined || inventoryQuantity === undefined || price === undefined) {
+    if (!productName || !inventoryQuantity || !price) {
         return res.status(400).json({ msg: 'All fields must be specified' });
     };
     
@@ -143,9 +156,6 @@ storeRouter.post('/category/:category_id/', async (req, res, next) => {
 storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => { 
     try {
         const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
-        if (result.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different product, this one is not in the system' });
-        }
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500);
@@ -157,16 +167,11 @@ storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => 
 storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => { 
     const {   productName, inventoryQuantity, price, discountPercetage} = req.body;
 
-    if (productName === undefined || inventoryQuantity === undefined || price === undefined) {
+    if (!productName || !inventoryQuantity || !price) {
         return res.status(400).json({ msg: 'All fields must be specified' });
     };
     
     try {
-        const check = await pool.query('select * from products where id = $1', [req.params.product_id]);
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different product, this one is not in the system' });
-        }
-
         const timestamp = new Date(Date.now());
         await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, modified_at = $7 where id = $1;', 
         [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
@@ -179,10 +184,6 @@ storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => 
 // Delete a specific product
 storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) => {
     try {
-        const check = await pool.query('select * from products where id = $1', [req.params.product_id])
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'Please choose a different product, this one is not in the system' });
-        }
         await pool.query('delete from products where id = $1;', [req.params.product_id]);
         res.status(200).json({ msg: 'Deleted product' });
     } catch (e) {
