@@ -54,23 +54,24 @@ storeRouter.get('/category', async (req, res, next) => {
 
 // Post a new category-
 storeRouter.post('/category', async (req, res, next) => { 
-    const { categoryName } = req.body;
-
-    if (!categoryName) {
-        return res.status(400).json({ msg: 'Please enter a category name' });
-    };
+    if (req.user.is_admin) {
+        const { categoryName } = req.body;
+        if (!categoryName) {
+            return res.status(400).json({ msg: 'Please enter a category name' });
+        };
+        
+        try {
+            const check = await pool.query('select * from category where category_name = $1', [categoryName]);
+            if (check.rows.length > 0) {
+                return res.status(400).json({ msg: 'Please enter a different name this already exist' });
+            }
     
-    try {
-        const check = await pool.query('select * from category where category_name = $1', [categoryName]);
-        if (check.rows.length > 0) {
-            return res.status(400).json({ msg: 'Please enter a different name this already exist' });
+            const timestamp = new Date(Date.now());
+            await pool.query('insert into category (category_name, created_at) values ($1, $2);', [categoryName, timestamp]);
+            res.status(200).json({msg: 'Added category'});
+        } catch (e) {
+            res.status(500);
         }
-
-        const timestamp = new Date(Date.now());
-        await pool.query('insert into category (category_name, created_at) values ($1, $2);', [categoryName, timestamp]);
-        res.status(200).json({msg: 'Added category'});
-    } catch (e) {
-        res.status(500);
     }
 });
 
@@ -99,30 +100,33 @@ storeRouter.get('/category/:category_id/products', async (req, res, next) => {
 
 
 // Update a specific category
-storeRouter.put('/category/:category_id', async (req, res, next) => { 
+storeRouter.put('/category/:category_id', async (req, res, next) => {
     const { categoryName } = req.body;
+    if (req.user.is_admin) {
+        if (!categoryName) {
+            return res.status(400).json({ msg: 'Please enter a category name' });
+        };
 
-    if (!categoryName) {
-        return res.status(400).json({ msg: 'Please enter a category name' });
-    };
-    
-    const timestamp = new Date(Date.now());
-    try {
-        await pool.query('update category set category_name = $2, modified_at = $3 where id = $1;', [req.params.category_id, categoryName, timestamp]);
-        res.status(200).json({ msg: 'Updated category' });
-    } catch(e) {
-        res.status(500);
+        const timestamp = new Date(Date.now());
+        try {
+            await pool.query('update category set category_name = $2, modified_at = $3 where id = $1;', [req.params.category_id, categoryName, timestamp]);
+            res.status(200).json({ msg: 'Updated category' });
+        } catch (e) {
+            res.status(500);
+        }
     }
 });
 
 
 // Delete a specific category
 storeRouter.delete('/category/:category_id', async (req, res, next) => {
-    try {
-        await pool.query('delete from category where id = $1;', [req.params.category_id]);
-        res.status(200).json({ msg: 'Deleted category' });
-    } catch (e) {
-        res.status(500);
+    if (req.user.is_admin) {
+        try {
+            await pool.query('delete from category where id = $1;', [req.params.category_id]);
+            res.status(200).json({ msg: 'Deleted category' });
+        } catch (e) {
+            res.status(500);
+        }
     }
 });
 
@@ -130,24 +134,26 @@ storeRouter.delete('/category/:category_id', async (req, res, next) => {
 //Products
 
 // Post a specific product-
-storeRouter.post('/category/:category_id', async (req, res, next) => { 
-    const {   productName, inventoryQuantity, price, discountPercetage} = req.body;
+storeRouter.post('/category/:category_id', async (req, res, next) => {
+    if (req.user.is_admin) {
+        const { productName, inventoryQuantity, price, discountPercetage } = req.body;
 
-    if (!productName || !inventoryQuantity || !price) {
-        return res.status(400).json({ msg: 'All fields must be specified' });
-    };
-    
-    try {
-        const check = await pool.query('select * from products where product_name = $1', [productName]);
-        if (check.rows.length > 0) {
-            return res.status(400).json({ msg: 'Please enter a different name this already exist' });
+        if (!productName || !inventoryQuantity || !price) {
+            return res.status(400).json({ msg: 'All fields must be specified' });
+        };
+
+        try {
+            const check = await pool.query('select * from products where product_name = $1', [productName]);
+            if (check.rows.length > 0) {
+                return res.status(400).json({ msg: 'Please enter a different name this already exist' });
+            }
+            const timestamp = new Date(Date.now());
+            await pool.query('insert into products (product_name, inventory_quantity, price, discount_percentage, category_id, created_at) values ($1, $2, $3, $4, $5, $6);',
+                [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
+            res.status(200).json({ msg: 'Added product' });
+        } catch (e) {
+            res.status(500);
         }
-        const timestamp = new Date(Date.now());
-        await pool.query('insert into products (product_name, inventory_quantity, price, discount_percentage, category_id, created_at) values ($1, $2, $3, $4, $5, $6);', 
-        [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
-        res.status(200).json({msg: 'Added product'});
-    } catch (e) {
-        res.status(500);
     }
 });
 
@@ -164,30 +170,34 @@ storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => 
 
 
 // Update a specific product
-storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => { 
-    const {   productName, inventoryQuantity, price, discountPercetage} = req.body;
+storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => {
+    if (req.user.is_admin) {
+        const { productName, inventoryQuantity, price, discountPercetage } = req.body;
 
-    if (!productName || !inventoryQuantity || !price) {
-        return res.status(400).json({ msg: 'All fields must be specified' });
-    };
-    
-    try {
-        const timestamp = new Date(Date.now());
-        await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, modified_at = $7 where id = $1;', 
-        [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
-        res.status(200).json({msg: 'Updated product'});
-    } catch (e) {
-        res.status(500);
+        if (!productName || !inventoryQuantity || !price) {
+            return res.status(400).json({ msg: 'All fields must be specified' });
+        };
+
+        try {
+            const timestamp = new Date(Date.now());
+            await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, modified_at = $7 where id = $1;',
+                [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
+            res.status(200).json({ msg: 'Updated product' });
+        } catch (e) {
+            res.status(500);
+        }
     }
 });
 
 // Delete a specific product
 storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) => {
-    try {
-        await pool.query('delete from products where id = $1;', [req.params.product_id]);
-        res.status(200).json({ msg: 'Deleted product' });
-    } catch (e) {
-        res.status(500);
+    if (req.user.is_admin) {
+        try {
+            await pool.query('delete from products where id = $1;', [req.params.product_id]);
+            res.status(200).json({ msg: 'Deleted product' });
+        } catch (e) {
+            res.status(500);
+        }
     }
 });
 
