@@ -43,7 +43,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'userCHECK', password: 'p23f', nickname: 'userNickname', firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353'})
+            .send({username: 'userCHECK', password: 'p23f', nickname: 'userNickname', firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Password needs to be at least 8 characters'});
             });
@@ -53,7 +53,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'us', password: 'passwordCHECK', nickname: 'userNickname',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353'})
+            .send({username: 'us', password: 'passwordCHECK', nickname: 'userNickname',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Username needs to be at least 3 characters'});
             });
@@ -63,7 +63,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'userCHECK', password: 'passwordCHECK', nickname: 'us',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353'})
+            .send({username: 'userCHECK', password: 'passwordCHECK', nickname: 'us',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Nickname needs to be at least 3 characters'});
             });
@@ -73,7 +73,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'user_gCheck', password: 'passwordCHECK', nickname: 'userNickname',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353'})
+            .send({username: 'user_gCheck', password: 'passwordCHECK', nickname: 'userNickname',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Username or Nickname already exist, choose differently'});
             });
@@ -83,7 +83,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'userCHECK1235', password: 'passwordCHECK', nickname: 'userNickname123424',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353'})
+            .send({username: 'userCHECK1235', password: 'passwordCHECK', nickname: 'userNickname123424',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .expect(201)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Success creating user'});
@@ -180,7 +180,24 @@ describe('/category routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/category')
+            .send({categoryName: undefined})
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        })
+    });
+
+    it('POST /category should NOT create a new category- no category name', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -197,7 +214,7 @@ describe('/category routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -210,11 +227,28 @@ describe('/category routes', function() {
         })
     });
 
-    it('POST /category should create a new category- category name does not exists', function () {
+    it('POST /category should create a new category', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/category')
+            .send({categoryName: 'pantsCheck'})
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        })
+    });
+
+    it('POST /category should create a new category', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -240,7 +274,7 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .get('/category/4')
+            .get('/category/1')
             .then((response) => {
                 expect(response.body).to.be.an.instanceOf(Object);
             })
@@ -255,7 +289,7 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .get('/category/4')
+            .get('/category/1')
             .expect(200)
             .then((response) => {
                 expect(response.body[0]).to.have.ownProperty('id');
@@ -276,7 +310,7 @@ describe('/category routes- with products also', function() {
             return agent
             .get('/category/14')
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid category id'});
             })
         });
     });
@@ -333,7 +367,7 @@ describe('/category routes- with products also', function() {
             return agent
             .get('/category/14/products')
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid category id'});
             })
         });
     });
@@ -342,7 +376,7 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -359,7 +393,7 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -367,7 +401,7 @@ describe('/category routes- with products also', function() {
             .send({categoryName: 'check'})
             .expect(400)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid category id'});
             });
         });
     });
@@ -376,7 +410,24 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/4')
+            .send({categoryName: 'check'})
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        });
+    });
+
+    it('PUT /category/:category_id should update a specific category', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -393,14 +444,14 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
             .delete('/category/24')
             .expect(400)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid category id'});
             });
         });
     });
@@ -409,7 +460,23 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/category/4')
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        });
+    });
+
+    it('DELETE /category/:category_id should delete a specific category', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -473,7 +540,7 @@ describe('/category/:category_id/:product_id routes', function() {
             return agent
             .get('/category/1/14')
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different product, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid product id'});
             })
         });
     });
@@ -482,7 +549,7 @@ describe('/category/:category_id/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -500,7 +567,7 @@ describe('/category/:category_id/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -517,7 +584,24 @@ describe('/category/:category_id/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/category/1/')
+            .send({productName: 'check', inventoryQuantity: 10, price: 3, discountPercetage: undefined})
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        })
+    });
+
+    it('POST /category/:category_id/ should create a new product', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -530,15 +614,15 @@ describe('/category/:category_id/:product_id routes', function() {
         })
     });
 
-    it('PUT /category/:category_id/ should NOT update a product- fields need specification', function () {
+    it('PUT /category/:category_id/:product_id should NOT update a product- fields need specification', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/5/1')
+            .put('/category/1/1')
             .send({productName: undefined, inventoryQuantity: 10, price: 3, discountPercetage: undefined})
             .expect(400)
             .then((response) => {
@@ -548,11 +632,11 @@ describe('/category/:category_id/:product_id routes', function() {
     });
 
 
-    it('PUT /category/:category_id/ should NOT update a product- wrong id', function () {
+    it('PUT /category/:category_id/:product_id should NOT update a product- wrong id', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -560,16 +644,33 @@ describe('/category/:category_id/:product_id routes', function() {
             .send({productName: 'pants', inventoryQuantity: 10, price: 3, discountPercetage: undefined})
             .expect(400)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different product, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid product id'});
             });
         })
     });
 
-    it('PUT /category/:category_id/ should update a product', function () {
+    it('PUT /category/:category_id/:product_id should update a product', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/3/4')
+            .send({productName: 'check8888', inventoryQuantity: 10, price: 3, discountPercetage: 5})
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        })
+    });
+
+    it('PUT /category/:category_id/:product_id should update a product', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -586,14 +687,14 @@ describe('/category/:category_id/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
             .delete('/category/1/10')
             .expect(400)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Please choose a different product, this one is not in the system'});
+                expect(response.body).to.be.deep.equal({msg: 'invalid product id'});
             });
         });
     });
@@ -602,7 +703,23 @@ describe('/category/:category_id/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist Unauthorized
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/category/3/5')
+            .expect(401)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
+            });
+        });
+    });
+
+    it('DELETE /category/:category_id/:product_id should delete a specific product', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent

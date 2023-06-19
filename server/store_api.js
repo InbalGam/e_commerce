@@ -13,29 +13,44 @@ storeRouter.use((req, res, next) => {
 
 
 storeRouter.use('/category/:category_id', async (req, res, next) => {
-    const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
+    try {
+        const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
         if (result.rows.length === 0) {
             return res.status(400).json({ msg: 'invalid category id' });
+        }
+        next();
+    } catch (e) {
+        res.status(500).json({ msg: 'Server error' });
     }
-    next();
 });
 
 
 storeRouter.use('/category/:category_id/products', async (req, res, next) => {
-    const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
+    try {
+        console.log('here');
+        const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
         if (result.rows.length === 0) {
+            console.log('inside if');
             return res.status(400).json({ msg: 'invalid category id' });
+        }
+        next();
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ msg: 'Server error' });
     }
-    next();
 });
 
 
 storeRouter.use('/category/:category_id/:product_id', async (req, res, next) => {
-    const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
+    try {
+        const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
         if (result.rows.length === 0) {
             return res.status(400).json({ msg: 'invalid product id' });
+        }
+        next();
+    } catch (e) {
+        res.status(500).json({ msg: 'Server error' });
     }
-    next();
 });
 
 
@@ -47,7 +62,7 @@ storeRouter.get('/category', async (req, res, next) => {
         const result = await pool.query('select * from category');
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -70,8 +85,10 @@ storeRouter.post('/category', async (req, res, next) => {
             await pool.query('insert into category (category_name, created_at) values ($1, $2);', [categoryName, timestamp]);
             res.status(200).json({msg: 'Added category'});
         } catch (e) {
-            res.status(500);
+            res.status(500).json({msg: 'Server error'});
         }
+    } else {
+        return res.status(401).json({msg: 'Unauthorized'});
     }
 });
 
@@ -81,9 +98,10 @@ storeRouter.post('/category', async (req, res, next) => {
 // Get a specific category-
 storeRouter.get('/category/:category_id', async (req, res, next) => { 
     try {
+        const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -91,10 +109,13 @@ storeRouter.get('/category/:category_id', async (req, res, next) => {
 // Get a specific category, ALL products-
 storeRouter.get('/category/:category_id/products', async (req, res, next) => { 
     try {
+        console.log('here2');
         const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
+        console.log(result);
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        console.log(e);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -112,8 +133,10 @@ storeRouter.put('/category/:category_id', async (req, res, next) => {
             await pool.query('update category set category_name = $2, modified_at = $3 where id = $1;', [req.params.category_id, categoryName, timestamp]);
             res.status(200).json({ msg: 'Updated category' });
         } catch (e) {
-            res.status(500);
+            res.status(500).json({msg: 'Server error'});
         }
+    } else {
+        return res.status(401).json({msg: 'Unauthorized'});
     }
 });
 
@@ -125,8 +148,10 @@ storeRouter.delete('/category/:category_id', async (req, res, next) => {
             await pool.query('delete from category where id = $1;', [req.params.category_id]);
             res.status(200).json({ msg: 'Deleted category' });
         } catch (e) {
-            res.status(500);
+            res.status(500).json({msg: 'Server error'});
         }
+    } else {
+        return res.status(401).json({msg: 'Unauthorized'});
     }
 });
 
@@ -152,8 +177,10 @@ storeRouter.post('/category/:category_id', async (req, res, next) => {
                 [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
             res.status(200).json({ msg: 'Added product' });
         } catch (e) {
-            res.status(500);
+            res.status(500).json({msg: 'Server error'});
         }
+    } else {
+        return res.status(401).json({msg: 'Unauthorized'});
     }
 });
 
@@ -164,7 +191,7 @@ storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => 
         const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -184,8 +211,10 @@ storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => 
                 [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
             res.status(200).json({ msg: 'Updated product' });
         } catch (e) {
-            res.status(500);
+            res.status(500).json({msg: 'Server error'});
         }
+    } else {
+        return res.status(401).json({msg: 'Unauthorized'});
     }
 });
 
@@ -196,8 +225,10 @@ storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) 
             await pool.query('delete from products where id = $1;', [req.params.product_id]);
             res.status(200).json({ msg: 'Deleted product' });
         } catch (e) {
-            res.status(500);
+            res.status(500).json({msg: 'Server error'});
         }
+    } else {
+        return res.status(401).json({msg: 'Unauthorized'});
     }
 });
 
@@ -210,7 +241,7 @@ storeRouter.get('/cart', async (req, res, next) => {
         const result = await pool.query('select * from carts where user_id = $1;', [req.user.id]);
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -248,7 +279,7 @@ storeRouter.post('/cart', async (req, res, next) => {
         await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
         res.status(200).json({msg: 'Added to cart and Updated product'});
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -259,7 +290,7 @@ storeRouter.delete('/cart', async (req, res, next) => {
         await pool.query('delete from carts where user_id = $1;', [req.user.id]);
         res.status(200).json({msg: 'Deleted cart'});
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -295,7 +326,7 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
         await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
         res.status(200).json({msg: 'Updated product in cart and Updated product'});
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -310,7 +341,7 @@ storeRouter.delete('/cart/:product_id', async (req, res, next) => {
         await pool.query('delete from carts where user_id = $1 and product_id = $2;', [req.user.id, req.params.product_id]);
         res.status(200).json({msg: 'Deleted product from cart'});
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -323,7 +354,7 @@ storeRouter.get('/order', async (req, res, next) => {
         const result = await pool.query('select * from order_details od join order_items oi on od.id = oi.order_id where od.user_id = $1;', [req.user.id]);
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -349,7 +380,7 @@ storeRouter.post('/order', async (req, res, next) => {
         res.status(200).json({msg: 'Added order'});
     } catch (e) {
         console.log(e);
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
@@ -363,7 +394,7 @@ storeRouter.get('/order/:order_id', async (req, res, next) => {
         }
         res.status(200).json(result.rows);
     } catch (e) {
-        res.status(500);
+        res.status(500).json({msg: 'Server error'});
     }
 });
 
