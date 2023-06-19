@@ -295,6 +295,10 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
 // Delete in cart-
 storeRouter.delete('/cart/:product_id', async (req, res, next) => { 
     try {
+        const check = await pool.query('select * from carts where user_id = $1 and product_id = $2', [req.user.id, req.params.product_id])
+        if (check.rows.length === 0) {
+            return res.status(400).json({ msg: 'Product does not exist in cart, please add it' });
+        }
         await pool.query('delete from carts where user_id = $1 and product_id = $2;', [req.user.id, req.params.product_id]);
         res.status(200).json({msg: 'Deleted product from cart'});
     } catch (e) {
