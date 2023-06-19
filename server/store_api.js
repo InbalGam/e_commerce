@@ -319,6 +319,10 @@ storeRouter.get('/order', async (req, res, next) => {
 // Post an order
 storeRouter.post('/order', async (req, res, next) => { 
     const { total, address, products } = req.body;
+
+    if (address === undefined) {
+        return res.status(400).json({ msg: 'Address must be specified' });
+    };
     
     try {
         const timestamp = new Date(Date.now());
