@@ -282,11 +282,10 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
 
         const timestamp = new Date(Date.now());
         await pool.query('update carts set user_id = $1, product_id = $2, quantity = $3, calculated_price = $4, modified_at = $5 where user_id = $1 and product_id = $2;', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
-        res.status(200).json({msg: 'Updated product in cart'});
 
         const newQuantity = (product.rows[0].inventory_quantity - quantity);
         await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
-        res.status(200).json({msg: 'Updated product'});
+        res.status(200).json({msg: 'Updated product in cart and Updated product'});
     } catch (e) {
         res.status(500);
     }
