@@ -281,56 +281,144 @@ describe('/category routes- with products also', function() {
         });
     });
 
-    // it('POST /category should NOT create a new category- no category name', function () {
-    //     const agent = request.agent(app);
-    //     return agent
-    //     .post('/login')
-    //     .send({username: 'user_gCheck', password: 'user2828'}) // User exist
-    //     .redirects(1)
-    //     .then(() => {
-    //         return agent
-    //         .post('/category')
-    //         .send({categoryName: undefined})
-    //         .expect(400)
-    //         .then((response) => {
-    //             expect(response.body).to.be.deep.equal({msg: 'Please enter a category name'});
-    //         });
-    //     })
-    // });
+    it('GET /category/:category_id/products returns a specific category all products', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/1/products')
+            .then((response) => {
+                expect(response.body).to.be.an.instanceOf(Array);
+            })
+        });
+    });
 
-    // it('POST /category should NOT create a new category- category name exists', function () {
-    //     const agent = request.agent(app);
-    //     return agent
-    //     .post('/login')
-    //     .send({username: 'user_gCheck', password: 'user2828'}) // User exist
-    //     .redirects(1)
-    //     .then(() => {
-    //         return agent
-    //         .post('/category')
-    //         .send({categoryName: 'pants'})
-    //         .expect(400)
-    //         .then((response) => {
-    //             expect(response.body).to.be.deep.equal({msg: 'Please enter a different name this already exist'});
-    //         });
-    //     })
-    // });
+    it('GET /category/:category_id/products returns a specific category all products', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/1/products')
+            .expect(200)
+            .then(async (response) => {
+                const results = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = 1');
+                expect(response.body.length).to.be.equal(results.rows.length);
+                response.body.forEach((comment) => {
+                    expect(comment).to.have.ownProperty('id');
+                    expect(comment).to.have.ownProperty('product_name');
+                    expect(comment).to.have.ownProperty('inventory_quantity');
+                    expect(comment).to.have.ownProperty('price');
+                    expect(comment).to.have.ownProperty('discount_percentage');
+                    expect(comment).to.have.ownProperty('category_id');
+                    expect(comment).to.have.ownProperty('created_at');
+                    expect(comment).to.have.ownProperty('modified_at');
+                });
+            });
+        });
+    });
 
-    // it('POST /category should create a new category- category name does not exists', function () {
-    //     const agent = request.agent(app);
-    //     return agent
-    //     .post('/login')
-    //     .send({username: 'user_gCheck', password: 'user2828'}) // User exist
-    //     .redirects(1)
-    //     .then(() => {
-    //         return agent
-    //         .post('/category')
-    //         .send({categoryName: 'pantsCheck'})
-    //         .expect(200)
-    //         .then((response) => {
-    //             expect(response.body).to.be.deep.equal({msg: 'Added category'});
-    //         });
-    //     })
-    // });
+    it('GET /category/:category_id/products should NOT return a specific category- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/14/products')
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+            })
+        });
+    });
 
+    it('PUT /category/:category_id should NOT update a specific category- no category name', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/4')
+            .send({categoryName: undefined})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please enter a category name'});
+            });
+        });
+    });
+
+    it('PUT /category/:category_id should NOT update a specific category- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/24')
+            .send({categoryName: 'check'})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+            });
+        });
+    });
+
+    it('PUT /category/:category_id should update a specific category', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/4')
+            .send({categoryName: 'check'})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Updated category'});
+            });
+        });
+    });
+
+    it('DELETE /category/:category_id should NOT delete a specific category- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/category/24')
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different category, this one is not in the system'});
+            });
+        });
+    });
+
+    it('DELETE /category/:category_id should delete a specific category', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/category/4')
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Deleted category'});
+            });
+        });
+    });
 });
 
