@@ -615,3 +615,231 @@ describe('/category/:category_id/:product_id routes', function() {
     });
 
 });
+
+
+// Cart
+describe('/cart routes', function() {
+    it('POST /cart should NOT post product in cart- wrong product id', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/cart')
+            .send({product_id: 20, quantity: 2})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Product does not exist'});
+            });
+        })
+    });
+
+
+    it('POST /cart should NOT post product in cart- not enough inventory', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/cart')
+            .send({product_id: 2, quantity: 200})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Not enough in stock'});
+            });
+        })
+    });
+
+    it('POST /cart should post product in cart', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/cart')
+            .send({product_id: 2, quantity: 2})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Added to cart and Updated product'});
+            });
+        })
+    });
+
+    it('POST /cart should post product in cart', function () { // in order to have multiple products in cart for further tests
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/cart')
+            .send({product_id: 4, quantity: 2})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Added to cart and Updated product'});
+            });
+        })
+    });
+
+    it('POST /cart should NOT post product in cart- product already in cart', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/cart')
+            .send({product_id: 2, quantity: 2})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Product already exist, please update it'});
+            });
+        })
+    });
+
+    it('GET /cart returns a specific cart', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/cart')
+            .then((response) => {
+                expect(response.body).to.be.an.instanceOf(Array);
+            })
+        });
+    });
+
+    it('GET /cart returns a specific cart', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/cart')
+            .expect(200)
+            .then((response) => {
+                expect(response.body[0]).to.have.ownProperty('id');
+                expect(response.body[0]).to.have.ownProperty('user_id');
+                expect(response.body[0]).to.have.ownProperty('product_id');
+                expect(response.body[0]).to.have.ownProperty('quantity');
+                expect(response.body[0]).to.have.ownProperty('calculated_price');
+                expect(response.body[0]).to.have.ownProperty('created_at');
+                expect(response.body[0]).to.have.ownProperty('modified_at');
+            });
+        })
+    });
+
+    it('PUT /cart/:product_id should NOT update a product in cart- wrong product id', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/cart/5')
+            .send({product_id: 5, quantity: 5})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Product does not exist in cart, please add it'});
+            });
+        })
+    });
+
+    it('PUT /cart/:product_id should NOT update a product in cart- not enough inventory', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/cart/2')
+            .send({product_id: 2, quantity: 55})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Not enough in stock'});
+            });
+        })
+    });
+
+
+    it('PUT /cart/:product_id should update a product in cart', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/cart/2')
+            .send({product_id: 2, quantity: 5})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Updated product in cart and Updated product'});
+            });
+        })
+    });
+
+    it('DELETE /cart/:product_id should NOT delete a specific product- wrong product id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/cart/14')
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Product does not exist in cart, please add it'});
+            });
+        });
+    });
+
+    it('DELETE /cart/:product_id should delete a specific product', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/cart/2')
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Deleted product from cart'});
+            });
+        });
+    });
+
+    it('DELETE /cart/ should delete cart', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/cart')
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Deleted cart'});
+            });
+        });
+    });
+
+});
