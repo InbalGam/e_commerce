@@ -309,15 +309,15 @@ describe('/category routes- with products also', function() {
             .then(async (response) => {
                 const results = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = 1');
                 expect(response.body.length).to.be.equal(results.rows.length);
-                response.body.forEach((comment) => {
-                    expect(comment).to.have.ownProperty('id');
-                    expect(comment).to.have.ownProperty('product_name');
-                    expect(comment).to.have.ownProperty('inventory_quantity');
-                    expect(comment).to.have.ownProperty('price');
-                    expect(comment).to.have.ownProperty('discount_percentage');
-                    expect(comment).to.have.ownProperty('category_id');
-                    expect(comment).to.have.ownProperty('created_at');
-                    expect(comment).to.have.ownProperty('modified_at');
+                response.body.forEach((product) => {
+                    expect(product).to.have.ownProperty('id');
+                    expect(product).to.have.ownProperty('product_name');
+                    expect(product).to.have.ownProperty('inventory_quantity');
+                    expect(product).to.have.ownProperty('price');
+                    expect(product).to.have.ownProperty('discount_percentage');
+                    expect(product).to.have.ownProperty('category_id');
+                    expect(product).to.have.ownProperty('created_at');
+                    expect(product).to.have.ownProperty('modified_at');
                 });
             });
         });
@@ -422,3 +422,196 @@ describe('/category routes- with products also', function() {
     });
 });
 
+
+// Products
+describe('/category/:category_id/:product_id routes', function() {
+    it('GET /category/:category_id/:product_id returns a specific category', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/1/1')
+            .then((response) => {
+                expect(response.body).to.be.an.instanceOf(Object);
+            })
+        });
+    });
+
+    it('GET /category/:category_id/:product_id returns a specific category', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/1/1')
+            .expect(200)
+            .then((response) => {
+                expect(response.body[0]).to.have.ownProperty('id');
+                expect(response.body[0]).to.have.ownProperty('product_name');
+                expect(response.body[0]).to.have.ownProperty('inventory_quantity');
+                expect(response.body[0]).to.have.ownProperty('price');
+                expect(response.body[0]).to.have.ownProperty('discount_percentage');
+                expect(response.body[0]).to.have.ownProperty('category_id');
+                expect(response.body[0]).to.have.ownProperty('created_at');
+                expect(response.body[0]).to.have.ownProperty('modified_at');
+            });
+        })
+    });
+
+    it('GET /category/:category_id/:product_id should NOT return a specific category- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .get('/category/1/14')
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different product, this one is not in the system'});
+            })
+        });
+    });
+
+    it('POST /category/:category_id/ should NOT create a new product- fields need specification', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/category/1/')
+            .send({productName: undefined, inventoryQuantity: 10, price: 3, discountPercetage: undefined})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'All fields must be specified'});
+            });
+        })
+    });
+
+
+    it('POST /category/:category_id/ should NOT create a new product- product name exists', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/category/1/')
+            .send({productName: 'large pants black', inventoryQuantity: 10, price: 3, discountPercetage: undefined})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please enter a different name this already exist'});
+            });
+        })
+    });
+
+    it('POST /category/:category_id/ should create a new product', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/category/1/')
+            .send({productName: 'check', inventoryQuantity: 10, price: 3, discountPercetage: undefined})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Added product'});
+            });
+        })
+    });
+
+    it('PUT /category/:category_id/ should NOT update a product- fields need specification', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/5/1')
+            .send({productName: undefined, inventoryQuantity: 10, price: 3, discountPercetage: undefined})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'All fields must be specified'});
+            });
+        })
+    });
+
+
+    it('PUT /category/:category_id/ should NOT update a product- wrong id', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/1/10')
+            .send({productName: 'pants', inventoryQuantity: 10, price: 3, discountPercetage: undefined})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different product, this one is not in the system'});
+            });
+        })
+    });
+
+    it('PUT /category/:category_id/ should update a product', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .put('/category/3/4')
+            .send({productName: 'check8888', inventoryQuantity: 10, price: 3, discountPercetage: 5})
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Updated product'});
+            });
+        })
+    });
+
+    it('DELETE /category/:category_id/:product_id should NOT delete a specific product- wrong id', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/category/1/10')
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Please choose a different product, this one is not in the system'});
+            });
+        });
+    });
+
+    it('DELETE /category/:category_id/:product_id should delete a specific product', function() {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .delete('/category/3/5')
+            .expect(200)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Deleted product'});
+            });
+        });
+    });
+
+});
