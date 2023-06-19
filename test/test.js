@@ -491,8 +491,8 @@ describe('/category routes- with products also', function() {
 
 
 // Products
-describe('/category/:category_id/:product_id routes', function() {
-    it('GET /category/:category_id/:product_id returns a specific category', function() {
+describe('/category/:category_id/products/:product_id routes', function() {
+    it('GET /category/:category_id/products/:product_id returns a specific category', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -500,14 +500,14 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .get('/category/1/1')
+            .get('/category/1/products/1')
             .then((response) => {
                 expect(response.body).to.be.an.instanceOf(Object);
             })
         });
     });
 
-    it('GET /category/:category_id/:product_id returns a specific category', function () {
+    it('GET /category/:category_id/products/:product_id returns a specific category', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -515,7 +515,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .get('/category/1/1')
+            .get('/category/1/products/1')
             .expect(200)
             .then((response) => {
                 expect(response.body[0]).to.have.ownProperty('id');
@@ -530,7 +530,7 @@ describe('/category/:category_id/:product_id routes', function() {
         })
     });
 
-    it('GET /category/:category_id/:product_id should NOT return a specific category- wrong id', function() {
+    it('GET /category/:category_id/products/:product_id should NOT return a specific category- wrong id', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -538,7 +538,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .get('/category/1/14')
+            .get('/category/1/products/14')
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'invalid product id'});
             })
@@ -614,7 +614,7 @@ describe('/category/:category_id/:product_id routes', function() {
         })
     });
 
-    it('PUT /category/:category_id/:product_id should NOT update a product- fields need specification', function () {
+    it('PUT /category/:category_id/products/:product_id should NOT update a product- fields need specification', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -622,7 +622,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/1/1')
+            .put('/category/1/products/1')
             .send({productName: undefined, inventoryQuantity: 10, price: 3, discountPercetage: undefined})
             .expect(400)
             .then((response) => {
@@ -632,7 +632,7 @@ describe('/category/:category_id/:product_id routes', function() {
     });
 
 
-    it('PUT /category/:category_id/:product_id should NOT update a product- wrong id', function () {
+    it('PUT /category/:category_id/products/:product_id should NOT update a product- wrong id', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -640,7 +640,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/1/10')
+            .put('/category/1/products/10')
             .send({productName: 'pants', inventoryQuantity: 10, price: 3, discountPercetage: undefined})
             .expect(400)
             .then((response) => {
@@ -649,7 +649,7 @@ describe('/category/:category_id/:product_id routes', function() {
         })
     });
 
-    it('PUT /category/:category_id/:product_id should update a product', function () {
+    it('PUT /category/:category_id/products/:product_id should update a product', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -657,7 +657,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/3/4')
+            .put('/category/3/products/4')
             .send({productName: 'check8888', inventoryQuantity: 10, price: 3, discountPercetage: 5})
             .expect(401)
             .then((response) => {
@@ -666,7 +666,7 @@ describe('/category/:category_id/:product_id routes', function() {
         })
     });
 
-    it('PUT /category/:category_id/:product_id should update a product', function () {
+    it('PUT /category/:category_id/products/:product_id should update a product', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -674,7 +674,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/3/4')
+            .put('/category/3/products/4')
             .send({productName: 'check8888', inventoryQuantity: 10, price: 3, discountPercetage: 5})
             .expect(200)
             .then((response) => {
@@ -683,7 +683,7 @@ describe('/category/:category_id/:product_id routes', function() {
         })
     });
 
-    it('DELETE /category/:category_id/:product_id should NOT delete a specific product- wrong id', function() {
+    it('DELETE /category/:category_id/products/:product_id should NOT delete a specific product- wrong id', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -691,7 +691,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/1/10')
+            .delete('/category/1/products/10')
             .expect(400)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'invalid product id'});
@@ -699,7 +699,7 @@ describe('/category/:category_id/:product_id routes', function() {
         });
     });
 
-    it('DELETE /category/:category_id/:product_id should delete a specific product', function() {
+    it('DELETE /category/:category_id/products/:product_id should delete a specific product', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -707,7 +707,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/3/5')
+            .delete('/category/3/products/5')
             .expect(401)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
@@ -715,7 +715,7 @@ describe('/category/:category_id/:product_id routes', function() {
         });
     });
 
-    it('DELETE /category/:category_id/:product_id should delete a specific product', function() {
+    it('DELETE /category/:category_id/products/:product_id should delete a specific product', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -723,7 +723,7 @@ describe('/category/:category_id/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/3/5')
+            .delete('/category/3/products/5')
             .expect(200)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Deleted product'});

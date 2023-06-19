@@ -27,21 +27,18 @@ storeRouter.use('/category/:category_id', async (req, res, next) => {
 
 storeRouter.use('/category/:category_id/products', async (req, res, next) => {
     try {
-        console.log('here');
         const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
         if (result.rows.length === 0) {
-            console.log('inside if');
             return res.status(400).json({ msg: 'invalid category id' });
         }
         next();
     } catch (e) {
-        console.log(e);
         res.status(500).json({ msg: 'Server error' });
     }
 });
 
 
-storeRouter.use('/category/:category_id/:product_id', async (req, res, next) => {
+storeRouter.use('/category/:category_id/products/:product_id', async (req, res, next) => {
     try {
         const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
         if (result.rows.length === 0) {
@@ -109,12 +106,9 @@ storeRouter.get('/category/:category_id', async (req, res, next) => {
 // Get a specific category, ALL products-
 storeRouter.get('/category/:category_id/products', async (req, res, next) => { 
     try {
-        console.log('here2');
         const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
-        console.log(result);
         res.status(200).json(result.rows);
     } catch (e) {
-        console.log(e);
         res.status(500).json({msg: 'Server error'});
     }
 });
@@ -186,7 +180,7 @@ storeRouter.post('/category/:category_id', async (req, res, next) => {
 
 
 // Get a specific product-
-storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => { 
+storeRouter.get('/category/:category_id/products/:product_id', async (req, res, next) => { 
     try {
         const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
         res.status(200).json(result.rows);
@@ -197,7 +191,7 @@ storeRouter.get('/category/:category_id/:product_id', async (req, res, next) => 
 
 
 // Update a specific product
-storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => {
+storeRouter.put('/category/:category_id/products/:product_id', async (req, res, next) => {
     if (req.user.is_admin) {
         const { productName, inventoryQuantity, price, discountPercetage } = req.body;
 
@@ -219,7 +213,7 @@ storeRouter.put('/category/:category_id/:product_id', async (req, res, next) => 
 });
 
 // Delete a specific product
-storeRouter.delete('/category/:category_id/:product_id', async (req, res, next) => {
+storeRouter.delete('/category/:category_id/products/:product_id', async (req, res, next) => {
     if (req.user.is_admin) {
         try {
             await pool.query('delete from products where id = $1;', [req.params.product_id]);
