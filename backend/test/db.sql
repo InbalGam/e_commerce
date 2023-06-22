@@ -357,6 +357,11 @@ COPY public.products (id, product_name, inventory_quantity, price, discount_perc
 COPY public.users (id, username, password, nickname, first_name, last_name, address, phone, created_at, modified_at, is_admin) FROM stdin;
 1	userCheck	$2b$10$xGRbQBRNzcX20S.JhB5Z9u/nsXIbseeZ/YFUURfNIDSwU3ZCVuwwC	userc	user	check	checky check 23	+9723484848	2023-06-18 11:15:48.901	\N	\N
 2	user_gCheck	$2b$10$ORRYqbw9MGrGni/TGp857e4GagB3iTcExejl3UMucTpPpfdK5WN9G	usercg	user	check	checky check 23 new	+9723484849	2023-06-18 11:16:43.994	2023-06-18 11:23:30.467	\N
+3	userCheck55	$2b$10$bWra5HDyyBB.NABwdx/1eu.NHIsLvkFyO6q80Evf9Y3DlJkHHyGU.	userc55	user	check	checky check 23	+9723484848	2023-06-19 13:56:16.013	\N	\N
+5	userCheck545	$2b$10$gxN.a1VhmuXZX.ZV2gQcEO.1cvXMyMZpreQ9MghwuxDYWDsxhpzFi	userc545	user	check	checky check 23	+9723484848	2023-06-19 13:58:32.186	\N	\N
+6	userCheck5445	$2b$10$sZIbLZEmM0w9n06p7skDGOsRc7RVEmDgcSGjdP86QA63mdhtWRsr2	userc5445	user	check	checky check 23	+9723484848	2023-06-19 13:58:56.146	\N	\N
+7	userCk5445	$2b$10$UeeJP/QxWXlo37sfn.fyAOiaV2Ei6nxOuXDsg.WRn.shBdLBKdkjO	use5445	user	check	checky check 23	+9723484848	2023-06-19 13:59:36.044	\N	\N
+8	user33Ck5445	$2b$10$Sc8wt6X3n.wqQ1yHVm2iYOztF.8mrLQQwxkKJmGTY0XY4h81Y0ksC	use45445	user	check	checky check 23	+9723484848	2023-06-19 14:00:24.819	\N	t
 \.
 
 
@@ -399,7 +404,7 @@ SELECT pg_catalog.setval('public.products_id_seq', 7, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 2, true);
+SELECT pg_catalog.setval('public.users_id_seq', 8, true);
 
 
 --

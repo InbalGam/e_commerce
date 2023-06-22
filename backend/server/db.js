@@ -1,10 +1,14 @@
-const Pool = require('pg').Pool
+import dotenv from "dotenv";
+const Pool = require('pg').Pool;
+
+dotenv.config();
+
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
   database: process.env.DB || 'e_commerce_project',
-  password: 'postgres',
-  port: 5432,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
 });
 
 
