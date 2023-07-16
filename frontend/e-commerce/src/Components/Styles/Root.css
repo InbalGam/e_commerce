@@ -26,7 +26,7 @@
     margin-right: 2rem;
 }
 
-/* .nav-links .logoutLink {
+.nav-links .logoutLink {
     padding-left: 1rem;
     text-decoration: none;
     cursor: pointer;
@@ -36,7 +36,7 @@
 .nav-links .logoutLink:hover {
     text-decoration: underline;
     cursor: pointer;
-} */
+}
 
 .nav-links .loginLink {
     text-decoration: none;
@@ -53,6 +53,7 @@
     text-decoration: none;
     cursor: pointer;
     color: #060565;
+    padding-left: 1rem;
 }
 
 .nav-links .profileLink:hover {
