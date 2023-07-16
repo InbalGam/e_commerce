@@ -14,6 +14,17 @@ async function login(username, password) {
     return response.status === 200;
 };
 
+
+async function logout() {
+    const url = `${baseURL}/logout`;
+    const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
 ///////////////////////////////////////////
 async function getAllCategories() {
     const url = `${baseURL}/category`;
@@ -25,4 +36,4 @@ async function getAllCategories() {
     return response;
 };
 
-export {login, getAllCategories};
+export {login, logout, getAllCategories};

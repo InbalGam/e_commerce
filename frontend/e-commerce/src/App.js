@@ -3,6 +3,7 @@ import Root from './Components/Root';
 import Login from './Components/Login';
 import CategoryList from "./Components/CategoryList";
 import Home from './Components/Home';
+import Logout from "./Components/Logout";
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path='category' element={ <CategoryList/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
+      <Route path='login' element={ <Logout/> } />
     </Route>
   ));
 
