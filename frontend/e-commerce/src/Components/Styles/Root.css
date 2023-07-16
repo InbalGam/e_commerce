@@ -1,0 +1,65 @@
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #060565;
+    background-color: #adcbf3;
+}
+
+.nav-bar p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 7rem;
+    color: #060565;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    margin-right: 2rem;
+}
+
+/* .nav-links .logoutLink {
+    padding-left: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    color: #060565;
+}
+
+.nav-links .logoutLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
+} */
+
+.nav-links .loginLink {
+    text-decoration: none;
+    cursor: pointer;
+    color: #060565;
+}
+
+.nav-links .loginLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 550px) {
+    .nav-bar p {
+        padding-left: 2rem;
+        font-size: 1rem;
+    }
+
+    .nav-links .loginLink {
+        font-size: 0.8rem;
+    }
+
+    /* .nav-links .logoutLink {
+        font-size: 0.8rem;
+    } */
+}
