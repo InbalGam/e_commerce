@@ -14,6 +14,15 @@ async function login(username, password) {
     return response.status === 200;
 };
 
+async function userProfile() {
+    const url = `${baseURL}/profile`;
+    const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response;
+};
 
 async function logout() {
     const url = `${baseURL}/logout`;
@@ -36,4 +45,4 @@ async function getAllCategories() {
     return response;
 };
 
-export {login, logout, getAllCategories};
+export {login, userProfile, logout, getAllCategories};
