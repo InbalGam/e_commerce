@@ -41,6 +41,7 @@ function Login() {
 
     return (
         <div className={'login_container'}>
+            <p className={'messages'}>{searchParams.get("logout") ? 'Succefully logged out' : ''}</p>
             <p className={'messages'}>{searchParams.get("register") ? 'Succefully registered, you can log in' : ''}</p>
             <h1 className='loginH1'>Shop Online</h1>
             <p className={'loginHeadline'}>Log in below</p>

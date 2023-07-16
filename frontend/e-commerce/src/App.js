@@ -17,7 +17,7 @@ function App() {
         <Route path='profile' element={ <Profile/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
-      <Route path='login' element={ <Logout/> } />
+      <Route path='logout' element={ <Logout/> } />
     </Route>
   ));
 
