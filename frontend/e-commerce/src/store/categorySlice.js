@@ -1,14 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {getAllCategories} from '../Api';
+import { useNavigate } from 'react-router-dom';
+
 
 
 export const loadCategories = createAsyncThunk(
     '/category',
     async () => {
-        const results = await getAllCategories();
-        const jsonData = await results.json();
-        console.log(jsonData);
-        return jsonData;
+        try {
+            const results = await getAllCategories();
+            const jsonData = await results.json();
+            console.log(jsonData);
+            return jsonData;
+        } catch (e) {
+            useNavigate('/error');
+        }
     }
 );
 
