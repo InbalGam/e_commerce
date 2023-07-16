@@ -4,6 +4,7 @@ import Login from './Components/Login';
 import CategoryList from "./Components/CategoryList";
 import Home from './Components/Home';
 import Logout from "./Components/Logout";
+import Profile from "./Components/Profile";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Route exact path="/" element={<Home />} />
       <Route path='/' element={ <Root /> } >
         <Route path='category' element={ <CategoryList/> } />
+        <Route path='profile' element={ <Profile/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
       <Route path='login' element={ <Logout/> } />
