@@ -42,7 +42,7 @@ authRouter.post("/register", async (req, res, next) => {
 });
 
 
-// Login a user
+// Login a user - local strategy
 authRouter.get("/login", (req, res) => {
     res.status(401).json({msg: 'Authentication failed'});
 });
@@ -65,6 +65,19 @@ authRouter.post("/login",
       res.redirect("/profile");
     }
 );
+
+
+// Login a user - using Google
+authRouter.get('/login/google', passport.authenticate('google', {
+    scope: ['email', 'profile']
+}));
+
+
+authRouter.get('/oauth2/redirect/google',
+  passport.authenticate('google', { failureRedirect: `${process.env.CORS_ORIGIN}/login`, failureMessage: true }),
+  (req, res) => {
+    res.redirect(`${process.env.CORS_ORIGIN}/profile`);
+});
 
 
 // Logout user

@@ -3,6 +3,7 @@ import { useState } from "react";
 import {login} from '../Api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FadeLoader from 'react-spinners/FadeLoader';
+import {baseURL} from '../apiKey';
 
 
 function Login() {
@@ -54,6 +55,9 @@ function Login() {
             </form>
             <div className={'authStatus'}>
                 {authFailed ? 'Username or Password are incorrect, try again' : ''}
+            </div>
+            <div>
+                <Link to={`${baseURL}/login/google`} className={'loginGoogleLink'}>Sign in with Google</Link>
             </div>
             <p className={'registrationHeadline'}>Not registered yet?</p>
             <Link to='/register' className={'registrationLink'} >Register here</Link>

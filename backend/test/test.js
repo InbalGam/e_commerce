@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 4001;
 
 
 // Authorization tests
-describe('Login Authorization tests', function() {
+describe('Login Authorization tests- local strategy', function() {
     it('should pass auth check for log in', function() {
         const agent = request.agent(app);
         return agent
