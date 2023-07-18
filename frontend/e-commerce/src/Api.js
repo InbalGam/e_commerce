@@ -2,6 +2,19 @@ import fetch from 'cross-fetch';
 import {baseURL} from './apiKey';
 
 // Auth
+async function register(form) {
+    const url = `${baseURL}/register`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(form)
+    });
+
+    return response;
+};
+
+
 async function login(username, password) {
     const url = `${baseURL}/login`;
     const response = await fetch(url, {
@@ -45,4 +58,4 @@ async function getAllCategories() {
     return response;
 };
 
-export {login, userProfile, logout, getAllCategories};
+export {register, login, userProfile, logout, getAllCategories};

@@ -5,6 +5,7 @@ import CategoryList from "./Components/CategoryList";
 import Home from './Components/Home';
 import Logout from "./Components/Logout";
 import Profile from "./Components/Profile";
+import Register from "./Components/Register";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path='profile' element={ <Profile/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
+      <Route path='register' element={ <Register/> } />
       <Route path='logout' element={ <Logout/> } />
     </Route>
   ));
