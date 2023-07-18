@@ -27,6 +27,7 @@ function Profile() {
         (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
             <div>
                 <h2>Welcome {profile.nickname}!</h2>
+                <p>{profile.is_admin ? 'You have an admin account' : ''}</p>
                 <p>{profile.first_name} {profile.last_name}</p>
                 <div className="editContainer">
                     <p>{profile.address}</p>
