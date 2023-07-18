@@ -9,7 +9,7 @@ const {validateEmail} = require('../utils');
 // Registering a user
 authRouter.post("/register", async (req, res, next) => {
     const { username, password, nickname, firstName, lastName, address, phone } = req.body;
-    if (!username || !password || !nickname || !firstName || !lastName || !address || !phone) {
+    if (!username || !password || !nickname || !firstName || !lastName) {
         return res.status(400).json({ msg: 'All fields should be specified' });
     };
 
@@ -95,10 +95,6 @@ authRouter.get('/logout', function(req, res, next){
 // Update user profile page
 authRouter.put('/profile', async (req, res, next) => { 
     const { address, phone } = req.body;
-
-    if (!address || !phone) {
-        return res.status(400).json({ msg: 'All fields should be specified' });
-    };
 
     try {
         const timestamp = new Date(Date.now());
