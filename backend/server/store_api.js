@@ -354,16 +354,20 @@ storeRouter.get('/order', async (req, res, next) => {
 
 // Post an order
 storeRouter.post('/order', async (req, res, next) => { 
-    const { total, address, products } = req.body;
+    const { total, address, phone, products } = req.body;
 
     if (address === undefined) {
         return res.status(400).json({ msg: 'Address must be specified' });
     };
+
+    if (phone === undefined) {
+        return res.status(400).json({ msg: 'Phone must be specified' });
+    };
     
     try {
         const timestamp = new Date(Date.now());
-        const order_id = await pool.query('insert into order_details (user_id, total, shipping_address, created_at) values ($1, $2, $3, $4) returning id;', 
-        [req.user.id, total, address, timestamp]);
+        const order_id = await pool.query('insert into order_details (user_id, total, shipping_address, phone, created_at) values ($1, $2, $3, $4, $5) returning id;', 
+        [req.user.id, total, address, phone, timestamp]);
         
         console.log(products);
         products.forEach(async element => {

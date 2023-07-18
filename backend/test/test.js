@@ -988,10 +988,27 @@ describe('/cart routes', function() {
         .then(() => {
             return agent
             .post('/order')
-            .send({total: 50, address: undefined, products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
+            .send({total: 50, address: undefined, phone: '+972545898987', products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
             .expect(400)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Address must be specified'});
+            });
+        })
+    });
+
+    it('POST /order should NOT post an order- no phone', function () {
+        const agent = request.agent(app);
+        return agent
+        .post('/login')
+        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .redirects(1)
+        .then(() => {
+            return agent
+            .post('/order')
+            .send({total: 50, address: 'check', phone: undefined, products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
+            .expect(400)
+            .then((response) => {
+                expect(response.body).to.be.deep.equal({msg: 'Phone must be specified'});
             });
         })
     });
@@ -1005,7 +1022,7 @@ describe('/cart routes', function() {
         .then(() => {
             return agent
             .post('/order')
-            .send({total: 50, address: 'check', products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
+            .send({total: 50, address: 'check', phone: '+972545898987', products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]})
             .expect(200)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Added order'});
