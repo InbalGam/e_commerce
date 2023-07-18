@@ -47,6 +47,19 @@ async function logout() {
     return response;
 };
 
+
+async function updateProfile(data) {
+    const url = `${baseURL}/profile`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response.status === 200;
+};
+
 ///////////////////////////////////////////
 async function getAllCategories() {
     const url = `${baseURL}/category`;
@@ -58,4 +71,4 @@ async function getAllCategories() {
     return response;
 };
 
-export {register, login, userProfile, logout, getAllCategories};
+export {register, login, userProfile, logout, updateProfile, getAllCategories};
