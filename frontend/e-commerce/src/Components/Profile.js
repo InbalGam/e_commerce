@@ -25,18 +25,19 @@ function Profile() {
         <div> 
         {hasError ? 'Could not fetch profile, try again' : 
         (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
-        <div>
-            <h2>Welcome {profile[0].nickname}!</h2>
-            <p>{profile[0].first_name} {profile[0].last_name}</p>
-            <div className="editContainer">
-                <p>{profile[0].address}</p>
-                <button className='editIcon' onClick={showEditForm}><EditIcon /></button>
+            <div>
+                <h2>Welcome {profile.nickname}!</h2>
+                <p>{profile.first_name} {profile.last_name}</p>
+                <div className="editContainer">
+                    <p>{profile.address}</p>
+                    <button className='editIcon' onClick={showEditForm}><EditIcon /></button>
+                </div>
+                <div className="editContainer">
+                    <p>{profile.phone}</p>
+                    <button className='editIcon' onClick={showEditForm}><EditIcon /></button>
+                </div>
             </div>
-            <div className="editContainer">
-                <p>{profile[0].phone}</p>
-                <button className='editIcon' onClick={showEditForm}><EditIcon /></button>
-            </div>
-        </div>)}
+        )}
         </div>
     );
 };
