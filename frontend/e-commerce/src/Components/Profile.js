@@ -43,28 +43,57 @@ function Profile() {
     };
 
 
-    function showEdit(e) {
-        setShowForm(!showForm);
-    };
-
-
-    async function submitField(e) {
+    async function submitAddressField(e) {
         e.preventDefault();
         console.log(address);
-        console.log(phone);
+        console.log(profile.phone);
 
-        if (!address || !phone) {
+        if (!address) {
             setFieldsFilled(false);
         } else {
             setFieldsFilled(true);
         }
 
-        if (address && phone){
-            const form = {address, phone};
+        if (address){
+            const form = {address, phone: profile.phone};
             try {
                 setLoading(true);
                 const result = await updateProfile(form);
-                if (result.status === 201) {
+                if (result) {
+                    dispatch(loadProfile());
+                    setShowAddressForm(false);
+                    setShowPhoneForm(false);
+                    setLoading(false);
+                } else {
+                    setShowAddressForm(false);
+                    setShowPhoneForm(false);
+                    setLoading(false);
+                }
+            } catch (e) {
+                navigate('/error');
+            }
+        }
+    };
+
+
+    async function submitPhoneField(e) {
+        e.preventDefault();
+        console.log(profile.address);
+        console.log(phone);
+
+        if (!phone) {
+            setFieldsFilled(false);
+        } else {
+            setFieldsFilled(true);
+        }
+
+        if (phone){
+            const form = {address: profile.address, phone};
+            try {
+                setLoading(true);
+                const result = await updateProfile(form);
+                if (result) {
+                    dispatch(loadProfile());
                     setShowAddressForm(false);
                     setShowPhoneForm(false);
                     setLoading(false);
@@ -92,7 +121,7 @@ function Profile() {
                     {showAddressForm === false ?  <p>{profile.address}</p> : 
                     <div>
                         <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange}/> 
-                        <button type="submit" value="Submit" className="submitButton" onClick={submitField}>submit</button>
+                        <button type="submit" value="Submit" className="submitButton" onClick={submitAddressField}>submit</button>
                     </div>}
                 </div>
                 <div className="editContainer">
@@ -100,7 +129,7 @@ function Profile() {
                     {showPhoneForm === false ?  <p>{profile.phone}</p> : 
                     <div>
                         <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange}/>
-                        <button type="submit" value="Submit" className="submitButton" onClick={submitField}>submit</button>
+                        <button type="submit" value="Submit" className="submitButton" onClick={submitPhoneField}>submit</button>
                     </div>}
                 </div>
                 {fieldsFilled ? '' : 'Address and phone needs to be filled'}
