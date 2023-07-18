@@ -3,6 +3,7 @@ const authRouter = express.Router();
 const {pool} = require('./db');
 const passport = require("passport");
 const {passwordHash} = require('../hash');
+const {validateEmail} = require('./utils');
 
 
 // Registering a user
@@ -16,8 +17,8 @@ authRouter.post("/register", async (req, res, next) => {
         return res.status(400).json({ msg: 'Password needs to be at least 8 characters' });
     }
 
-    if (username.length < 3) {
-        return res.status(400).json({ msg: 'Username needs to be at least 3 characters' });
+    if (!validateEmail(username)) {
+        return res.status(400).json({ msg: 'Username needs to be a valid email' });
     }
 
     if (nickname.length < 3) {
