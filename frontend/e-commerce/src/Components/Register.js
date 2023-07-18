@@ -20,6 +20,7 @@ function Register() {
     const [registerAuth, setRegisterAuth] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const[msg, setMsg] = useState('');
+    const [fieldsFilled, setFieldsFilled] = useState(true);
 
     function handleUsernameChange(e) {
         setUsername(e.target.value);
@@ -57,7 +58,13 @@ function Register() {
         setValidNickname(nickname.length >= 3);
         setValidUsername(validateEmail(username));
 
-        if (password && nickname && username && firstName && lastName && address && phone){
+        if (!firstName || !lastName || !address || !phone) {
+            setFieldsFilled(false);
+        } else {
+            setFieldsFilled(true);
+        }
+
+        if ((password.length >= 8) && (nickname.length >= 3) && (validateEmail(username)) && firstName && lastName && address && phone){
             const form = {username, password, nickname, firstName, lastName, address, phone};
             try {
                 setIsLoading(true);
@@ -112,6 +119,7 @@ function Register() {
             {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='submitLoader'/> : <button type="submit" value="Submit" className="submitButton">Register</button>}
             {registerAuth ? 'Could not register' : ''}
             {msg ? msg : ''}
+            {fieldsFilled ? '' : 'All fields needs to be filled'}
         </form>
     </div>
     );
