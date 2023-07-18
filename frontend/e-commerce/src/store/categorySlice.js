@@ -10,7 +10,6 @@ export const loadCategories = createAsyncThunk(
         try {
             const results = await getAllCategories();
             const jsonData = await results.json();
-            console.log(jsonData);
             return jsonData;
         } catch (e) {
             useNavigate('/error');
@@ -20,14 +19,12 @@ export const loadCategories = createAsyncThunk(
 
 
 const fetchData = (payload) => {
-    console.log(payload);
     const data = payload.map(el => {
         return {
             id: el.id,
             categoryName: el.category_name
         };
     });
-    console.log(data);
     return data;
 };
 
@@ -46,9 +43,7 @@ export const categorySlice = createSlice({
             state.hasError = false;
         },
         [loadCategories.fulfilled]: (state, action) => {
-            console.log(action.payload);
             const data = fetchData(action.payload);
-            console.log(data);
             state.categories = data;
             state.isLoading = false;
             state.hasError = false;
