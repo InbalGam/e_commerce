@@ -3,7 +3,7 @@ const authRouter = express.Router();
 const {pool} = require('./db');
 const passport = require("passport");
 const {passwordHash} = require('../hash');
-const {validateEmail} = require('./utils');
+const {validateEmail} = require('../utils');
 
 
 // Registering a user
