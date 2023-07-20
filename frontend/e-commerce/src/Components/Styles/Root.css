@@ -38,6 +38,18 @@
     cursor: pointer;
 }
 
+.nav-links .categoryLink {
+    text-decoration: none;
+    cursor: pointer;
+    color: #060565;
+    padding-right: 1rem;
+}
+
+.nav-links .categoryLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .nav-links .loginLink {
     text-decoration: none;
     cursor: pointer;
