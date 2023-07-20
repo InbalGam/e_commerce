@@ -58,7 +58,7 @@ storeRouter.use('/category/:category_id/products/:product_id', async (req, res, 
 // Get all categories-
 storeRouter.get('/category', async (req, res, next) => { 
     try {
-        const result = await pool.query('select c.*, if.filename as imageName from category c join image_files if on c.image_id = if.id');
+        const result = await pool.query('select c.*, if.filename as imageName from category c left join image_files if on c.image_id = if.id');
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
