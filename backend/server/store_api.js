@@ -142,6 +142,7 @@ storeRouter.delete('/category/:category_id', async (req, res, next) => {
             await pool.query('delete from category where id = $1;', [req.params.category_id]);
             res.status(200).json({ msg: 'Deleted category' });
         } catch (e) {
+            console.log(e);
             res.status(500).json({msg: 'Server error'});
         }
     } else {
