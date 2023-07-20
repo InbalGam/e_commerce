@@ -1,6 +1,8 @@
 const express = require('express');
 const storeRouter = express.Router();
 const {pool} = require('./db');
+const multer = require('multer');
+const path = require('path');
 
 
 // Middlewares
@@ -56,7 +58,7 @@ storeRouter.use('/category/:category_id/products/:product_id', async (req, res, 
 // Get all categories-
 storeRouter.get('/category', async (req, res, next) => { 
     try {
-        const result = await pool.query('select * from category');
+        const result = await pool.query('select c.*, if.filename as imageName from category c join image_files if on c.image_id = if.id');
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
@@ -149,6 +151,48 @@ storeRouter.delete('/category/:category_id', async (req, res, next) => {
         return res.status(401).json({msg: 'Unauthorized'});
     }
 });
+
+
+// Image Upload & Retrieve
+const imageUpload = multer({
+    storage: multer.diskStorage(
+        {
+            destination: function (req, file, cb) {
+                cb(null, 'images/');
+            },
+            filename: function (req, file, cb) {
+                cb(
+                    null,
+                    new Date().valueOf() + 
+                    '_' +
+                    file.originalname
+                );
+            }
+        }
+    ), 
+});
+// Image Upload Routes
+storeRouter.post('/image', imageUpload.single('image'), async (req, res) => { 
+    if (req.user.is_admin) {
+        console.log(req.file);
+        try {
+            const result = await pool.query('insert into image_files (filename, filepath, mimetype, size) values ($1, $2, $3, $4) returning *;',
+            [req.file.filename, req.file.filepath, req.file.mimetype, req.file.size]);
+            res.status(200).json(result.rows[0]);
+        } catch(e) {
+            console.log(e);
+            res.status(500).json({msg: 'Server error'});
+        }
+    }
+});
+// Image Get Routes
+storeRouter.get('/image/:filename', (req, res) => {
+    const { filename } = req.params;
+    const dirname = path.resolve();
+    const fullfilepath = path.join(dirname, 'images/' + filename);
+    return res.sendFile(fullfilepath);
+});
+
 
 
 //Products
