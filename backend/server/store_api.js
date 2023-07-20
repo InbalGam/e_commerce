@@ -172,18 +172,25 @@ const imageUpload = multer({
     ), 
 });
 // Image Upload Routes
-storeRouter.post('/image', imageUpload.single('image'), async (req, res) => { 
-    if (req.user.is_admin) {
+storeRouter.post('/image',
+    async (req, res, next) => {
+        if (req.user.is_admin) {
+            next();
+        } else {
+            res.status(401).json({ msg: 'Unauthorized' });
+        }
+    },
+    imageUpload.single('image'),
+    async (req, res) => {
         console.log(req.file);
         try {
             const result = await pool.query('insert into image_files (filename, filepath, mimetype, size) values ($1, $2, $3, $4) returning *;',
-            [req.file.filename, req.file.filepath, req.file.mimetype, req.file.size]);
+                [req.file.filename, req.file.path, req.file.mimetype, req.file.size]);
             res.status(200).json(result.rows[0]);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
-            res.status(500).json({msg: 'Server error'});
+            res.status(500).json({ msg: 'Server error' });
         }
-    }
 });
 // Image Get Routes
 storeRouter.get('/image/:filename', (req, res) => {
