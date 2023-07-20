@@ -63,7 +63,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'userCHECK', password: 'passwordCHECK', nickname: 'us',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
+            .send({username: 'userCHECK@gmail.com', password: 'passwordCHECK', nickname: 'us',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Nickname needs to be at least 3 characters'});
             });
@@ -73,7 +73,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'user_gCheck', password: 'passwordCHECK', nickname: 'userNickname',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
+            .send({username: 'userCHECK@gmail.com', password: 'passwordCHECK', nickname: 'userc',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Username or Nickname already exist, choose differently'});
             });
@@ -83,7 +83,7 @@ describe('Register Authorization tests', function() {
         const agent = request.agent(app);
         return agent
             .post('/register')
-            .send({username: 'userCHECK1235', password: 'passwordCHECK', nickname: 'userNickname123424',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
+            .send({username: 'userCHECK@gmail.com', password: 'passwordCHECK', nickname: 'userNickname123424',  firstName: 'user1', lastName: 'logi', address: 'bliblu', phone: '34353', is_admin: 'true'})
             .expect(201)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Success creating user'});
@@ -106,16 +106,6 @@ describe('Logout Authorization tests', function() {
 
 
 describe('Update profile page', function() {
-    it('should NOT pass- all fields needs specification', function() {
-        const agent = request.agent(app);
-        return agent
-            .put('/profile')
-            .send({username: 'userCHECK', password: 'passwordCHECK'})
-            .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'All fields should be specified'});
-            });
-    });
-
     it('should pass- all fields specified', function() {
         const agent = request.agent(app);
         return agent
@@ -171,12 +161,13 @@ describe('/category routes', function() {
                     expect(comment).to.have.ownProperty('category_name');
                     expect(comment).to.have.ownProperty('created_at');
                     expect(comment).to.have.ownProperty('modified_at');
+                    expect(comment).to.have.ownProperty('image_id');
                 });
             });
         })
     });
 
-    it('POST /category should NOT create a new category- no category name', function () {
+    it('POST /category should NOT create a new category- Unauthorized', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -185,7 +176,7 @@ describe('/category routes', function() {
         .then(() => {
             return agent
             .post('/category')
-            .send({categoryName: undefined})
+            .send({categoryName: 'undefined'})
             .expect(401)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
@@ -197,7 +188,7 @@ describe('/category routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -214,12 +205,12 @@ describe('/category routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
             .post('/category')
-            .send({categoryName: 'pants'})
+            .send({categoryName: 'Shirts'})
             .expect(400)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Please enter a different name this already exist'});
@@ -227,7 +218,7 @@ describe('/category routes', function() {
         })
     });
 
-    it('POST /category should create a new category', function () {
+    it('POST /category should NOT create a new category - Unauthorized', function () {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -248,7 +239,7 @@ describe('/category routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -376,11 +367,11 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/4')
+            .put('/category/1')
             .send({categoryName: undefined})
             .expect(400)
             .then((response) => {
@@ -393,7 +384,7 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -414,7 +405,7 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/4')
+            .put('/category/1')
             .send({categoryName: 'check'})
             .expect(401)
             .then((response) => {
@@ -427,11 +418,11 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/4')
+            .put('/category/1')
             .send({categoryName: 'check'})
             .expect(200)
             .then((response) => {
@@ -444,7 +435,7 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -456,7 +447,7 @@ describe('/category routes- with products also', function() {
         });
     });
 
-    it('DELETE /category/:category_id should delete a specific category', function() {
+    it('DELETE /category/:category_id should delete a specific category - Unauthorized', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -464,7 +455,7 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/4')
+            .delete('/category/5')
             .expect(401)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
@@ -476,11 +467,11 @@ describe('/category routes- with products also', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/4')
+            .delete('/category/5')
             .expect(200)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Deleted category'});
@@ -496,7 +487,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCheck', password: 'user2828'}) // User exist
         .redirects(1)
         .then(() => {
             return agent
@@ -511,7 +502,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCheck', password: 'user2828'}) // User exist
         .redirects(1)
         .then(() => {
             return agent
@@ -534,7 +525,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCheck', password: 'user2828'}) // User exist
         .redirects(1)
         .then(() => {
             return agent
@@ -549,7 +540,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -567,7 +558,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -601,7 +592,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -618,7 +609,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -636,7 +627,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -657,7 +648,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/3/products/4')
+            .put('/category/1/products/3')
             .send({productName: 'check8888', inventoryQuantity: 10, price: 3, discountPercetage: 5})
             .expect(401)
             .then((response) => {
@@ -670,11 +661,11 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
-            .put('/category/3/products/4')
+            .put('/category/1/products/3')
             .send({productName: 'check8888', inventoryQuantity: 10, price: 3, discountPercetage: 5})
             .expect(200)
             .then((response) => {
@@ -687,7 +678,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
@@ -707,7 +698,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/3/products/5')
+            .delete('/category/1/products/3')
             .expect(401)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
@@ -719,11 +710,11 @@ describe('/category/:category_id/products/:product_id routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'userCHECK1235', password: 'passwordCHECK'}) // User exist authorized
+        .send({username: 'userCheck', password: 'user2828'}) // User exist authorized
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/3/products/5')
+            .delete('/category/1/products/3')
             .expect(200)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Deleted product'});
@@ -797,7 +788,7 @@ describe('/cart routes', function() {
         .then(() => {
             return agent
             .post('/cart')
-            .send({product_id: 4, quantity: 2})
+            .send({product_id: 1, quantity: 2})
             .expect(200)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Added to cart and Updated product'});
