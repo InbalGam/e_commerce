@@ -1025,7 +1025,7 @@ describe('/cart routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCheck', password: 'user2828'}) // User exist
         .redirects(1)
         .then(() => {
             return agent
@@ -1041,7 +1041,7 @@ describe('/cart routes', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
-        .send({username: 'user_gCheck', password: 'user2828'}) // User exist
+        .send({username: 'userCheck', password: 'user2828'}) // User exist
         .redirects(1)
         .then(() => {
             return agent
