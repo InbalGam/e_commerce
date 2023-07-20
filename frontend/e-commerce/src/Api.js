@@ -61,6 +61,7 @@ async function updateProfile(data) {
 };
 
 ///////////////////////////////////////////
+// Categories
 async function getAllCategories() {
     const url = `${baseURL}/category`;
     const response = await fetch(url, {
@@ -71,4 +72,15 @@ async function getAllCategories() {
     return response;
 };
 
-export {register, login, userProfile, logout, updateProfile, getAllCategories};
+
+async function deleteSpecificCategory(categoryId) {
+    const url = `${baseURL}/category/${categoryId}`;
+    const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+    console.log(response);
+    return response;
+};
+
+export {register, login, userProfile, logout, updateProfile, getAllCategories, deleteSpecificCategory};
