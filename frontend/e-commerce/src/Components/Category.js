@@ -10,6 +10,7 @@ import {baseURL} from '../apiKey';
 import EditIcon from '@mui/icons-material/Edit';
 import CategoryAddUpdate from './CategoryAddUpdate';
 import {updateCategory, loadCategoryImage} from '../Api';
+import styles from './Styles/Category.css';
 
 
 function Category(props) {
@@ -70,7 +71,7 @@ function Category(props) {
 
     return (
         <li key={props.ind}>
-            <div className="categoryActions" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
+            <div className="category" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
             <p>{props.el.categoryName}</p>
                 {props.admin ? 
                     <div> 
