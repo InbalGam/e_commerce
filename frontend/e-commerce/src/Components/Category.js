@@ -42,8 +42,9 @@ function Category(props) {
     };
 
     return (
-        <li key={props.ind} style={{ backgroundImage: props.el.imagename ? `${baseURL}/image/${props.el.imagename}` : '' }}>
-            <div className="categoryActions">
+        <li key={props.ind}>
+            <div className="categoryActions" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
+            <p>{props.el.categoryName}</p>
                 {props.admin ? 
                     <div> 
                         <input type="checkbox" name="isArchive" onChange={onClickIsArchive}/> 
@@ -51,7 +52,6 @@ function Category(props) {
                     </div> : ''}
                 {deleteFailed === false ? '' : 'Could not archive category'}
             </div>
-            <p>{props.el.categoryName}</p>
         </li>
     );
 };
