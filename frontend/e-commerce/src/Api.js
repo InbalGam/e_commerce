@@ -85,4 +85,30 @@ async function archiveSpecificCategory(categoryId, status) {
     return response;
 };
 
-export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory};
+
+async function insertNewCategory(categoryName, imgId) {
+    const url = `${baseURL}/category`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({categoryName, imgId})
+    });
+
+    return response;
+};
+
+
+async function loadCategoryImage(data) {
+    const url = `${baseURL}/image`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Accept': 'application/json'},
+        body: data
+    });
+
+    return response;
+};
+
+export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory, insertNewCategory, loadCategoryImage};

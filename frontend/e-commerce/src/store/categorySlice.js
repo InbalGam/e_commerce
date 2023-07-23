@@ -23,7 +23,8 @@ const fetchData = (payload) => {
         return {
             id: el.id,
             categoryName: el.category_name,
-            is_archived: el.is_archived
+            is_archived: el.is_archived,
+            imagename: el.imagename
         };
     });
     return data;

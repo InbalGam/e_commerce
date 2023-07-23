@@ -69,7 +69,7 @@ storeRouter.get('/category', async (req, res, next) => {
 // Post a new category-
 storeRouter.post('/category', async (req, res, next) => { 
     if (req.user.is_admin) {
-        const { categoryName } = req.body;
+        const { categoryName, imgId } = req.body;
         if (!categoryName) {
             return res.status(400).json({ msg: 'Please enter a category name' });
         };
@@ -81,9 +81,10 @@ storeRouter.post('/category', async (req, res, next) => {
             }
     
             const timestamp = new Date(Date.now());
-            await pool.query('insert into category (category_name, created_at) values ($1, $2);', [categoryName, timestamp]);
+            await pool.query('insert into category (category_name, image_id, created_at) values ($1, $2, $3);', [categoryName, imgId, timestamp]);
             res.status(200).json({msg: 'Added category'});
         } catch (e) {
+            console.log(e);
             res.status(500).json({msg: 'Server error'});
         }
     } else {
@@ -118,7 +119,7 @@ storeRouter.get('/category/:category_id/products', async (req, res, next) => {
 
 // Update a specific category
 storeRouter.put('/category/:category_id', async (req, res, next) => {
-    const { categoryName } = req.body;
+    const { categoryName, imgId } = req.body;
     if (req.user.is_admin) {
         if (!categoryName) {
             return res.status(400).json({ msg: 'Please enter a category name' });
@@ -126,9 +127,10 @@ storeRouter.put('/category/:category_id', async (req, res, next) => {
 
         const timestamp = new Date(Date.now());
         try {
-            await pool.query('update category set category_name = $2, modified_at = $3 where id = $1;', [req.params.category_id, categoryName, timestamp]);
+            await pool.query('update category set category_name = $2, image_id = $3, modified_at = $4 where id = $1;', [req.params.category_id, categoryName, imgId, timestamp]);
             res.status(200).json({ msg: 'Updated category' });
         } catch (e) {
+            console.log(e);
             res.status(500).json({msg: 'Server error'});
         }
     } else {
@@ -187,7 +189,7 @@ storeRouter.post('/image',
     },
     imageUpload.single('image'),
     async (req, res) => {
-        console.log(req.file);
+        //console.log(req.file);
         try {
             const result = await pool.query('insert into image_files (filename, filepath, mimetype, size) values ($1, $2, $3, $4) returning *;',
                 [req.file.filename, req.file.path, req.file.mimetype, req.file.size]);
