@@ -24,7 +24,8 @@ const fetchData = (payload) => {
             id: el.id,
             categoryName: el.category_name,
             is_archived: el.is_archived,
-            imagename: el.imagename
+            imagename: el.imagename,
+            image_id: el.image_id
         };
     });
     return data;

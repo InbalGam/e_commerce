@@ -55,7 +55,7 @@ function Category(props) {
               const jsonData = await imgResult.json();
               imgId = jsonData.id;
           } else {
-              imgId = null;
+              imgId = props.el.image_id;
           }
           const result = await updateCategory(props.el.id, categoryName, imgId);
           if (result.status === 200) {
