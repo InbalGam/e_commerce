@@ -109,7 +109,7 @@ storeRouter.get('/category/:category_id', async (req, res, next) => {
 // Get a specific category, ALL products-
 storeRouter.get('/category/:category_id/products', async (req, res, next) => { 
     try {
-        const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
+        const result = await pool.query('select p.*, if.filename as imageName from category c join products p on c.id = p.category_id left join image_files if on p.image_id = if.id where p.category_id = $1;', [req.params.category_id]);
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
@@ -210,11 +210,10 @@ storeRouter.get('/image/:filename', (req, res) => {
 
 
 //Products
-
 // Post a specific product-
 storeRouter.post('/category/:category_id', async (req, res, next) => {
     if (req.user.is_admin) {
-        const { productName, inventoryQuantity, price, discountPercetage } = req.body;
+        const { productName, inventoryQuantity, price, discountPercetage, imgId } = req.body;
 
         if (!productName || !inventoryQuantity || !price) {
             return res.status(400).json({ msg: 'All fields must be specified' });
@@ -226,10 +225,11 @@ storeRouter.post('/category/:category_id', async (req, res, next) => {
                 return res.status(400).json({ msg: 'Please enter a different name this already exist' });
             }
             const timestamp = new Date(Date.now());
-            await pool.query('insert into products (product_name, inventory_quantity, price, discount_percentage, category_id, created_at) values ($1, $2, $3, $4, $5, $6);',
-                [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
+            await pool.query('insert into products (product_name, inventory_quantity, price, discount_percentage, category_id, image_id, created_at) values ($1, $2, $3, $4, $5, $6, $7);',
+                [productName, inventoryQuantity, price, discountPercetage, req.params.category_id, imgId, timestamp]);
             res.status(200).json({ msg: 'Added product' });
         } catch (e) {
+            console.log(e);
             res.status(500).json({msg: 'Server error'});
         }
     } else {
@@ -241,9 +241,10 @@ storeRouter.post('/category/:category_id', async (req, res, next) => {
 // Get a specific product-
 storeRouter.get('/category/:category_id/products/:product_id', async (req, res, next) => { 
     try {
-        const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
+        const result = await pool.query('select p.*, if.filename as imageName from products p left join image_files if on p.image_id = if.id where p.id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
         res.status(200).json(result.rows);
     } catch (e) {
+        console.log(e);
         res.status(500).json({msg: 'Server error'});
     }
 });
@@ -252,7 +253,7 @@ storeRouter.get('/category/:category_id/products/:product_id', async (req, res, 
 // Update a specific product
 storeRouter.put('/category/:category_id/products/:product_id', async (req, res, next) => {
     if (req.user.is_admin) {
-        const { productName, inventoryQuantity, price, discountPercetage } = req.body;
+        const { productName, inventoryQuantity, price, discountPercetage, imgId } = req.body;
 
         if (!productName || !inventoryQuantity || !price) {
             return res.status(400).json({ msg: 'All fields must be specified' });
@@ -260,8 +261,8 @@ storeRouter.put('/category/:category_id/products/:product_id', async (req, res, 
 
         try {
             const timestamp = new Date(Date.now());
-            await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, modified_at = $7 where id = $1;',
-                [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, timestamp]);
+            await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, image_id = $7, modified_at = $8 where id = $1;',
+                [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, imgId, timestamp]);
             res.status(200).json({ msg: 'Updated product' });
         } catch (e) {
             res.status(500).json({msg: 'Server error'});
