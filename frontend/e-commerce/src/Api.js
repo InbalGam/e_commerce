@@ -98,6 +98,18 @@ async function insertNewCategory(categoryName, imgId) {
     return response;
 };
 
+async function updateCategory(categoryId, categoryName, imgId) {
+    const url = `${baseURL}/category/${categoryId}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({categoryName, imgId})
+    });
+
+    return response;
+};
+
 
 async function loadCategoryImage(data) {
     const url = `${baseURL}/image`;
@@ -111,4 +123,4 @@ async function loadCategoryImage(data) {
     return response;
 };
 
-export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory, insertNewCategory, loadCategoryImage};
+export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadCategoryImage};
