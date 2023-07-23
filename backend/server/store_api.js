@@ -150,7 +150,7 @@ storeRouter.delete('/category/:category_id/archive', async (req, res, next) => {
     try {
         await pool.query('update category set is_archived = $2, modified_at = $3 where id = $1;', [req.params.category_id, status, timestamp]);
         await pool.query('update products set is_archived = $2, modified_at = $3 where category_id = $1;', [req.params.category_id, status, timestamp]);
-        res.status(200).json({ msg: 'Archived category & products' });
+        res.status(200).json({ msg: `Archived category & products to ${status}` });
     } catch (e) {
         console.log(e);
         res.status(500).json({ msg: 'Server error' });
@@ -281,7 +281,7 @@ storeRouter.delete('/category/:category_id/products/:product_id/archive', async 
     const timestamp = new Date(Date.now());
         try {
             await pool.query('update products set is_archived = $2, modified_at = $3 where id = $1;', [req.params.product_id, status, timestamp]);
-            res.status(200).json({ msg: 'Archived product' });
+            res.status(200).json({ msg: `Archived product to ${status}` });
         } catch (e) {
             console.log(e);
             res.status(500).json({msg: 'Server error'});
