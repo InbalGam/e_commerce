@@ -1,49 +1,55 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import {deleteSpecificCategory} from '../Api';
+import {archiveSpecificCategory} from '../Api';
 import { useEffect, useState } from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
 import { useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {loadCategories} from '../store/categorySlice';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 
 
 function Category(props) {
-    const [isCategoryLoading, setIsCategoryLoading] = useState(false);
     const [deleteFailed, setDeleteFailed] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
 
     // add edit and delete for admins only
-    async function onClickDelete(event) {
-        event.preventDefault();
+    async function onClickIsArchive(e) {
+        console.log(e.target.checked);
+    };
+
+    async function archive(e) {
+        e.preventDefault();
         try {
-          setIsCategoryLoading(true);
-          console.log(props.el.id);
-          const result = await deleteSpecificCategory(props.el.id);
-          if (result.status === 401) {
-            navigate('/login');
-          } else {
-            if (result.status === 200) {
-              dispatch(loadCategories());
-              setDeleteFailed(false);
-              setIsCategoryLoading(false);
+            //setIsCategoryLoading(true);
+            console.log(props.el.id);
+            const result = await archiveSpecificCategory(props.el.id, !props.isArchived);
+            if (result.status === 401) {
+              navigate('/login');
             } else {
-              setDeleteFailed(true);
-              setIsCategoryLoading(false);
+              if (result.status === 200) {
+                dispatch(loadCategories());
+                setDeleteFailed(false);
+              } else {
+                setDeleteFailed(true);
+              }
             }
+          } catch (e) {
+            navigate('/error');
           }
-        } catch (e) {
-          navigate('/error');
-        }
-      };
+    };
 
 
     return (
         <li key={props.ind}>
             <div className="categoryActions">
-                {props.admin ? <button className='delete_category' onClick={(event) => onClickDelete(event)}><DeleteIcon /></button> : ''}
-                {deleteFailed === false ? '' : 'Could not delete category'}
+                {props.admin ? 
+                    <div> 
+                        <input type="checkbox" name="isArchive" onChange={onClickIsArchive}/> 
+                        <button onClick={archive}>{props.isArchived ? <UnarchiveIcon/> : <ArchiveIcon/>}</button>
+                    </div> : ''}
+                {deleteFailed === false ? '' : 'Could not archive category'}
             </div>
             <p>{props.el.categoryName}</p>
         </li>

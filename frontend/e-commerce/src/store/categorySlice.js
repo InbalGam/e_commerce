@@ -22,7 +22,8 @@ const fetchData = (payload) => {
     const data = payload.map(el => {
         return {
             id: el.id,
-            categoryName: el.category_name
+            categoryName: el.category_name,
+            is_archived: el.is_archived
         };
     });
     return data;

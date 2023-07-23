@@ -73,14 +73,16 @@ async function getAllCategories() {
 };
 
 
-async function deleteSpecificCategory(categoryId) {
-    const url = `${baseURL}/category/${categoryId}`;
+async function archiveSpecificCategory(categoryId, status) {
+    const url = `${baseURL}/category/${categoryId}/archive`;
     const response = await fetch(url, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({status})
     });
     console.log(response);
     return response;
 };
 
-export {register, login, userProfile, logout, updateProfile, getAllCategories, deleteSpecificCategory};
+export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory};
