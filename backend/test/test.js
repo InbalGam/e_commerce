@@ -431,7 +431,7 @@ describe('/category routes- with products also', function() {
         });
     });
 
-    it('DELETE /category/:category_id should NOT delete a specific category- wrong id', function() {
+    it('DELETE /category/:category_id/archive should NOT delete a specific category- wrong id', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -439,7 +439,7 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/24')
+            .delete('/category/24/archive')
             .expect(400)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'invalid category id'});
@@ -447,7 +447,7 @@ describe('/category routes- with products also', function() {
         });
     });
 
-    it('DELETE /category/:category_id should delete a specific category - Unauthorized', function() {
+    it('DELETE /category/:category_id/archive should delete a specific category - Unauthorized', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -455,7 +455,7 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/5')
+            .delete('/category/5/archive')
             .expect(401)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
@@ -463,7 +463,7 @@ describe('/category routes- with products also', function() {
         });
     });
 
-    it('DELETE /category/:category_id should delete a specific category', function() {
+    it('DELETE /category/:category_id/archive should delete a specific category', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -471,10 +471,10 @@ describe('/category routes- with products also', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/5')
+            .delete('/category/5/archive')
             .expect(200)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Deleted category'});
+                expect(response.body).to.be.deep.equal({msg: 'Archived category & products'});
             });
         });
     });
@@ -674,7 +674,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         })
     });
 
-    it('DELETE /category/:category_id/products/:product_id should NOT delete a specific product- wrong id', function() {
+    it('DELETE /category/:category_id/products/:product_id/archive should NOT delete a specific product- wrong id', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -682,7 +682,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/1/products/10')
+            .delete('/category/1/products/10/archive')
             .expect(400)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'invalid product id'});
@@ -690,7 +690,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         });
     });
 
-    it('DELETE /category/:category_id/products/:product_id should delete a specific product', function() {
+    it('DELETE /category/:category_id/products/:product_id/archive should delete a specific product', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -698,7 +698,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/1/products/3')
+            .delete('/category/1/products/3/archive')
             .expect(401)
             .then((response) => {
                 expect(response.body).to.be.deep.equal({msg: 'Unauthorized'});
@@ -706,7 +706,7 @@ describe('/category/:category_id/products/:product_id routes', function() {
         });
     });
 
-    it('DELETE /category/:category_id/products/:product_id should delete a specific product', function() {
+    it('DELETE /category/:category_id/products/:product_id/archive should delete a specific product', function() {
         const agent = request.agent(app);
         return agent
         .post('/login')
@@ -714,10 +714,10 @@ describe('/category/:category_id/products/:product_id routes', function() {
         .redirects(1)
         .then(() => {
             return agent
-            .delete('/category/1/products/3')
+            .delete('/category/1/products/3/archive')
             .expect(200)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Deleted product'});
+                expect(response.body).to.be.deep.equal({msg: 'Archived product'});
             });
         });
     });

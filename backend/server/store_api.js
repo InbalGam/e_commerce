@@ -137,18 +137,23 @@ storeRouter.put('/category/:category_id', async (req, res, next) => {
 });
 
 
-// Delete a specific category
-storeRouter.delete('/category/:category_id', async (req, res, next) => {
+// Archive / Un-Archive a specific category
+storeRouter.delete('/category/:category_id/archive', async (req, res, next) => {
     if (req.user.is_admin) {
-        try {
-            await pool.query('delete from category where id = $1;', [req.params.category_id]);
-            res.status(200).json({ msg: 'Deleted category' });
-        } catch (e) {
-            console.log(e);
-            res.status(500).json({msg: 'Server error'});
-        }
+        next();
     } else {
-        return res.status(401).json({msg: 'Unauthorized'});
+        res.status(401).json({ msg: 'Unauthorized' });
+    }
+}, async (req, res, next) => {
+    const { status } = req.body;
+    const timestamp = new Date(Date.now());
+    try {
+        await pool.query('update category set is_archived = $2, modified_at = $3 where id = $1;', [req.params.category_id, status, timestamp]);
+        await pool.query('update products set is_archived = $2, modified_at = $3 where category_id = $1;', [req.params.category_id, status, timestamp]);
+        res.status(200).json({ msg: 'Archived category & products' });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ msg: 'Server error' });
     }
 });
 
@@ -264,18 +269,23 @@ storeRouter.put('/category/:category_id/products/:product_id', async (req, res, 
     }
 });
 
-// Delete a specific product
-storeRouter.delete('/category/:category_id/products/:product_id', async (req, res, next) => {
+// Archive / Un-archive a specific product
+storeRouter.delete('/category/:category_id/products/:product_id/archive', async (req, res, next) => {
     if (req.user.is_admin) {
+        next();
+    } else {
+        res.status(401).json({ msg: 'Unauthorized' });
+    }
+}, async (req, res, next) => {
+    const { status } = req.body;
+    const timestamp = new Date(Date.now());
         try {
-            await pool.query('delete from products where id = $1;', [req.params.product_id]);
-            res.status(200).json({ msg: 'Deleted product' });
+            await pool.query('update products set is_archived = $2, modified_at = $3 where id = $1;', [req.params.product_id, status, timestamp]);
+            res.status(200).json({ msg: 'Archived product' });
         } catch (e) {
+            console.log(e);
             res.status(500).json({msg: 'Server error'});
         }
-    } else {
-        return res.status(401).json({msg: 'Unauthorized'});
-    }
 });
 
 
