@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import {loadCategories} from '../store/categorySlice';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
+import {baseURL} from '../apiKey';
 
 
 function Category(props) {
@@ -40,9 +41,8 @@ function Category(props) {
           }
     };
 
-
     return (
-        <li key={props.ind}>
+        <li key={props.ind} style={{ backgroundImage: props.el.imagename ? `${baseURL}/image/${props.el.imagename}` : '' }}>
             <div className="categoryActions">
                 {props.admin ? 
                     <div> 
