@@ -23,12 +23,18 @@ function CategoryAddUpdate(props) {
 
     async function submitNewCategory(e) {
         e.preventDefault();
+        let imgId;
         const data = new FormData();
         data.append('image', categoryImg );
         try {
-            const imgResult = await loadCategoryImage(data);
-            const jsonData = await imgResult.json();
-            const result = await insertNewCategory(categoryName, jsonData.id);
+            if (categoryImg) {
+                const imgResult = await loadCategoryImage(data);
+                const jsonData = await imgResult.json();
+                imgId = jsonData.id;
+            } else {
+                imgId = null;
+            }
+            const result = await insertNewCategory(categoryName, imgId);
             if (result.status === 200) {
                 dispatch(loadCategories());
             } else if (result.status === 401){
