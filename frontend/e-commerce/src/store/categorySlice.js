@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export const loadCategories = createAsyncThunk(
-    '/category',
+    'categories/loadCategories',
     async () => {
         try {
             const results = await getAllCategories();
