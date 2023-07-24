@@ -1,7 +1,7 @@
 import {archiveSpecificCategory, updateCategory, loadCategoryImage} from '../Api';
 import { useEffect, useState } from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, Link} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {loadCategories} from '../store/categorySlice';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -67,7 +67,7 @@ function Category(props) {
   };
 
     return (
-        <li key={props.ind}>
+      <Link to={`${props.el.id}/products`} className='categoryLink'><li key={props.ind}>
             <div className="category" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
             <p>{props.el.categoryName}</p>
                 {props.admin ? 
@@ -79,7 +79,7 @@ function Category(props) {
                 {deleteFailed === false ? '' : 'Could not archive category'}
                 {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el}/> : ''}
             </div>
-        </li>
+        </li></Link>
     );
 };
 
