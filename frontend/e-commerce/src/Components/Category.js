@@ -66,21 +66,21 @@ function Category(props) {
       }
   };
 
-    return (
-      <Link to={`${props.el.id}/products`} className='categoryLink'><li key={props.ind}>
-            <div className="category" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
-            <p>{props.el.categoryName}</p>
-                {props.admin ? 
-                    <div> 
-                        <input type="checkbox" name="isArchive" onChange={onClickIsArchive}/> 
-                        <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon/> : <ArchiveIcon/>}</button>
-                        <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon/></button>
-                    </div> : ''}
-                {deleteFailed === false ? '' : 'Could not archive category'}
-                {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el}/> : ''}
-            </div>
-        </li></Link>
-    );
+  return (
+    <li key={props.ind}>
+      <div className="category" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
+      <Link to={`${props.el.id}/products`} className='categoryLink'><p>{props.el.categoryName}</p></Link>
+        {props.admin ?
+          <div>
+            <input type="checkbox" name="isArchive" onChange={onClickIsArchive} />
+            <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</button>
+            <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon /></button>
+          </div> : ''}
+        {deleteFailed === false ? '' : 'Could not archive category'}
+        {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el} /> : ''}
+      </div>
+    </li>
+  );
 };
 
 export default Category;
