@@ -19,7 +19,6 @@ function Category(props) {
     const dispatch = useDispatch();
 
 
-    // add edit and delete for admins only
     async function onClickIsArchive(e) {
         console.log(e.target.checked);
     };
@@ -27,7 +26,6 @@ function Category(props) {
     async function archive(e) {
         e.preventDefault();
         try {
-            //setIsCategoryLoading(true);
             console.log(props.el.id);
             const result = await archiveSpecificCategory(props.el.id, !props.isArchived);
             if (result.status === 401) {
