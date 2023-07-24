@@ -135,4 +135,58 @@ async function getAllCategoryProducts(categoryId) {
 };
 
 
-export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadCategoryImage, getAllCategoryProducts};
+async function archiveSpecificProduct(categoryId, productId, status) {
+    const url = `${baseURL}/category/${categoryId}/products/${productId}/archive`;
+    const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({status})
+    });
+    console.log(response);
+    return response;
+};
+
+
+async function insertNewProduct(categoryId, data) {
+    const url = `${baseURL}/category/${categoryId}`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response;
+};
+
+
+async function updateProduct(categoryId, productId, data) {
+    const url = `${baseURL}/category/${categoryId}/products/${productId}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response;
+};
+
+
+async function loadProductImage(data) {
+    const url = `${baseURL}/image`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Accept': 'application/json'},
+        body: data
+    });
+
+    return response;
+};
+
+
+export {register, login, userProfile, logout, updateProfile,
+    getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadCategoryImage,
+    getAllCategoryProducts, archiveSpecificProduct};

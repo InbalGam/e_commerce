@@ -47,7 +47,7 @@ function ProductsList() {
                 <p>Archived Products</p>
                 <ul>
                     {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : products.map((el, ind) => el.is_archived ?
-                                                                                                                                                        <Product el={el} ind={ind} admin={profile.is_admin} isArchived={false}/> : '' ))}
+                                                                                                                                                        <Product el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' ))}
                 </ul>
             </div> : '' }
         </div>
