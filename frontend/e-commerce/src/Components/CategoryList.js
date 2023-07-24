@@ -67,13 +67,14 @@ function CategoryList() {
                                                                                                                                                                         : <Category el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
                 </ul>
             </div>
+            {profile.is_admin ? 
             <div className="archivedCategories">
                 <p>Archived Categories</p>
                 <ul>
                     {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
                                                                                                                                                                                     <Category el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' ))}
                 </ul>
-            </div>
+            </div> : '' }
         </div>
     );
 };
