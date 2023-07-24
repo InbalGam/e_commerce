@@ -1,4 +1,4 @@
-import {archiveSpecificCategory} from '../Api';
+import {archiveSpecificCategory, updateCategory, loadCategoryImage} from '../Api';
 import { useEffect, useState } from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
 import { useNavigate} from 'react-router-dom';
@@ -9,7 +9,6 @@ import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import {baseURL} from '../apiKey';
 import EditIcon from '@mui/icons-material/Edit';
 import CategoryAddUpdate from './CategoryAddUpdate';
-import {updateCategory, loadCategoryImage} from '../Api';
 import styles from './Styles/Category.css';
 
 
