@@ -123,4 +123,16 @@ async function loadCategoryImage(data) {
     return response;
 };
 
-export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadCategoryImage};
+
+async function getAllCategoryProducts(categoryId) {
+    const url = `${baseURL}/category/${categoryId}/products`;
+    const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
+
+export {register, login, userProfile, logout, updateProfile, getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadCategoryImage, getAllCategoryProducts};
