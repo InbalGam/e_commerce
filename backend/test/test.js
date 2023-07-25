@@ -852,6 +852,7 @@ describe('/cart routes', function() {
                 expect(response.body[0]).to.have.ownProperty('calculated_price');
                 expect(response.body[0]).to.have.ownProperty('created_at');
                 expect(response.body[0]).to.have.ownProperty('modified_at');
+                expect(response.body[0]).to.have.ownProperty('product_name');
             });
         })
     });
