@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import categoryReducer from './categorySlice';
 import profileReducer from './profileSlice';
 import productsReducer from './productSlice';
+import cartReducer from './cartSlice';
 
 export default configureStore({
   reducer: {
     categories: categoryReducer,
     profile: profileReducer,
-    products: productsReducer
+    products: productsReducer,
+    cart: cartReducer
   },
 });

@@ -173,6 +173,31 @@ async function loadImage(data) {
 };
 
 
+async function getCart() {
+    const url = `${baseURL}/cart`;
+    const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
+
+async function addToCart(data) {
+    const url = `${baseURL}/cart`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response;
+};
+
+
 export {register, login, userProfile, logout, updateProfile,
     getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
-    getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct};
+    getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct,
+    getCart, addToCart};
