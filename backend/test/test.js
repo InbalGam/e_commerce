@@ -797,7 +797,7 @@ describe('/cart routes', function() {
             .send({product_id: 1, quantity: 2})
             .expect(200)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Added to cart and Updated product'});
+                expect(response.body).to.be.deep.equal({msg: 'Added to cart'});
             });
         })
     });
@@ -905,7 +905,7 @@ describe('/cart routes', function() {
             .send({product_id: 2, quantity: 5})
             .expect(200)
             .then((response) => {
-                expect(response.body).to.be.deep.equal({msg: 'Updated product in cart and Updated product'});
+                expect(response.body).to.be.deep.equal({msg: 'Updated product in cart'});
             });
         })
     });
