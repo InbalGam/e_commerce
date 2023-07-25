@@ -10,7 +10,8 @@ import {baseURL} from '../apiKey';
 import EditIcon from '@mui/icons-material/Edit';
 import styles from './Styles/Product.css';
 import ProductAddUpdate from "./ProductAddUpdate";
-import {loadImage, updateProduct} from '../Api';
+import {loadImage, updateProduct, addToCart} from '../Api';
+import Select from 'react-select';
 
 
 function Product(props) {
@@ -19,6 +20,16 @@ function Product(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { categoryId } = useParams();
+    const [amount, setAmount] = useState(0);
+
+
+    const amountOptions = [];
+    for (let i = 0; i <= props.el.inventoryQuantity; i++) {
+        amountOptions.push({value: i, label:i});
+    }
+    const changeHandler = value => {
+        setAmount(value);
+    };
 
 
     async function onClickIsArchive(e) {
@@ -72,6 +83,21 @@ function Product(props) {
         }
     };
 
+
+    async function insertToCart() {
+        try {
+            const result = await addToCart({product_id: props.el.id, quantity: amount.value});
+            if (result.status === 200) {
+                dispatch(loadProducts(categoryId));
+            } else if (result.status === 401){
+                navigate('/login');
+            }
+        } catch(e) {
+            navigate('/error');
+        }
+    };
+
+
     return (
         <li key={props.ind}>
             <div className="product" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
@@ -85,7 +111,8 @@ function Product(props) {
                 <div className='productInfo'>
                     <p>{props.el.price}$</p>
                     <p>{props.el.discount ? props.el.discount+'% discount' : ''}</p>
-                    <button className='addToCart'>Add to cart</button>
+                    <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount"/>
+                    <button className='addToCart' onClick={insertToCart}>Add to cart</button>
                 </div>
                 {deleteFailed === false ? '' : 'Could not archive product'}
                 {showForm ? <ProductAddUpdate onProductSubmit={onProductSubmit} product={props.el}/> : ''}
