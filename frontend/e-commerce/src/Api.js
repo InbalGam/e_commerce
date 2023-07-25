@@ -197,7 +197,20 @@ async function addToCart(data) {
 };
 
 
+async function updateProductCart(productId, data) {
+    const url = `${baseURL}/cart/${productId}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response;
+};
+
+
 export {register, login, userProfile, logout, updateProfile,
     getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
     getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct,
-    getCart, addToCart};
+    getCart, addToCart, updateProductCart};

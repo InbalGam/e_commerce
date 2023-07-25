@@ -4,6 +4,7 @@ import {selectCart, loadCart} from '../store/cartSlice';
 import FadeLoader from 'react-spinners/FadeLoader';
 import {selectProfile} from '../store/profileSlice';
 import { useNavigate } from 'react-router-dom';
+import CartItem from "./CartItem";
 
 
 function Cart() {
@@ -25,16 +26,9 @@ function Cart() {
             {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
                 <div className="cartInfo">
                     <ul>
-                        {cart.map((el, ind) =>
-                            <li key={ind}>
-                                <div>
-                                    <p>{el.product_name}</p>
-                                    <p>Quantity: {el.quantity}</p>
-                                    <p>Price: {el.calculated_price}</p>
-                                </div>
-                            </li>)}
+                        {cart.map((el, ind) => <CartItem el={el} ind={ind} />)}
                     </ul>
-                    <p className="cartTotal">Total: {total}</p>
+                    <p className="cartTotal">Total: {total}$</p>
                 </div>)}
         </div>
     );
