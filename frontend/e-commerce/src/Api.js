@@ -110,20 +110,6 @@ async function updateCategory(categoryId, categoryName, imgId) {
     return response;
 };
 
-
-// async function loadCategoryImage(data) {
-//     const url = `${baseURL}/image`;
-//     const response = await fetch(url, {
-//         method: 'POST',
-//         credentials: 'include',
-//         headers: {'Accept': 'application/json'},
-//         body: data
-//     });
-
-//     return response;
-// };
-
-
 async function getAllCategoryProducts(categoryId) {
     const url = `${baseURL}/category/${categoryId}/products`;
     const response = await fetch(url, {
@@ -189,4 +175,4 @@ async function loadImage(data) {
 
 export {register, login, userProfile, logout, updateProfile,
     getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
-    getAllCategoryProducts, archiveSpecificProduct, insertNewProduct};
+    getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct};

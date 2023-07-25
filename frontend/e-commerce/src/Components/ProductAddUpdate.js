@@ -34,6 +34,9 @@ function ProductAddUpdate(props) {
 
     async function setProduct(product) {
         setProductName(product.productName);
+        setPrice(product.price);
+        setDiscount(product.discount);
+        setQuantity(product.inventoryQuantity);
     };
 
 
@@ -45,12 +48,6 @@ function ProductAddUpdate(props) {
 
     function ProductSubmit(e) {
         e.preventDefault();
-        // const data = {
-        //     productName: productName,
-        //     inventoryQuantity: quantity,
-        //     price: price,
-        //     discountPercetage: discount
-        // };
         const data = {
             productName: productName,
             inventoryQuantity: Number(quantity),

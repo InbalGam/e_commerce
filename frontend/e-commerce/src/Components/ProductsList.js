@@ -43,7 +43,6 @@ function ProductsList() {
             }
             productData.imgId = imgId;
             productData.categoryId = categoryId;
-            console.log(productData);
             const result = await insertNewProduct(categoryId, productData);
             if (result.status === 200) {
                 dispatch(loadProducts(categoryId));

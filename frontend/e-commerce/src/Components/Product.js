@@ -8,6 +8,9 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import {baseURL} from '../apiKey';
 import EditIcon from '@mui/icons-material/Edit';
+import styles from './Styles/Product.css';
+import ProductAddUpdate from "./ProductAddUpdate";
+import {loadImage, updateProduct} from '../Api';
 
 
 function Product(props) {
@@ -18,7 +21,6 @@ function Product(props) {
     const { categoryId } = useParams();
 
 
-    // add edit and delete for admins only
     async function onClickIsArchive(e) {
         console.log(e.target.checked);
     };
@@ -43,28 +45,32 @@ function Product(props) {
           }
     };
 
-//     async function onProductSubmit(categoryName, categoryImg) {
-//       let imgId;
-//       const data = new FormData();
-//       data.append('image', categoryImg );
-//       try {
-//           if (categoryImg) {
-//               const imgResult = await loadCategoryImage(data);
-//               const jsonData = await imgResult.json();
-//               imgId = jsonData.id;
-//           } else {
-//               imgId = props.el.image_id;
-//           }
-//           const result = await updateCategory(props.el.id, categoryName, imgId);
-//           if (result.status === 200) {
-//               dispatch(loadCategories());
-//           } else if (result.status === 401){
-//               navigate('/login');
-//           }
-//       } catch (e) {
-//           navigate('/error');
-//       }
-//   };
+    async function onProductSubmit(productData, productImg) {
+        let imgId;
+        const data = new FormData();
+        data.append('image', productImg );
+        try {
+            if (productImg) {
+                const imgResult = await loadImage(data);
+                const jsonData = await imgResult.json();
+                imgId = jsonData.id;
+            } else {
+                imgId = props.el.image_id;
+            }
+            productData.imgId = imgId;
+            productData.categoryId = categoryId;
+            const result = await updateProduct(categoryId, props.el.id, productData);
+            if (result.status === 200) {
+                dispatch(loadProducts(categoryId));
+                setShowForm(false);
+            } else if (result.status === 401){
+                navigate('/login');
+                setShowForm(false);
+            }
+        } catch (e) {
+            navigate('/error');
+        }
+    };
 
     return (
         <li key={props.ind}>
@@ -82,7 +88,7 @@ function Product(props) {
                     <button className='addToCart'>Add to cart</button>
                 </div>
                 {deleteFailed === false ? '' : 'Could not archive product'}
-                {/* {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el}/> : ''} */}
+                {showForm ? <ProductAddUpdate onProductSubmit={onProductSubmit} product={props.el}/> : ''}
             </div>
         </li>
     );
