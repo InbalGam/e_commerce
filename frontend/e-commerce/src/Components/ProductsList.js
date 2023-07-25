@@ -4,9 +4,10 @@ import {selectProducts, loadProducts} from '../store/productSlice';
 import FadeLoader from 'react-spinners/FadeLoader';
 import AddIcon from '@mui/icons-material/Add';
 import {selectProfile} from '../store/profileSlice';
-import {loadCategoryImage, insertNewCategory} from '../Api';
+import {loadImage, insertNewProduct} from '../Api';
 import { useParams, useNavigate } from 'react-router-dom';
 import Product from "./Product";
+import ProductAddUpdate from "./ProductAddUpdate";
 
 
 function ProductsList() {
@@ -28,12 +29,41 @@ function ProductsList() {
         setShowForm(!showForm);
     };
 
+    async function onProductSubmit(productData, productImg) {
+        let imgId;
+        const data = new FormData();
+        data.append('image', productImg );
+        try {
+            if (productImg) {
+                const imgResult = await loadImage(data);
+                const jsonData = await imgResult.json();
+                imgId = jsonData.id;
+            } else {
+                imgId = null;
+            }
+            productData.imgId = imgId;
+            productData.categoryId = categoryId;
+            console.log(productData);
+            const result = await insertNewProduct(categoryId, productData);
+            if (result.status === 200) {
+                dispatch(loadProducts(categoryId));
+                setShowForm(false);
+            } else if (result.status === 401){
+                navigate('/login');
+                setShowForm(false);
+            }
+        } catch (e) {
+            navigate('/error');
+        }
+    };
+
+
     return (
         <div className="productsContainer">
             {profile.is_admin ?
                 <div className="addProduct">
                     <button className='add_product' onClick={showAddProduct}><AddIcon /></button>
-                    {showForm === false ? '' : 'ADD COMPONENET to add update product'}
+                    {showForm === false ? '' : <ProductAddUpdate onProductSubmit={onProductSubmit} />}
                 </div> : ''}
             <div className="currentProducts">
                 <p>Current Products</p>

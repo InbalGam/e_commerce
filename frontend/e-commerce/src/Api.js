@@ -111,17 +111,17 @@ async function updateCategory(categoryId, categoryName, imgId) {
 };
 
 
-async function loadCategoryImage(data) {
-    const url = `${baseURL}/image`;
-    const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {'Accept': 'application/json'},
-        body: data
-    });
+// async function loadCategoryImage(data) {
+//     const url = `${baseURL}/image`;
+//     const response = await fetch(url, {
+//         method: 'POST',
+//         credentials: 'include',
+//         headers: {'Accept': 'application/json'},
+//         body: data
+//     });
 
-    return response;
-};
+//     return response;
+// };
 
 
 async function getAllCategoryProducts(categoryId) {
@@ -174,7 +174,7 @@ async function updateProduct(categoryId, productId, data) {
 };
 
 
-async function loadProductImage(data) {
+async function loadImage(data) {
     const url = `${baseURL}/image`;
     const response = await fetch(url, {
         method: 'POST',
@@ -188,5 +188,5 @@ async function loadProductImage(data) {
 
 
 export {register, login, userProfile, logout, updateProfile,
-    getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadCategoryImage,
-    getAllCategoryProducts, archiveSpecificProduct};
+    getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
+    getAllCategoryProducts, archiveSpecificProduct, insertNewProduct};
