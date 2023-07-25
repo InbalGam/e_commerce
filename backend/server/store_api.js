@@ -297,7 +297,7 @@ storeRouter.delete('/category/:category_id/products/:product_id/archive', async 
 // Get cart-
 storeRouter.get('/cart', async (req, res, next) => { 
     try {
-        const result = await pool.query('select c.*, p.product_name from carts c join products p on c.product_id = p.id where user_id = $1;', [req.user.id]);
+        const result = await pool.query('select c.*, p.product_name, p.inventory_quantity from carts c join products p on c.product_id = p.id where user_id = $1;', [req.user.id]);
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
