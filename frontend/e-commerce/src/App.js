@@ -7,6 +7,7 @@ import Logout from "./Components/Logout";
 import Profile from "./Components/Profile";
 import Register from "./Components/Register";
 import ProductsList from "./Components/ProductsList";
+import Cart from './Components/Cart';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path='category' element={ <CategoryList/> } />
         <Route path='category/:categoryId/products' element={ <ProductsList/> } />
         <Route path='profile' element={ <Profile/> } />
+        <Route path='cart' element={ <Cart/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
       <Route path='register' element={ <Register/> } />

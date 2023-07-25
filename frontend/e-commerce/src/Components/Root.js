@@ -8,10 +8,11 @@ function Root() {
             <div className='nav-bar'>
                 <p>Shop Online</p>
                 <div className='nav-links'>
-                    <NavLink to='/category' className='categoryLink'>Categories</NavLink>
-                    <NavLink to='/login' className='loginLink'>Log in</NavLink>
-                    <NavLink to='/profile' className='profileLink'>Profile</NavLink>
-                    <NavLink to='/logout' className='logoutLink'>Log out</NavLink>
+                    <NavLink to='/category' className='rootLink'>Categories</NavLink>
+                    <NavLink to='/profile' className='rootLink'>Profile</NavLink>
+                    <NavLink to='/cart' className='rootLink'>Cart</NavLink>
+                    <NavLink to='/login' className='rootLink'>Log in</NavLink>
+                    <NavLink to='/logout' className='rootLink'>Log out</NavLink>
                 </div>
             </div>
             <Outlet />
