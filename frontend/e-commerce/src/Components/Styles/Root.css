@@ -26,49 +26,14 @@
     margin-right: 2rem;
 }
 
-.nav-links .logoutLink {
+.nav-links .rootLink {
     padding-left: 1rem;
     text-decoration: none;
     cursor: pointer;
     color: #060565;
 }
 
-.nav-links .logoutLink:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.nav-links .categoryLink {
-    text-decoration: none;
-    cursor: pointer;
-    color: #060565;
-    padding-right: 1rem;
-}
-
-.nav-links .categoryLink:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.nav-links .loginLink {
-    text-decoration: none;
-    cursor: pointer;
-    color: #060565;
-}
-
-.nav-links .loginLink:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.nav-links .profileLink {
-    text-decoration: none;
-    cursor: pointer;
-    color: #060565;
-    padding-left: 1rem;
-}
-
-.nav-links .profileLink:hover {
+.nav-links .rootLink:hover {
     text-decoration: underline;
     cursor: pointer;
 }
@@ -79,11 +44,7 @@
         font-size: 1rem;
     }
 
-    .nav-links .loginLink {
+    .nav-links .rootLink {
         font-size: 0.8rem;
     }
-
-    /* .nav-links .logoutLink {
-        font-size: 0.8rem;
-    } */
 }
