@@ -19,10 +19,6 @@ function Category(props) {
     const dispatch = useDispatch();
 
 
-    async function onClickIsArchive(e) {
-        console.log(e.target.checked);
-    };
-
     async function archive(e) {
         e.preventDefault();
         try {
@@ -74,7 +70,6 @@ function Category(props) {
       <Link to={`${props.el.id}/products`} className='categoryLink'><p>{props.el.categoryName}</p></Link>
         {props.admin ?
           <div>
-            <input type="checkbox" name="isArchive" onChange={onClickIsArchive} />
             <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</button>
             <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon /></button>
           </div> : ''}

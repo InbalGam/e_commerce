@@ -32,10 +32,6 @@ function Product(props) {
     };
 
 
-    async function onClickIsArchive(e) {
-        console.log(e.target.checked);
-    };
-
     async function archive(e) {
         e.preventDefault();
         try {
@@ -104,7 +100,6 @@ function Product(props) {
                 <h3>{props.el.productName}</h3>
                 {props.admin ? 
                     <div> 
-                        <input type="checkbox" name="isArchive" onChange={onClickIsArchive}/> 
                         <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon/> : <ArchiveIcon/>}</button>
                         <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon/></button>
                     </div> : ''}
