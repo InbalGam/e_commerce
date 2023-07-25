@@ -6,7 +6,7 @@ import Category from './Category';
 import AddIcon from '@mui/icons-material/Add';
 import {selectProfile} from '../store/profileSlice';
 import CategoryAddUpdate from "./CategoryAddUpdate";
-import {loadCategoryImage, insertNewCategory} from '../Api';
+import {loadImage, insertNewCategory} from '../Api';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -35,7 +35,7 @@ function CategoryList() {
         data.append('image', categoryImg );
         try {
             if (categoryImg) {
-                const imgResult = await loadCategoryImage(data);
+                const imgResult = await loadImage(data);
                 const jsonData = await imgResult.json();
                 imgId = jsonData.id;
             } else {
@@ -44,8 +44,10 @@ function CategoryList() {
             const result = await insertNewCategory(categoryName, imgId);
             if (result.status === 200) {
                 dispatch(loadCategories());
+                setShowForm(false);
             } else if (result.status === 401){
                 navigate('/login');
+                setShowForm(false);
             }
         } catch (e) {
             navigate('/error');

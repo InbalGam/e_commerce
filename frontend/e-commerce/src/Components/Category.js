@@ -1,4 +1,4 @@
-import {archiveSpecificCategory, updateCategory, loadCategoryImage} from '../Api';
+import {archiveSpecificCategory, updateCategory, loadImage} from '../Api';
 import { useEffect, useState } from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
 import { useNavigate, Link} from 'react-router-dom';
@@ -34,8 +34,10 @@ function Category(props) {
               if (result.status === 200) {
                 dispatch(loadCategories());
                 setDeleteFailed(false);
+                setShowForm(false);
               } else {
                 setDeleteFailed(true);
+                setShowForm(false);
               }
             }
           } catch (e) {
@@ -49,7 +51,7 @@ function Category(props) {
       data.append('image', categoryImg );
       try {
           if (categoryImg) {
-              const imgResult = await loadCategoryImage(data);
+              const imgResult = await loadImage(data);
               const jsonData = await imgResult.json();
               imgId = jsonData.id;
           } else {
