@@ -334,9 +334,9 @@ storeRouter.post('/cart', async (req, res, next) => {
         const timestamp = new Date(Date.now());
         await pool.query('insert into carts (user_id, product_id, quantity, calculated_price, created_at) values ($1, $2, $3, $4, $5);', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
 
-        const newQuantity = product.rows[0].inventory_quantity - quantity;
-        await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
-        res.status(200).json({msg: 'Added to cart and Updated product'});
+        //const newQuantity = product.rows[0].inventory_quantity - quantity;
+        //await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
+        res.status(200).json({msg: 'Added to cart'});
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
     }
@@ -381,9 +381,9 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
         const timestamp = new Date(Date.now());
         await pool.query('update carts set user_id = $1, product_id = $2, quantity = $3, calculated_price = $4, modified_at = $5 where user_id = $1 and product_id = $2;', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
 
-        const newQuantity = (product.rows[0].inventory_quantity - quantity);
-        await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
-        res.status(200).json({msg: 'Updated product in cart and Updated product'});
+        //const newQuantity = (product.rows[0].inventory_quantity - quantity);
+        //await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
+        res.status(200).json({msg: 'Updated product in cart'});
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
     }
@@ -407,7 +407,7 @@ storeRouter.delete('/cart/:product_id', async (req, res, next) => {
 
 // Order
 
-// Get an order
+// Get all user orders
 storeRouter.get('/order', async (req, res, next) => { 
     try {
         const result = await pool.query('select * from order_details od join order_items oi on od.id = oi.order_id where od.user_id = $1;', [req.user.id]);
@@ -416,7 +416,7 @@ storeRouter.get('/order', async (req, res, next) => {
         res.status(500).json({msg: 'Server error'});
     }
 });
-
+//products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]
 // Post an order
 storeRouter.post('/order', async (req, res, next) => { 
     const { total, address, phone, products } = req.body;
@@ -439,6 +439,9 @@ storeRouter.post('/order', async (req, res, next) => {
             await pool.query('insert into order_items (order_id, product_id, quantity, price, created_at) values ($1, $2, $3, $4, $5);', 
             [order_id.rows[0].id, element.product_id, element.quantity, element.price, timestamp]);
             console.log(element);
+            const product = await pool.query('select * from products where id = $1', [element.product_id]);
+            const newQuantity = (product.rows[0].inventory_quantity - element.quantity);
+            await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [element.product_id, newQuantity, timestamp]);
         });
         res.status(200).json({msg: 'Added order'});
     } catch (e) {
