@@ -5,6 +5,7 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import EditIcon from '@mui/icons-material/Edit';
 import {updateProfile} from '../Api';
 import { useNavigate} from 'react-router-dom';
+import OrdersList from "./OrdersList";
 
 
 function Profile() {
@@ -133,6 +134,9 @@ function Profile() {
                     </div>}
                 </div>
                 {fieldsFilled ? '' : 'Address and phone needs to be filled'}
+
+                <h3>Your orders</h3>
+                <OrdersList/>
             </div>
         )}
         </div>

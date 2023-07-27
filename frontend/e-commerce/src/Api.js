@@ -210,19 +210,6 @@ async function updateProductCart(productId, data) {
 };
 
 
-async function addOrder(data) {
-    const url = `${baseURL}/order`;
-    const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-
-    return response;
-};
-
-
 async function deleteUserCart() {
     const url = `${baseURL}/cart`;
     const response = await fetch(url, {
@@ -245,8 +232,41 @@ async function deleteProductInCart(productId) {
 };
 
 
+async function getUserOrders() {
+    const url = `${baseURL}/order`;
+    const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
+async function getSpecificOrder(orderId) {
+    const url = `${baseURL}/order/${orderId}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
+async function addOrder(data) {
+    const url = `${baseURL}/order`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response;
+};
+
+
 export {register, login, userProfile, logout, updateProfile,
     getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
     getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct,
     getCart, addToCart, updateProductCart, deleteUserCart, deleteProductInCart,
-    addOrder};
+    addOrder, getUserOrders, getSpecificOrder};

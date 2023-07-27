@@ -8,7 +8,7 @@ import Profile from "./Components/Profile";
 import Register from "./Components/Register";
 import ProductsList from "./Components/ProductsList";
 import Cart from './Components/Cart';
-import OrdersList from "./Components/OrdersList";
+import OrderDetails from "./Components/OrderDetails";
 
 function App() {
 
@@ -20,11 +20,11 @@ function App() {
         <Route path='category/:categoryId/products' element={ <ProductsList/> } />
         <Route path='profile' element={ <Profile/> } />
         <Route path='cart' element={ <Cart/> } />
+        <Route path='myOrders/:orderId' element={ <OrderDetails/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
       <Route path='register' element={ <Register/> } />
       <Route path='logout' element={ <Logout/> } />
-      <Route path='myOrders' element={ <OrdersList/> } />
     </Route>
   ));
 

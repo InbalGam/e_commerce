@@ -410,13 +410,13 @@ storeRouter.delete('/cart/:product_id', async (req, res, next) => {
 // Get all user orders
 storeRouter.get('/order', async (req, res, next) => { 
     try {
-        const result = await pool.query('select * from order_details od join order_items oi on od.id = oi.order_id where od.user_id = $1 order by od.created_at desc;', [req.user.id]);
+        const result = await pool.query('select * from order_details where user_id = $1 order by created_at desc;', [req.user.id]);
         res.status(200).json(result.rows);
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
     }
 });
-//products:[{product_id: 2, quantity: 2, price: 2}, {product_id: 4, quantity: 2, price: 2}]
+
 // Post an order
 storeRouter.post('/order', async (req, res, next) => { 
     const { total, address, phone, products } = req.body;
@@ -454,7 +454,7 @@ storeRouter.post('/order', async (req, res, next) => {
 // Get a specific order
 storeRouter.get('/order/:order_id', async (req, res, next) => { 
     try {
-        const result = await pool.query('select * from order_details od join order_items oi on od.id = oi.order_id where od.id = $1;', [req.params.order_id]);
+        const result = await pool.query('select oi.*, p.product_name from order_details od join order_items oi on od.id = oi.order_id join products p on p.id = oi.product_id where od.id = $1 and od.user_id = $2;', [req.params.order_id, req.user.id]);
         if (result.rows.length === 0) {
             return res.status(400).json({ msg: 'Please choose a different order, this one is not in the system' });
         }
