@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export const loadCart = createAsyncThunk(
-    'categories/loadCategories',
+    'cart/loadCart',
     async () => {
         try {
             const results = await getCart();
