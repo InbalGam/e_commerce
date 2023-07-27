@@ -210,7 +210,43 @@ async function updateProductCart(productId, data) {
 };
 
 
+async function addOrder(data) {
+    const url = `${baseURL}/order`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    return response;
+};
+
+
+async function deleteUserCart() {
+    const url = `${baseURL}/cart`;
+    const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
+
+async function deleteProductInCart(productId) {
+    const url = `${baseURL}/cart/${productId}`;
+    const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+
+    return response;
+};
+
+
 export {register, login, userProfile, logout, updateProfile,
     getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
     getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct,
-    getCart, addToCart, updateProductCart};
+    getCart, addToCart, updateProductCart, deleteUserCart, deleteProductInCart,
+    addOrder};

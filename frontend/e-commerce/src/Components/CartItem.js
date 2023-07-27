@@ -1,9 +1,10 @@
 import Select from 'react-select';
 import { useEffect, useState } from "react";
-import {updateProductCart} from '../Api';
+import {updateProductCart, deleteProductInCart} from '../Api';
 import { useDispatch } from 'react-redux';
 import {loadCart} from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 function CartItem(props) {
@@ -21,9 +22,28 @@ function CartItem(props) {
     };
 
 
-    async function updateProductInCart() {
+    async function updateProductInCart(e) {
+        if (amount.value === 0) {
+            deleteProduct(e);
+        } else {
+            try {
+                const result = await updateProductCart(props.el.product_id, {product_id: props.el.product_id, quantity: amount.value});
+                if (result.status === 200) {
+                    dispatch(loadCart());
+                } else if (result.status === 401){
+                    navigate('/login');
+                }
+            } catch(e) {
+                navigate('/error');
+            }
+        }
+    };
+
+
+    async function deleteProduct(e) {
+        e.preventDefault();
         try {
-            const result = await updateProductCart(props.el.product_id, {product_id: props.el.product_id, quantity: amount.value});
+            const result = await deleteProductInCart(props.el.product_id);
             if (result.status === 200) {
                 dispatch(loadCart());
             } else if (result.status === 401){
@@ -37,6 +57,7 @@ function CartItem(props) {
     return (
         <li key={props.el.ind}>
             <div>
+                <button className='deleteIcon' onClick={deleteProduct}><DeleteIcon/></button>
                 <p>{props.el.product_name}</p>
                 <p>Quantity:</p>
                 {props.el.inventory_quantity > props.el.quantity ? <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" /> : 
