@@ -8,6 +8,7 @@ import Profile from "./Components/Profile";
 import Register from "./Components/Register";
 import ProductsList from "./Components/ProductsList";
 import Cart from './Components/Cart';
+import OrdersList from "./Components/OrdersList";
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Route path='login' element={ <Login/> } />
       <Route path='register' element={ <Register/> } />
       <Route path='logout' element={ <Logout/> } />
+      <Route path='myOrders' element={ <OrdersList/> } />
     </Route>
   ));
 
