@@ -328,7 +328,7 @@ storeRouter.post('/cart', async (req, res, next) => {
            calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
         } else {
             console.log('no percentage');
-            calculatedPrice = product.rows[0].price;
+            calculatedPrice = product.rows[0].price * quantity;
         }
 
         const timestamp = new Date(Date.now());
@@ -375,7 +375,7 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
             calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
         } else {
             console.log('no percentage');
-            calculatedPrice = product.rows[0].price;
+            calculatedPrice = product.rows[0].price * quantity;
         }
 
         const timestamp = new Date(Date.now());
