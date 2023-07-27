@@ -10,7 +10,6 @@ export const loadOrdersDetails = createAsyncThunk(
         try {
             const results = await getUserOrders();
             const jsonData = await results.json();
-            console.log(jsonData);
             return jsonData;
         } catch (e) {
             useNavigate('/error');
@@ -29,7 +28,6 @@ const fetchData = (payload) => {
             createdAt: el.created_at
         };
     });
-    console.log(data);
     return data;
 };
 
