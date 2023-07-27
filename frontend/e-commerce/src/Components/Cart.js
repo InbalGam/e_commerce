@@ -56,7 +56,7 @@ function Cart() {
             const result = await addOrder(data);
             await deleteUserCart();
             if (result.status === 200) {
-                dispatch(loadCart());
+                navigate('/profile');
                 console.log('placed order');
             } else if (result.status === 401){
                 navigate('/login');
