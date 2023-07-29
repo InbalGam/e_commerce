@@ -347,7 +347,7 @@ storeRouter.post('/cart', async (req, res, next) => {
 // Delete cart-
 storeRouter.delete('/cart', async (req, res, next) => { 
     try {
-        await pool.query('delete from carts where user_id = $1;', [req.user.id]);
+        req.session.cart = [];
         res.status(200).json({msg: 'Deleted cart'});
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
@@ -359,33 +359,25 @@ storeRouter.delete('/cart', async (req, res, next) => {
 // Update in cart-
 storeRouter.put('/cart/:product_id', async (req, res, next) => { 
     const { product_id, quantity } = req.body;
-    let calculatedPrice;
     
     try {
-        const check = await pool.query('select * from carts where user_id = $1 and product_id = $2', [req.user.id, product_id])
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'Product does not exist in cart, please add it' });
-        }
 
         const product = await pool.query('select * from products where id = $1', [product_id])
         if (product.rows[0].inventory_quantity - quantity < 0) {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
-        if (product.rows[0].discount_percentage) {
-            console.log('percentage');
-            calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
-        } else {
-            console.log('no percentage');
-            calculatedPrice = product.rows[0].price * quantity;
-        }
+        // if (product.rows[0].discount_percentage) {
+        //     console.log('percentage');
+        //     calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
+        // } else {
+        //     console.log('no percentage');
+        //     calculatedPrice = product.rows[0].price * quantity;
+        // }
+        req.session.cart.filter(el => el.productId === product_id)[0].quantity = quantity;
 
-        const timestamp = new Date(Date.now());
-        await pool.query('update carts set user_id = $1, product_id = $2, quantity = $3, calculated_price = $4, modified_at = $5 where user_id = $1 and product_id = $2;', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
-
-        //const newQuantity = (product.rows[0].inventory_quantity - quantity);
-        //await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
         res.status(200).json({msg: 'Updated product in cart'});
     } catch (e) {
+        console.log(e);
         res.status(500).json({msg: 'Server error'});
     }
 });
@@ -394,11 +386,7 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
 // Delete in cart-
 storeRouter.delete('/cart/:product_id', async (req, res, next) => { 
     try {
-        const check = await pool.query('select * from carts where user_id = $1 and product_id = $2', [req.user.id, req.params.product_id])
-        if (check.rows.length === 0) {
-            return res.status(400).json({ msg: 'Product does not exist in cart, please add it' });
-        }
-        await pool.query('delete from carts where user_id = $1 and product_id = $2;', [req.user.id, req.params.product_id]);
+        req.session.cart = req.session.cart.filter(el => el.productId !== Number(req.params.product_id));
         res.status(200).json({msg: 'Deleted product from cart'});
     } catch (e) {
         res.status(500).json({msg: 'Server error'});
