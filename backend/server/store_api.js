@@ -6,7 +6,7 @@ const path = require('path');
 
 
 // Middlewares
-storeRouter.use((req, res, next) => {
+storeRouter.use(['/order', '/order/:order_id'], (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({msg: 'You need to login first'});
     }
@@ -299,7 +299,7 @@ storeRouter.get('/cart', async (req, res, next) => {
     if (!req.session.cart) {
         res.status(200).json([]);
     } else {
-        productIds = req.session.cart.map(el => el.productId);
+        const productIds = req.session.cart.map(el => el.productId);
         try {
             const result = await pool.query('select p.id, p.product_name, p.inventory_quantity, p.price, p.discount_percentage from products p where id = ANY ($1);', [productIds]);
             productsInfo = result.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
@@ -408,7 +408,7 @@ storeRouter.get('/order', async (req, res, next) => {
 
 // Post an order
 storeRouter.post('/order', async (req, res, next) => { 
-    const { total, address, phone, products } = req.body;
+    const { address, phone } = req.body;
 
     if (address === undefined) {
         return res.status(400).json({ msg: 'Address must be specified' });
@@ -419,18 +419,27 @@ storeRouter.post('/order', async (req, res, next) => {
     };
     
     try {
+        const productIds = req.session.cart.map(el => el.productId);
+        let productsData = await pool.query('select * from products where id = ANY ($1)', [productIds]);
+        productsData = productsData.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
+
+        const productsInfo = productsData.map(el => {
+            const finalPrice = el.discount_percentage ? el.price * el.quantity * (1 - (el.discount_percentage/100)) : el.price * el.quantity;
+            const newQuantity = el.inventory_quantity - el.quantity;
+            return {product_id: el.id, finalPrice: finalPrice, quantity: el.quantity, newQuantity: newQuantity}
+        });
+
+        const total = productsInfo.map(el => el.finalPrice).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
         const timestamp = new Date(Date.now());
         const order_id = await pool.query('insert into order_details (user_id, total, shipping_address, phone, created_at) values ($1, $2, $3, $4, $5) returning id;', 
         [req.user.id, total, address, phone, timestamp]);
-        
-        console.log(products);
-        products.forEach(async element => {
+
+
+        productsInfo.forEach(async element => {
             await pool.query('insert into order_items (order_id, product_id, quantity, price, created_at) values ($1, $2, $3, $4, $5);', 
-            [order_id.rows[0].id, element.product_id, element.quantity, element.price, timestamp]);
-            console.log(element);
-            const product = await pool.query('select * from products where id = $1', [element.product_id]);
-            const newQuantity = (product.rows[0].inventory_quantity - element.quantity);
-            await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [element.product_id, newQuantity, timestamp]);
+            [order_id.rows[0].id, element.product_id, element.quantity, element.finalPrice, timestamp]);
+            await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [element.product_id, element.newQuantity, timestamp]);
         });
         res.status(200).json({msg: 'Added order'});
     } catch (e) {
