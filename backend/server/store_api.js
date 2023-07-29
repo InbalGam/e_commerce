@@ -295,12 +295,19 @@ storeRouter.delete('/category/:category_id/products/:product_id/archive', async 
 // Cart
 
 // Get cart-
-storeRouter.get('/cart', async (req, res, next) => { 
-    try {
-        const result = await pool.query('select c.*, p.product_name, p.inventory_quantity from carts c join products p on c.product_id = p.id where user_id = $1;', [req.user.id]);
-        res.status(200).json(result.rows);
-    } catch (e) {
-        res.status(500).json({msg: 'Server error'});
+storeRouter.get('/cart', async (req, res, next) => {
+    if (!req.session.cart) {
+        res.status(200).json([]);
+    } else {
+        productIds = req.session.cart.map(el => el.productId);
+        try {
+            const result = await pool.query('select p.id, p.product_name, p.inventory_quantity, p.price, p.discount_percentage from products p where id = ANY ($1);', [productIds]);
+            productsInfo = result.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
+            res.status(200).json(productsInfo);
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({ msg: 'Server error' });
+        }
     }
 });
 
@@ -308,14 +315,8 @@ storeRouter.get('/cart', async (req, res, next) => {
 // Post to cart-
 storeRouter.post('/cart', async (req, res, next) => { 
     const { product_id, quantity } = req.body;
-    let calculatedPrice;
     
     try {
-        const check = await pool.query('select * from carts where user_id = $1 and product_id = $2', [req.user.id, product_id])
-        if (check.rows.length > 0) {
-            return res.status(400).json({ msg: 'Product already exist, please update it' });
-        }
-
         const product = await pool.query('select * from products where id = $1', [product_id])
         if (product.rows.length === 0) {
             return res.status(400).json({ msg: 'Product does not exist' });
@@ -323,21 +324,21 @@ storeRouter.post('/cart', async (req, res, next) => {
         if (product.rows[0].inventory_quantity - quantity < 0) {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
-        if (product.rows[0].discount_percentage) {
-            console.log('percentage');
-           calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
+        // if (product.rows[0].discount_percentage) {
+        //     console.log('percentage');
+        //    calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
+        // } else {
+        //     console.log('no percentage');
+        //     calculatedPrice = product.rows[0].price * quantity;
+        // }
+        if (!req.session.cart) {
+            req.session.cart = [{productId: product_id, quantity: quantity}];
         } else {
-            console.log('no percentage');
-            calculatedPrice = product.rows[0].price * quantity;
-        }
-
-        const timestamp = new Date(Date.now());
-        await pool.query('insert into carts (user_id, product_id, quantity, calculated_price, created_at) values ($1, $2, $3, $4, $5);', [req.user.id, product_id, quantity, calculatedPrice, timestamp]);
-
-        //const newQuantity = product.rows[0].inventory_quantity - quantity;
-        //await pool.query('update products set inventory_quantity = $2, modified_at = $3 where id = $1;', [product_id, newQuantity, timestamp]);
+            req.session.cart = [...req.session.cart, {productId: product_id, quantity: quantity}];
+        };
         res.status(200).json({msg: 'Added to cart'});
     } catch (e) {
+        console.log(e);
         res.status(500).json({msg: 'Server error'});
     }
 });
