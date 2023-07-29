@@ -61,7 +61,7 @@ authRouter.get("/profile", async (req, res) => {
 
 
 authRouter.post("/login",
-    passport.authenticate("local", { failureRedirect: "/login" }),
+    passport.authenticate("local", { failureRedirect: "/login", keepSessionInfo: true }),
     (req, res) => {
       res.redirect("/profile");
     }
@@ -75,7 +75,7 @@ authRouter.get('/login/google', passport.authenticate('google', {
 
 
 authRouter.get('/oauth2/redirect/google',
-  passport.authenticate('google', { failureRedirect: `${process.env.CORS_ORIGIN}/login`, failureMessage: true }),
+  passport.authenticate('google', { failureRedirect: `${process.env.CORS_ORIGIN}/login`, failureMessage: true, keepSessionInfo: true }),
   (req, res) => {
     res.redirect(`${process.env.CORS_ORIGIN}/profile`);
 });
@@ -83,7 +83,7 @@ authRouter.get('/oauth2/redirect/google',
 
 // Logout user
 authRouter.get('/logout', function(req, res, next){
-    req.logout(function(err) {
+    req.logout({keepSessionInfo: true}, function(err) {
       if (err) { return next(err); }
       //res.redirect('/');
       res.status(200).json({msg: 'Successfully logged out'})
