@@ -4,6 +4,7 @@ import {login} from '../Api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FadeLoader from 'react-spinners/FadeLoader';
 import {baseURL} from '../apiKey';
+import styles from './Styles/Login.css';
 
 
 function Login() {
