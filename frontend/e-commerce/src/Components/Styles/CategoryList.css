@@ -1,0 +1,42 @@
+.categoryContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 30%;
+}
+
+.categoryContainer p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.addCategory {
+    display: inline-block;
+}
+
+.addCategory .add_category {
+    align-self: center;
+    border: 0.06rem solid #ccc;
+    border-radius: 4rem;
+    box-sizing: border-box;
+    box-shadow:  2px 1px -1px rgba(0,0,0,0.2);
+    font-weight: bold;
+    background-color: #a56690;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5rem;
+    color: white;
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+}
+
+.addCategory .add_category:hover {
+    background-color: #c5a1b9;
+    cursor: pointer;
+}
+
+.Categories {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}

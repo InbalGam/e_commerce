@@ -69,7 +69,7 @@ function Category(props) {
       <div className="category" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
       <Link to={`${props.el.id}/products`} className='categoryLink'><p>{props.el.categoryName}</p></Link>
         {props.admin ?
-          <div>
+          <div className='buttons'>
             <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</button>
             <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon /></button>
           </div> : ''}

@@ -8,6 +8,7 @@ import {selectProfile} from '../store/profileSlice';
 import CategoryAddUpdate from "./CategoryAddUpdate";
 import {loadImage, insertNewCategory} from '../Api';
 import { useNavigate } from 'react-router-dom';
+import styles from './Styles/CategoryList.css';
 
 
 function CategoryList() {
@@ -62,15 +63,14 @@ function CategoryList() {
                     <button className='add_category' onClick={showAddCategory}><AddIcon /></button>
                     {showForm === false ? '' : <CategoryAddUpdate onCategorySubmit={onCategorySubmit} />}
                 </div> : ''}
-            <div className="currentCategories">
-                <p>Current Categories</p>
+            <div className="Categories">
                 <ul>
                     {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ? '' 
                                                                                                                                                                         : <Category el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
                 </ul>
             </div>
             {profile.is_admin ? 
-            <div className="archivedCategories">
+            <div className="Categories">
                 <p>Archived Categories</p>
                 <ul>
                     {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
