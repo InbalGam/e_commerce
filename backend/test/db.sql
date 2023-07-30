@@ -68,7 +68,8 @@ CREATE TABLE public.category (
     category_name character varying(50) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     modified_at timestamp without time zone,
-    image_id integer
+    image_id integer,
+    is_archived boolean DEFAULT false NOT NULL
 );
 
 
@@ -236,7 +237,9 @@ CREATE TABLE public.products (
     discount_percentage integer,
     category_id integer,
     created_at timestamp without time zone NOT NULL,
-    modified_at timestamp without time zone
+    modified_at timestamp without time zone,
+    is_archived boolean DEFAULT false NOT NULL,
+    image_id integer
 );
 
 
@@ -368,9 +371,10 @@ COPY public.carts (id, user_id, product_id, quantity, calculated_price, created_
 -- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.category (id, category_name, created_at, modified_at, image_id) FROM stdin;
-5	skirts	2023-06-18 11:40:46.911	\N	\N
-1	Shirts	2023-06-18 11:30:27.58	2023-06-18 11:41:15.155	3
+COPY public.category (id, category_name, created_at, modified_at, image_id, is_archived) FROM stdin;
+1	Shirts	2023-06-18 11:30:27.58	2023-07-23 16:10:57.029	\N	f
+11	Pants	2023-07-23 13:25:02.491	2023-07-23 16:11:11.711	14	f
+5	Skirts	2023-06-18 11:40:46.911	2023-07-25 13:10:04.849	21	f
 \.
 
 
@@ -388,7 +392,9 @@ COPY public.federated_credentials (user_id, provider, subject) FROM stdin;
 --
 
 COPY public.image_files (id, filename, filepath, mimetype, size) FROM stdin;
-3	1689854329828_IMG_20210302_100254_1.jpg	images\\1689854329828_IMG_20210302_100254_1.jpg	image/jpeg	3402937
+14	1690107902468_PANTS_IMG.PNG	images\\1690107902468_PANTS_IMG.PNG	image/png	157536
+21	1690117884374_skirts.PNG	images\\1690117884374_skirts.PNG	image/png	174700
+28	1690281952596_retro_shirt.PNG	images\\1690281952596_retro_shirt.PNG	image/png	94803
 \.
 
 
@@ -398,6 +404,9 @@ COPY public.image_files (id, filename, filepath, mimetype, size) FROM stdin;
 
 COPY public.order_details (id, user_id, total, shipping_address, created_at, modified_at, phone) FROM stdin;
 2	2	6.5	user2828	2023-06-18 15:00:42.779	\N	0
+3	1	6.5	user2828	2023-07-25 15:54:07.036	\N	+972545686897
+13	1	10	chu chu chu	2023-07-29 18:48:28.682	\N	05468294567
+15	1	26.849999999999998	chu chu chu	2023-07-29 18:53:30.77	\N	05468294567
 \.
 
 
@@ -408,6 +417,12 @@ COPY public.order_details (id, user_id, total, shipping_address, created_at, mod
 COPY public.order_items (id, order_id, product_id, quantity, price, created_at, modified_at) FROM stdin;
 1	2	7	3	1.5	2023-06-18 15:00:42.779	\N
 2	2	1	4	5	2023-06-18 15:00:42.779	\N
+3	3	7	3	1.5	2023-07-25 15:54:07.036	\N
+4	3	1	4	5	2023-07-25 15:54:07.036	\N
+11	13	2	1	5	2023-07-29 18:48:28.682	\N
+12	13	3	1	5	2023-07-29 18:48:28.682	\N
+16	15	9	1	21.849999999999998	2023-07-29 18:53:30.77	\N
+17	15	3	1	5	2023-07-29 18:53:30.77	\N
 \.
 
 
@@ -415,11 +430,12 @@ COPY public.order_items (id, order_id, product_id, quantity, price, created_at, 
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, product_name, inventory_quantity, price, discount_percentage, category_id, created_at, modified_at) FROM stdin;
-2	short sleeve red	10	5	\N	1	2023-06-18 12:39:18.463	\N
-3	short sleeve green	10	5	\N	1	2023-06-18 12:39:22.116	\N
-1	large pants black	10	7	\N	1	2023-06-18 12:38:44.354	2023-06-18 12:41:45.137
-7	short sleeve blue chcxcjss	10	5	10	1	2023-06-18 14:01:28.202	\N
+COPY public.products (id, product_name, inventory_quantity, price, discount_percentage, category_id, created_at, modified_at, is_archived, image_id) FROM stdin;
+9	Retro shirt	3	23	5	1	2023-07-25 13:34:57.602	2023-07-29 18:53:30.77	f	28
+3	short sleeve green	6	5	\N	1	2023-06-18 12:39:22.116	2023-07-29 18:53:30.77	f	\N
+1	large pants black	3	7	\N	1	2023-06-18 12:38:44.354	2023-07-25 15:54:07.036	f	\N
+7	short sleeve blue chcxcjss	6	5	10	1	2023-06-18 14:01:28.202	2023-07-27 11:10:11.322	f	\N
+2	short sleeve red	5	5	\N	1	2023-06-18 12:39:18.463	2023-07-29 18:50:49.355	f	\N
 \.
 
 
@@ -444,42 +460,42 @@ COPY public.users (id, username, password, nickname, first_name, last_name, addr
 -- Name: carts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.carts_id_seq', 10, true);
+SELECT pg_catalog.setval('public.carts_id_seq', 19, true);
 
 
 --
 -- Name: category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.category_id_seq', 6, true);
+SELECT pg_catalog.setval('public.category_id_seq', 15, true);
 
 
 --
 -- Name: image_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.image_files_id_seq', 3, true);
+SELECT pg_catalog.setval('public.image_files_id_seq', 28, true);
 
 
 --
 -- Name: order_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.order_details_id_seq', 2, true);
+SELECT pg_catalog.setval('public.order_details_id_seq', 15, true);
 
 
 --
 -- Name: order_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.order_items_id_seq', 2, true);
+SELECT pg_catalog.setval('public.order_items_id_seq', 17, true);
 
 
 --
 -- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.products_id_seq', 7, true);
+SELECT pg_catalog.setval('public.products_id_seq', 9, true);
 
 
 --
