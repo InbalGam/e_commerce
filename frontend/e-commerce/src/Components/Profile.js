@@ -4,7 +4,7 @@ import {selectProfile, loadProfile} from '../store/profileSlice';
 import FadeLoader from 'react-spinners/FadeLoader';
 import EditIcon from '@mui/icons-material/Edit';
 import {updateProfile} from '../Api';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import OrdersList from "./OrdersList";
 
 
@@ -110,35 +110,38 @@ function Profile() {
     };
 
     return (
-        <div> 
-        {hasError ? 'Could not fetch profile, try again' : 
-        (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
-            <div>
-                <h2>Welcome {profile.nickname}!</h2>
-                <p>{profile.is_admin ? 'You have an admin account' : ''}</p>
-                <p>{profile.first_name} {profile.last_name}</p>
-                <div className="editContainer">
-                    <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
-                    {showAddressForm === false ?  <p>{profile.address}</p> : 
-                    <div>
-                        <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange}/> 
-                        <button type="submit" value="Submit" className="submitButton" onClick={submitAddressField}>submit</button>
-                    </div>}
-                </div>
-                <div className="editContainer">
-                    <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
-                    {showPhoneForm === false ?  <p>{profile.phone}</p> : 
-                    <div>
-                        <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange}/>
-                        <button type="submit" value="Submit" className="submitButton" onClick={submitPhoneField}>submit</button>
-                    </div>}
-                </div>
-                {fieldsFilled ? '' : 'Address and phone needs to be filled'}
+        <div>
+            {profile.username ?
+                <div>
+                    {hasError ? 'Could not fetch profile, try again' :
+                        (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
+                            <div>
+                                <h2>Welcome {profile.nickname}!</h2>
+                                <p>{profile.is_admin ? 'You have an admin account' : ''}</p>
+                                <p>{profile.first_name} {profile.last_name}</p>
+                                <div className="editContainer">
+                                    <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
+                                    {showAddressForm === false ? <p>{profile.address}</p> :
+                                        <div>
+                                            <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
+                                            <button type="submit" value="Submit" className="submitButton" onClick={submitAddressField}>submit</button>
+                                        </div>}
+                                </div>
+                                <div className="editContainer">
+                                    <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
+                                    {showPhoneForm === false ? <p>{profile.phone}</p> :
+                                        <div>
+                                            <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
+                                            <button type="submit" value="Submit" className="submitButton" onClick={submitPhoneField}>submit</button>
+                                        </div>}
+                                </div>
+                                {fieldsFilled ? '' : 'Address and phone needs to be filled'}
 
-                <h3>Your orders</h3>
-                <OrdersList/>
-            </div>
-        )}
+                                <h3>Your orders</h3>
+                                <OrdersList />
+                            </div>
+                        )}
+                </div> : <Link to='/login'>Login to view your profile</Link>}
         </div>
     );
 };
