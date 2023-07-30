@@ -313,33 +313,31 @@ storeRouter.get('/cart', async (req, res, next) => {
 
 
 // Post to cart-
-storeRouter.post('/cart', async (req, res, next) => { 
+storeRouter.post('/cart', async (req, res, next) => {
     const { product_id, quantity } = req.body;
-    
+
     try {
         const product = await pool.query('select * from products where id = $1', [product_id])
         if (product.rows.length === 0) {
             return res.status(400).json({ msg: 'Product does not exist' });
         }
         if (product.rows[0].inventory_quantity - quantity < 0) {
-            return res.status(400).json({msg: 'Not enough in stock'});
+            return res.status(400).json({ msg: 'Not enough in stock' });
         }
-        // if (product.rows[0].discount_percentage) {
-        //     console.log('percentage');
-        //    calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
-        // } else {
-        //     console.log('no percentage');
-        //     calculatedPrice = product.rows[0].price * quantity;
-        // }
         if (!req.session.cart) {
-            req.session.cart = [{productId: product_id, quantity: quantity}];
+            req.session.cart = [{ productId: product_id, quantity: quantity }];
         } else {
-            req.session.cart = [...req.session.cart, {productId: product_id, quantity: quantity}];
+            const productIds = req.session.cart.map(el => el.productId);
+            if (productIds.includes(product_id)) {
+                req.session.cart.filter(el => el.productId === product_id)[0].quantity = quantity;
+            } else {
+                req.session.cart = [...req.session.cart, { productId: product_id, quantity: quantity }];
+            }
         };
-        res.status(200).json({msg: 'Added to cart'});
+        res.status(200).json({ msg: 'Added to cart' });
     } catch (e) {
         console.log(e);
-        res.status(500).json({msg: 'Server error'});
+        res.status(500).json({ msg: 'Server error' });
     }
 });
 
@@ -361,18 +359,14 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
     const { product_id, quantity } = req.body;
     
     try {
-
-        const product = await pool.query('select * from products where id = $1', [product_id])
+        const product = await pool.query('select * from products where id = $1', [product_id]);
+        if (product.rows.length === 0) {
+            return res.status(400).json({ msg: 'Product does not exist' });
+        }
         if (product.rows[0].inventory_quantity - quantity < 0) {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
-        // if (product.rows[0].discount_percentage) {
-        //     console.log('percentage');
-        //     calculatedPrice = (product.rows[0].price * quantity * (1 - (product.rows[0].discount_percentage/100))).toFixed(2);
-        // } else {
-        //     console.log('no percentage');
-        //     calculatedPrice = product.rows[0].price * quantity;
-        // }
+
         req.session.cart.filter(el => el.productId === product_id)[0].quantity = quantity;
 
         res.status(200).json({msg: 'Updated product in cart'});
