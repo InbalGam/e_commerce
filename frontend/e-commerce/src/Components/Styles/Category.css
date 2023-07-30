@@ -1,9 +1,23 @@
+.categoryItem {
+    display: inline-block;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
 .category {
-    width: 20%;
-    height: 30%;
+    width: 70%;
+    height: 100%;
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+.categoryInfo {
     display: flex;
+    align-items: flex-end;
+}
+
+.categoryLink {
+    align-self: flex-end;
 }
 
 .buttons {

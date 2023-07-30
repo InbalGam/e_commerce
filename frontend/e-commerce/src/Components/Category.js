@@ -65,16 +65,18 @@ function Category(props) {
   };
 
   return (
-    <li key={props.ind}>
+    <li key={props.ind} className='categoryItem'>
       <div className="category" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
-      <Link to={`${props.el.id}/products`} className='categoryLink'><p>{props.el.categoryName}</p></Link>
-        {props.admin ?
-          <div className='buttons'>
-            <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</button>
-            <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon /></button>
-          </div> : ''}
-        {deleteFailed === false ? '' : 'Could not archive category'}
-        {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el} /> : ''}
+        <div className='categoryInfo'>
+          <Link to={`${props.el.id}/products`} className='categoryLink'><p>{props.el.categoryName}</p></Link>
+          {props.admin ?
+            <div className='buttons'>
+              <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</button>
+              <button className='editButton' onClick={() => setShowForm(!showForm)}><EditIcon /></button>
+            </div> : ''}
+          {deleteFailed === false ? '' : 'Could not archive category'}
+          {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el} /> : ''}
+        </div>
       </div>
     </li>
   );
