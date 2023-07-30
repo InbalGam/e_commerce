@@ -3,6 +3,7 @@ import styles from './Styles/Root.css';
 import TextField from "@mui/material/TextField";
 import { useState } from 'react';
 import SearchList from "./SearchList";
+import SearchIcon from '@mui/icons-material/Search';
 
 
 function Root() {
@@ -24,12 +25,16 @@ function Root() {
                     <NavLink to='/cart' className='rootLink'>Cart</NavLink>
                     <NavLink to='/login' className='rootLink'>Log in</NavLink>
                     <NavLink to='/logout' className='rootLink'>Log out</NavLink>
-                    <div className='search'>
-                        <TextField id="outlined-basic" variant="outlined" fullWidth label="Search" onChange={inputHandler} />
+                </div>
+                <div className='searchContainer'>
+                    <div className='searchBar'>
+                    <SearchIcon className="searchIcon" />
+                    <input placeholder='Search' onChange={inputHandler} className='searchInput'/>
                     </div>
-                    {userInput ? <div>
-                        <SearchList input={userInput} />
-                    </div> : ''}
+                    {userInput ?
+                        <div className='searchResultsContainer'>
+                            <SearchList input={userInput} className='searchResults' />
+                        </div> : ''}
                 </div>
             </div>
             <Outlet />
