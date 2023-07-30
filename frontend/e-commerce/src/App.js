@@ -10,6 +10,7 @@ import ProductsList from "./Components/ProductsList";
 import Cart from './Components/Cart';
 import OrderDetails from "./Components/OrderDetails";
 import styles from './Components/Styles/App.css';
+import SearchList from "./Components/SearchList";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path='profile' element={ <Profile/> } />
         <Route path='cart' element={ <Cart/> } />
         <Route path='myOrders/:orderId' element={ <OrderDetails/> } />
+        <Route path='search' element={ <SearchList/> } />
       </Route>
       <Route path='login' element={ <Login/> } />
       <Route path='register' element={ <Register/> } />

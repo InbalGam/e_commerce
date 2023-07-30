@@ -265,8 +265,21 @@ async function addOrder(data) {
 };
 
 
+async function searchDB(word) {
+    const url = `${baseURL}/search`;
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(word)
+    });
+
+    return response;
+};
+
+
 export {register, login, userProfile, logout, updateProfile,
     getAllCategories, archiveSpecificCategory, insertNewCategory, updateCategory, loadImage,
     getAllCategoryProducts, archiveSpecificProduct, insertNewProduct, updateProduct,
     getCart, addToCart, updateProductCart, deleteUserCart, deleteProductInCart,
-    addOrder, getUserOrders, getSpecificOrder};
+    addOrder, getUserOrders, getSpecificOrder, searchDB};

@@ -19,12 +19,11 @@ function Product(props) {
     const [showForm, setShowForm] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { categoryId } = useParams();
     const [amount, setAmount] = useState(0);
 
 
     const amountOptions = [];
-    for (let i = 0; i <= props.el.inventoryQuantity; i++) {
+    for (let i = 0; i <= props.el.inventory_quantity; i++) {
         amountOptions.push({value: i, label:i});
     }
     const changeHandler = value => {
@@ -36,12 +35,12 @@ function Product(props) {
         e.preventDefault();
         try {
             console.log(props.el.id);
-            const result = await archiveSpecificProduct(categoryId, props.el.id, !props.isArchived);
+            const result = await archiveSpecificProduct(props.el.category_id, props.el.id, !props.isArchived);
             if (result.status === 401) {
               navigate('/login');
             } else {
               if (result.status === 200) {
-                dispatch(loadProducts(categoryId));
+                dispatch(loadProducts(props.el.category_id));
                 setDeleteFailed(false);
               } else {
                 setDeleteFailed(true);
@@ -65,10 +64,10 @@ function Product(props) {
                 imgId = props.el.image_id;
             }
             productData.imgId = imgId;
-            productData.categoryId = categoryId;
-            const result = await updateProduct(categoryId, props.el.id, productData);
+            productData.categoryId = props.el.category_id;
+            const result = await updateProduct(props.el.category_id, props.el.id, productData);
             if (result.status === 200) {
-                dispatch(loadProducts(categoryId));
+                dispatch(loadProducts(props.el.category_id));
                 setShowForm(false);
             } else if (result.status === 401){
                 navigate('/login');
@@ -84,7 +83,7 @@ function Product(props) {
         try {
             const result = await addToCart({product_id: props.el.id, quantity: amount.value});
             if (result.status === 200) {
-                dispatch(loadProducts(categoryId));
+                dispatch(loadProducts(props.el.category_id));
             } else if (result.status === 401){
                 navigate('/login');
             }
@@ -97,7 +96,7 @@ function Product(props) {
     return (
         <li key={props.ind}>
             <div className="product" style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
-                <h3>{props.el.productName}</h3>
+                <h3>{props.el.product_name}</h3>
                 {props.admin ? 
                     <div> 
                         <button onClick={archive} className='archiveButton'>{props.isArchived ? <UnarchiveIcon/> : <ArchiveIcon/>}</button>

@@ -456,4 +456,19 @@ storeRouter.get('/order/:order_id', async (req, res, next) => {
     }
 });
 
+
+// Search
+storeRouter.post('/search', async (req, res, next) => { 
+    const {searchWord} = req.body;
+    try {
+        const result = await pool.query('select * from products where LOWER(product_name) like $1;', [`%${searchWord.toLowerCase()}%`]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ msg: 'There are no products matching the search' });
+        }
+        res.status(200).json(result.rows);
+    } catch (e) {
+        res.status(500).json({msg: 'Server error'});
+    }
+});
+
 module.exports = storeRouter;

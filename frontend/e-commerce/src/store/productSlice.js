@@ -23,13 +23,14 @@ const fetchData = (payload) => {
     const data = payload.map(el => {
         return {
             id: el.id,
-            productName: el.product_name,
+            product_name: el.product_name,
             is_archived: el.is_archived,
-            inventoryQuantity: el.inventory_quantity,
+            inventory_quantity: el.inventory_quantity,
             price: el.price,
             discount: el.discount_percentage,
             imagename: el.imagename,
-            image_id: el.image_id
+            image_id: el.image_id,
+            category_id: el.category_id
         };
     });
     return data;

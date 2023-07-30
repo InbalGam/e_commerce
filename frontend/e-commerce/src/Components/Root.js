@@ -25,17 +25,18 @@ function Root() {
                     <NavLink to='/cart' className='rootLink'>Cart</NavLink>
                     <NavLink to='/login' className='rootLink'>Log in</NavLink>
                     <NavLink to='/logout' className='rootLink'>Log out</NavLink>
+                    <NavLink to='/search'><SearchIcon className="searchIcon" /></NavLink>
                 </div>
-                <div className='searchContainer'>
+                {/* <div className='searchContainer'>
                     <div className='searchBar'>
-                    <SearchIcon className="searchIcon" />
+                    
                     <input placeholder='Search' onChange={inputHandler} className='searchInput'/>
                     </div>
                     {userInput ?
                         <div className='searchResultsContainer'>
                             <SearchList input={userInput} className='searchResults' />
                         </div> : ''}
-                </div>
+                </div> */}
             </div>
             <Outlet />
         </div>
