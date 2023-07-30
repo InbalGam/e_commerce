@@ -3,8 +3,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #060565;
-    background-color: #adcbf3;
+    border-bottom: 4px solid #060565;
+    background-color: rgb(250, 244, 232);
 }
 
 .nav-bar p {
@@ -55,6 +55,7 @@
     border: 1px solid #060565;
     border-radius: 5px 5px;
     height: 1.5rem;
+    background-color: rgb(250, 244, 232);
 }
 
 .searchResultsContainer {
@@ -62,7 +63,7 @@
     margin-left: 0.5rem;
     position: absolute;
     width: 100%;
-    background-color: #adcbf3;
+    background-color: rgb(250, 244, 232);
     z-index: 99999;
     border-radius: 2px 2px;
 }
