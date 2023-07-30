@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {selectCart, loadCart} from '../store/cartSlice';
 import FadeLoader from 'react-spinners/FadeLoader';
 import {selectProfile} from '../store/profileSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import CartItem from "./CartItem";
 import {addOrder, deleteUserCart} from '../Api';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,8 +20,9 @@ function Cart() {
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [showPhoneForm, setShowPhoneForm] = useState(false);
 
-    const initialValue = 0;
-    const total = cart.map(el => el.calculated_price).reduce((accumulator, currentValue) => accumulator + currentValue, initialValue);
+    const total = cart.map(el => {
+        return el.discount_percentage ? el.price * el.quantity * (1 - (el.discount_percentage/100)) : el.price * el.quantity;
+    }).reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2);
 
     useEffect(() => {
         dispatch(loadCart());
@@ -48,11 +49,7 @@ function Cart() {
     async function submitOrder(e) {
         e.preventDefault();
         try {
-            const products = cart.map(el => {return {product_id: el.product_id, quantity: el.quantity, price: el.calculated_price}})
-            const data = {total: total,
-                address: address,
-                phone: phone,
-                products: products}
+            const data = {address: address, phone: phone};
             const result = await addOrder(data);
             await deleteUserCart();
             if (result.status === 200) {
@@ -74,20 +71,23 @@ function Cart() {
                         {cart.map((el, ind) => <CartItem el={el} ind={ind} />)}
                     </ul>
                     <p className="cartTotal">Total: {total}$</p>
-                    <h3>Shipping information</h3>
-                    <p>Shipping address:</p>
-                    <button className='editIcon' onClick={showEditAddress}><EditIcon/></button>
-                    {showAddressForm === false ?  <p>{address}</p> : 
-                    <div>
-                        <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange}/> 
-                    </div>}
-                    <p>Contact phone:</p>
-                    <button className='editIcon' onClick={showEditPhone}><EditIcon/></button>
-                    {showPhoneForm === false ?  <p>{phone}</p> : 
-                    <div>
-                        <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange}/> 
-                    </div>}
-                    <button type="submit" value="Submit" onClick={submitOrder} >Place Order</button>
+                    {!profile.username ? <Link to='/login'>Login to place an order</Link> :
+                        <div>
+                            <h3>Shipping information</h3>
+                            <p>Shipping address:</p>
+                            <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
+                            {showAddressForm === false ? <p>{address}</p> :
+                                <div>
+                                    <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
+                                </div>}
+                            <p>Contact phone:</p>
+                            <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
+                            {showPhoneForm === false ? <p>{phone}</p> :
+                                <div>
+                                    <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
+                                </div>}
+                            <button type="submit" value="Submit" onClick={submitOrder} >Place Order</button>
+                        </div>}
                 </div>)}
         </div>
     );

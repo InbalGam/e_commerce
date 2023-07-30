@@ -39,7 +39,7 @@ function OrderDetails() {
                 <li key={ind}> 
                     <p>{el.product_name}</p>
                     <p>quantity purchased: {el.quantity}</p>
-                    <p>final price for item: {el.price}$</p>
+                    <p>final price for item: {el.price.toFixed(2)}$</p>
                 </li>)}
             </ul>}
         </div>

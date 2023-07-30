@@ -10,6 +10,7 @@ export const loadCart = createAsyncThunk(
         try {
             const results = await getCart();
             const jsonData = await results.json();
+            console.log(jsonData);
             return jsonData;
         } catch (e) {
             useNavigate('/error');

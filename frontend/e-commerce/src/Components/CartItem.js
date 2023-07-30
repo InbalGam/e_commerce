@@ -27,7 +27,7 @@ function CartItem(props) {
             deleteProduct(e);
         } else {
             try {
-                const result = await updateProductCart(props.el.product_id, {product_id: props.el.product_id, quantity: amount.value});
+                const result = await updateProductCart(props.el.id, {product_id: props.el.id, quantity: amount.value});
                 if (result.status === 200) {
                     dispatch(loadCart());
                 } else if (result.status === 401){
@@ -43,7 +43,7 @@ function CartItem(props) {
     async function deleteProduct(e) {
         e.preventDefault();
         try {
-            const result = await deleteProductInCart(props.el.product_id);
+            const result = await deleteProductInCart(props.el.id);
             if (result.status === 200) {
                 dispatch(loadCart());
             } else if (result.status === 401){
@@ -63,7 +63,7 @@ function CartItem(props) {
                 {props.el.inventory_quantity > props.el.quantity ? <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" /> : 
                 <Select options={[]} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />}
                 {amount.value !== props.el.quantity ? <button className='updateCart' onClick={updateProductInCart}>Submit</button> : ''}
-                <p>Price: {props.el.calculated_price}$</p>
+                <p>Price: {(props.el.discount_percentage ? props.el.price * props.el.quantity * (1 - (props.el.discount_percentage/100)) : props.el.price * props.el.quantity).toFixed(2)}$</p>
             </div>
         </li>
     );
