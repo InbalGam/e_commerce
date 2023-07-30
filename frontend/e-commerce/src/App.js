@@ -9,6 +9,7 @@ import Register from "./Components/Register";
 import ProductsList from "./Components/ProductsList";
 import Cart from './Components/Cart';
 import OrderDetails from "./Components/OrderDetails";
+import styles from './Components/Styles/App.css';
 
 function App() {
 
