@@ -22,7 +22,6 @@ function Root() {
                 {/* <p>Shop Online</p> */}
                 <NavLink to='/' className='mainLink'>Shop Online</NavLink>
                 <div className='nav-links'>
-                    <NavLink to='/category' className='rootLink'>Categories</NavLink>
                     <NavLink to='/profile' className='rootLink'>Profile</NavLink>
                     <NavLink to='/login' className='rootLink'>Log in</NavLink>
                     <NavLink to='/logout' className='rootLink'>Log out</NavLink>
