@@ -10,8 +10,11 @@ export const loadProducts = createAsyncThunk(
         try {
             const results = await getAllCategoryProducts(categoryId);
             const jsonData = await results.json();
-            console.log(jsonData);
-            return jsonData;
+            if (results.status === 200) {
+                return jsonData;
+            } else {
+                return [];
+            }
         } catch (e) {
             useNavigate('/error');
         }
@@ -20,19 +23,22 @@ export const loadProducts = createAsyncThunk(
 
 
 const fetchData = (payload) => {
-    const data = payload.map(el => {
-        return {
-            id: el.id,
-            product_name: el.product_name,
-            is_archived: el.is_archived,
-            inventory_quantity: el.inventory_quantity,
-            price: el.price,
-            discount: el.discount_percentage,
-            imagename: el.imagename,
-            image_id: el.image_id,
-            category_id: el.category_id
-        };
-    });
+    let data = [];
+    if (payload) {
+        data = payload.map(el => {
+            return {
+                id: el.id,
+                product_name: el.product_name,
+                is_archived: el.is_archived,
+                inventory_quantity: el.inventory_quantity,
+                price: el.price,
+                discount: el.discount_percentage,
+                imagename: el.imagename,
+                image_id: el.image_id,
+                category_id: el.category_id
+            };
+        });
+    }
     return data;
 };
 

@@ -65,18 +65,17 @@ function ProductsList() {
                     {showForm === false ? '' : <ProductAddUpdate onProductSubmit={onProductSubmit} />}
                 </div> : ''}
             <div className="currentProducts">
-                <p>Current Products</p>
                 <ul>
-                    {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : products.map((el, ind) => el.is_archived ? '' 
-                                                                                                                                                                        : <Product el={el} ind={ind} admin={profile.is_admin} isArchived={false}/>))}
+                    {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
+                        products.length > 0 ? (products.map((el, ind) => el.is_archived ? '' : <Product el={el} ind={ind} admin={profile.is_admin} isArchived={false}/>)) : 'There are no products yet')}
                 </ul>
             </div>
             {profile.is_admin ? 
             <div className="archivedProducts">
                 <p>Archived Products</p>
                 <ul>
-                    {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : products.map((el, ind) => el.is_archived ?
-                                                                                                                                                        <Product el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' ))}
+                    {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
+                       products.length > 0 ? (products.map((el, ind) => el.is_archived ? <Product el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' )) : 'There are no products yet')}
                 </ul>
             </div> : '' }
         </div>
