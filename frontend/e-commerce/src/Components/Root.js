@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import { useState } from 'react';
 import SearchList from "./SearchList";
 import SearchIcon from '@mui/icons-material/Search';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
 function Root() {
@@ -18,11 +19,12 @@ function Root() {
     return (
         <div>
             <div className='nav-bar'>
-                <p>Shop Online</p>
+                {/* <p>Shop Online</p> */}
+                <NavLink to='/' className='mainLink'>Shop Online</NavLink>
                 <div className='nav-links'>
                     <NavLink to='/category' className='rootLink'>Categories</NavLink>
                     <NavLink to='/profile' className='rootLink'>Profile</NavLink>
-                    <NavLink to='/cart' className='rootLink'>Cart</NavLink>
+                    <NavLink to='/cart' className='rootLink'><ShoppingCartIcon/></NavLink>
                     <NavLink to='/login' className='rootLink'>Log in</NavLink>
                     <NavLink to='/logout' className='rootLink'>Log out</NavLink>
                     <NavLink to='/search'><SearchIcon className="searchIcon" /></NavLink>

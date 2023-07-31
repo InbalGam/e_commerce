@@ -24,10 +24,10 @@ function App() {
         <Route path='cart' element={ <Cart/> } />
         <Route path='myOrders/:orderId' element={ <OrderDetails/> } />
         <Route path='search' element={ <SearchList/> } />
+        <Route path='login' element={ <Login/> } />
+        <Route path='register' element={ <Register/> } />
+        <Route path='logout' element={ <Logout/> } />
       </Route>
-      <Route path='login' element={ <Login/> } />
-      <Route path='register' element={ <Register/> } />
-      <Route path='logout' element={ <Logout/> } />
     </Route>
   ));
 

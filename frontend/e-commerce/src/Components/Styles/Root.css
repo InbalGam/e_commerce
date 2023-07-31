@@ -5,9 +5,10 @@
     justify-content: space-between;
     border-bottom: 4px solid #060565;
     background-color: rgb(250, 244, 232);
+    height: 4rem;
 }
 
-.nav-bar p {
+.nav-bar .mainLink {
     font-family: 'Raleway', sans-serif;
     font-size: 1.5rem;
     font-weight: bold;
@@ -15,6 +16,12 @@
     color: #060565;
     display: flex;
     align-items: center;
+    text-decoration: none;
+}
+
+.nav-bar .mainLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .nav-links {
