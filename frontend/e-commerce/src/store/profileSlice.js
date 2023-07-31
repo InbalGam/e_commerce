@@ -17,6 +17,18 @@ export const loadProfile = createAsyncThunk(
 );
 
 
+export const loggedOutProfile = createAsyncThunk(
+    '/loggedOutProfile',
+    async () => {
+        try {
+            return {};
+        } catch (e) {
+            useNavigate('/error');
+        }
+    }
+);
+
+
 const fetchData = (payload) => {
     const data = payload[0];
     return data;
@@ -45,6 +57,19 @@ export const profileSlice = createSlice({
         [loadProfile.rejected]: (state, action) => {
             state.isLoading = false;
             state.hasError = true;
+        },
+
+
+
+        [loggedOutProfile.pending]: (state, action) => {
+            
+        },
+        [loggedOutProfile.fulfilled]: (state, action) => {
+            state.profile = {};
+            
+        },
+        [loggedOutProfile.rejected]: (state, action) => {
+            
         }
     }
 });
