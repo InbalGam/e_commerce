@@ -3,12 +3,17 @@ import styles from './Styles/Root.css';
 import { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useSelector } from 'react-redux';
-import {selectCart} from '../store/cartSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import {selectCart, loadCart} from '../store/cartSlice';
 
 
 function Root() {
     const cart = useSelector(selectCart);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(loadCart());
+    }, []);
 
 
     return (

@@ -12,6 +12,7 @@ import styles from './Styles/Product.css';
 import ProductAddUpdate from "./ProductAddUpdate";
 import {loadImage, updateProduct, addToCart} from '../Api';
 import Select from 'react-select';
+import {loadCart} from '../store/cartSlice';
 
 
 function Product(props) {
@@ -84,6 +85,7 @@ function Product(props) {
             const result = await addToCart({product_id: props.el.id, quantity: amount.value});
             if (result.status === 200) {
                 dispatch(loadProducts(props.el.category_id));
+                dispatch(loadCart());
             } else if (result.status === 401){
                 navigate('/login');
             }
