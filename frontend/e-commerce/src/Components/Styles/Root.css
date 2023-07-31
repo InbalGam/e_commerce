@@ -31,6 +31,7 @@
     font-family: 'Raleway', sans-serif;
     font-weight: bold;
     margin-right: 2rem;
+    align-items: center;
 }
 
 .nav-links .rootLink {
@@ -50,6 +51,7 @@
     text-decoration: none;
     cursor: pointer;
     color: #060565;
+    font-size: 1.75rem !important;
 }
 
 .searchIcon:hover {
@@ -57,6 +59,30 @@
     cursor: pointer;
 }
 
+.cartInfo {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.AmountItemsCart {
+    text-decoration: none;
+    content:attr(value);
+    font-size: 0.75rem;
+    color: #fff;
+    background: rgb(255, 145, 0);
+    border-radius:50%;
+    padding: 0.125rem 0.5rem;
+    position:relative;
+    left:-0.5rem;
+    top:-0.625rem;
+    opacity:0.9;
+}
+
+.cartIcon {
+    font-size: 1.75rem !important;
+}
 
 @media only screen and (max-width: 550px) {
     .nav-bar p {

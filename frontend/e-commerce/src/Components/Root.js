@@ -1,19 +1,14 @@
 import {  Outlet, NavLink } from "react-router-dom";
 import styles from './Styles/Root.css';
-import TextField from "@mui/material/TextField";
-import { useState } from 'react';
-import SearchList from "./SearchList";
+import { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useSelector } from 'react-redux';
+import {selectCart} from '../store/cartSlice';
 
 
 function Root() {
-    const [userInput, setUserInput] = useState('');
-
-    function inputHandler(e) {
-        const lowerCase = e.target.value.toLowerCase();
-        setUserInput(lowerCase);
-    };
+    const cart = useSelector(selectCart);
 
 
     return (
@@ -24,10 +19,13 @@ function Root() {
                 <div className='nav-links'>
                     <NavLink to='/category' className='rootLink'>Categories</NavLink>
                     <NavLink to='/profile' className='rootLink'>Profile</NavLink>
-                    <NavLink to='/cart' className='rootLink'><ShoppingCartIcon/></NavLink>
                     <NavLink to='/login' className='rootLink'>Log in</NavLink>
                     <NavLink to='/logout' className='rootLink'>Log out</NavLink>
                     <NavLink to='/search'><SearchIcon className="searchIcon" /></NavLink>
+                    <div className="cartInfo">
+                        <NavLink to='/cart' className='rootLink' > <ShoppingCartIcon className='cartIcon'/> </NavLink>
+                        <p className="AmountItemsCart">{cart.length}</p>
+                    </div>
                 </div>
             </div>
             <Outlet />
