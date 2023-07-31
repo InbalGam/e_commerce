@@ -27,16 +27,6 @@ function Root() {
                     <NavLink to='/logout' className='rootLink'>Log out</NavLink>
                     <NavLink to='/search'><SearchIcon className="searchIcon" /></NavLink>
                 </div>
-                {/* <div className='searchContainer'>
-                    <div className='searchBar'>
-                    
-                    <input placeholder='Search' onChange={inputHandler} className='searchInput'/>
-                    </div>
-                    {userInput ?
-                        <div className='searchResultsContainer'>
-                            <SearchList input={userInput} className='searchResults' />
-                        </div> : ''}
-                </div> */}
             </div>
             <Outlet />
         </div>

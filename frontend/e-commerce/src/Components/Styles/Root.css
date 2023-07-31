@@ -38,34 +38,16 @@
     cursor: pointer;
 }
 
-.searchContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    margin-right: 0.5rem;
+.searchIcon {
+    padding-left: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    color: #060565;
 }
 
-.searchBar {
-    display: flex;
-    align-items: center;
-}
-
-.searchInput {
-    border: 1px solid #060565;
-    border-radius: 5px 5px;
-    height: 1.5rem;
-    background-color: rgb(250, 244, 232);
-}
-
-.searchResultsContainer {
-    margin-top: 3rem;
-    margin-left: 0.5rem;
-    position: absolute;
-    width: 100%;
-    background-color: rgb(250, 244, 232);
-    z-index: 99999;
-    border-radius: 2px 2px;
+.searchIcon:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 
