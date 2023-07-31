@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {selectCategories, loadCategories} from '../store/categorySlice';
 import FadeLoader from 'react-spinners/FadeLoader';
-import Category from './Category';
+//import Category from './Category';
 import AddIcon from '@mui/icons-material/Add';
 import {selectProfile} from '../store/profileSlice';
 import CategoryAddUpdate from "./CategoryAddUpdate";
 import {loadImage, insertNewCategory} from '../Api';
 import { useNavigate } from 'react-router-dom';
 import styles from './Styles/CategoryList.css';
+import CategoryCard from "./CategoryCard"; 
 
 
 function CategoryList() {
@@ -66,7 +67,7 @@ function CategoryList() {
             <div className="Categories">
                 <ul>
                     {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ? '' 
-                                                                                                                                                                        : <Category el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
+                                                                                                                                                                        : <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
                 </ul>
             </div>
             {profile.is_admin ? 
@@ -74,7 +75,7 @@ function CategoryList() {
                 <p>Archived Categories</p>
                 <ul>
                     {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
-                                                                                                                                                                                    <Category el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' ))}
+                                                                                                                                                                                    <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' ))}
                 </ul>
             </div> : '' }
         </div>

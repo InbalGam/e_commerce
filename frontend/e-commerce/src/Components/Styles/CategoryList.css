@@ -1,8 +1,9 @@
 .categoryContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     gap: 30%;
+    flex-wrap: wrap;
 }
 
 .categoryContainer p {
