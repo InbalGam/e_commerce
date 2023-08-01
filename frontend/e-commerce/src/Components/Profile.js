@@ -22,11 +22,6 @@ function Profile() {
     const [showForm, setShowForm] = useState(false);
 
 
-    useEffect(() => {
-        dispatch(loadProfile());
-    }, []);
-
-
     function showEditAddress(e) {
         setShowAddressForm(!showAddressForm);
     };
