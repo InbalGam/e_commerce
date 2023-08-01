@@ -71,26 +71,24 @@ export default function CategoryCard(props) {
   };
 
 
-  return (
-    <>
-      <Card sx={{ minWidth: 375 }} className='categoryCard' style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
-        <div className={'categoryCardOverlay'}>
-          <Link to={`${props.el.id}/products`} className='categoryCardLink'>
-            <CardContent>
-              <Typography sx={{ fontSize: 24 }} gutterBottom className='categoryName'>
-                {props.el.categoryName}
-              </Typography>
-            </CardContent>
-          </Link>
-          <CardActions>
-            {props.admin ? <Button size="small" onClick={() => setShowForm(!showForm)} className='categoryCardActionButtons'><EditIcon /></Button> : ''}
-            {props.admin ? <Button size="small" onClick={archive} className='categoryCardActionButtons'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</Button> : ''}
-          </CardActions>
+    return (
+        <div className='categoryCardContainer'>
+            <Link to={`${props.el.id}/products`} className='categoryCardLink'>
+                <Card sx={{ minWidth: 375 }} className='categoryCard' style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
+                </Card>
+                <CardContent>
+                    <Typography sx={{ fontSize: 24 }} gutterBottom className='categoryName'>
+                        {props.el.categoryName}
+                    </Typography>
+                </CardContent>
+            </Link>
+            <CardActions className='categoryCardButtons'>
+                {props.admin ? <Button size="small" onClick={() => setShowForm(!showForm)} className='categoryCardActionButtons'><EditIcon /></Button> : ''}
+                {props.admin ? <Button size="small" onClick={archive} className='categoryCardActionButtons'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</Button> : ''}
+            </CardActions>
+            {deleteFailed === false ? '' : 'Could not archive category'}
+            {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el} /> : ''}
         </div>
-      </Card>
-      {deleteFailed === false ? '' : 'Could not archive category'}
-      {showForm ? <CategoryAddUpdate onCategorySubmit={onCategorySubmit} category={props.el} /> : ''}
-    </>
-  );
+    );
 };
 

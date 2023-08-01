@@ -1,6 +1,8 @@
 .categoryName {
     font-family: 'Belanosima', sans-serif !important;
     color: rgb(5, 44, 116);
+    text-align: center;
+    padding: 0;
 }
 
 .categoryCardLink {
@@ -8,12 +10,16 @@
     text-decoration: none;
 }
 
-.categoryCardOverlay {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
+.css-46bh2p-MuiCardContent-root {
+    padding: 0;
+}
+
+.css-46bh2p-MuiCardContent-root:last-child {
+    padding: 0;
+}
+
+.categoryCardButtons {
+    padding: 0;
 }
 
 .categoryCardActionButtons {
@@ -28,6 +34,13 @@
     border-radius: 4rem;
     background-color: rgba(0, 0, 0, 0.04) !important;
     cursor: pointer;
+}
+
+.categoryCardContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .categoryCard {
