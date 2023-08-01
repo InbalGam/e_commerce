@@ -58,27 +58,29 @@ function CategoryList() {
 
 
     return (
-        <div className="categoryContainer">
+        <>
             {profile.is_admin ?
                 <div className="addCategory">
                     <button className='add_category' onClick={showAddCategory}><AddIcon /></button>
                     {showForm === false ? '' : <CategoryAddUpdate onCategorySubmit={onCategorySubmit} />}
                 </div> : ''}
-            <div className="Categories">
-                <ul>
-                    {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ? '' 
-                                                                                                                                                                        : <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
-                </ul>
+            <div className="categoryContainer">
+                <div className="Categories">
+                    <ul>
+                        {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ? ''
+                            : <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
+                    </ul>
+                </div>
+                {profile.is_admin ?
+                    <div className="Categories">
+                        <p>Archived Categories</p>
+                        <ul>
+                            {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
+                                <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} /> : ''))}
+                        </ul>
+                    </div> : ''}
             </div>
-            {profile.is_admin ? 
-            <div className="Categories">
-                <p>Archived Categories</p>
-                <ul>
-                    {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
-                                                                                                                                                                                    <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true}/> : '' ))}
-                </ul>
-            </div> : '' }
-        </div>
+        </>
     );
 };
 
