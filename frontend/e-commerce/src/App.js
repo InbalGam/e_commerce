@@ -11,8 +11,12 @@ import Cart from './Components/Cart';
 import OrderDetails from "./Components/OrderDetails";
 import styles from './Components/Styles/App.css';
 import SearchList from "./Components/SearchList";
+import { useEffect } from "react";
+import { useDispatch } from 'react-redux';
+import {loadProfile} from './store/profileSlice';
 
 function App() {
+  const dispatch = useDispatch();
 
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' >
@@ -30,6 +34,10 @@ function App() {
       </Route>
     </Route>
   ));
+
+  useEffect(() => {
+    dispatch(loadProfile());
+  }, []);
 
   return (
     <div className="App">
