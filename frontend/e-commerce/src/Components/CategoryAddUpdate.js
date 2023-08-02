@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SendIcon from '@mui/icons-material/Send';
+import styles from './Styles/CategoryAddUpdate.css';
 
 
 function CategoryAddUpdate(props) {
@@ -34,10 +35,10 @@ function CategoryAddUpdate(props) {
 
 
     return (
-        <form>
-            <input id='categoryName' type='text' name='categoryName' value={categoryName} placeholder={'Enter category name'} onChange={handleCategoryNameChange} />
-            <label htmlFor="categoryImage">Enter category image - optional</label>
-            <input id="categoryImage" type="file" onChange={imageLoad}/>
+        <form className="categoryForm">
+            <input id='categoryName' type='text' name='categoryName' value={categoryName} placeholder={'Enter category name'} onChange={handleCategoryNameChange} className='formParams'/>
+            <label htmlFor="categoryImage" className='formParams'>Enter category image - optional</label>
+            <input id="categoryImage" type="file" onChange={imageLoad} className='formParams'/>
             <button type="submit" value="Submit" className="submitButton" onClick={CategorySubmit}><SendIcon/></button>
         </form>
     );

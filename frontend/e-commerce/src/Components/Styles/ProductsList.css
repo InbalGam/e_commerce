@@ -19,7 +19,7 @@
     box-sizing: border-box;
     box-shadow:  2px 1px -1px rgba(0,0,0,0.2);
     font-weight: bold;
-    background-color: #a56690;
+    background-color: rgb(126, 89, 14);
     font-family: 'Roboto', sans-serif;
     padding: 0.5rem;
     color: white;
@@ -28,7 +28,7 @@
 }
 
 .addProduct .add_product:hover {
-    background-color: #c5a1b9;
+    background-color: rgb(218, 154, 26);
     cursor: pointer;
 }
 
@@ -36,7 +36,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
     gap: 2rem;
     margin-top: 2rem;
 }

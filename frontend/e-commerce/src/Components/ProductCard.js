@@ -101,29 +101,31 @@ export default function ProductCard(props) {
     };
 
     return (
-        <div className='productCardContainer'>
-                <Card sx={{ minWidth: 375 }} className='productCard' style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
-                </Card>
-                <CardContent>
-                    <Typography sx={{ fontSize: 24 }} gutterBottom className='productName'>
-                        {props.el.product_name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
-                        {props.el.price}$
-                    </Typography>
-                    <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
-                        {props.el.discount ? props.el.discount+'% discount' : ''}
-                    </Typography>
-                    <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount"/>
-                    <Button size="small" className='addToCart' onClick={insertToCart}>Add to cart</Button>
-                </CardContent>
-            <CardActions className='productCardButtons'>
-                {props.admin ? <Button size="small" onClick={() => setShowForm(!showForm)} className='productCardActionButtons'><EditIcon /></Button> : ''}
-                {props.admin ? <Button size="small" onClick={archive} className='productCardActionButtons'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</Button> : ''}
-            </CardActions>
+        <>
+            <div className='productCardContainer'>
+                    <Card sx={{ minWidth: 375 }} className='productCard' style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
+                    </Card>
+                    <CardContent>
+                        <Typography sx={{ fontSize: 24 }} gutterBottom className='productName'>
+                            {props.el.product_name}
+                        </Typography>
+                        <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
+                            {props.el.price}$
+                        </Typography>
+                        <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
+                            {props.el.discount ? props.el.discount+'% discount' : ''}
+                        </Typography>
+                        <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount"/>
+                        <Button size="small" className='addToCart' onClick={insertToCart}>Add to cart</Button>
+                    </CardContent>
+                <CardActions className='productCardButtons'>
+                    {props.admin ? <Button size="small" onClick={() => setShowForm(!showForm)} className='productCardActionButtons'><EditIcon /></Button> : ''}
+                    {props.admin ? <Button size="small" onClick={archive} className='productCardActionButtons'>{props.isArchived ? <UnarchiveIcon /> : <ArchiveIcon />}</Button> : ''}
+                </CardActions>
+            </div>
             {deleteFailed === false ? '' : 'Could not archive product'}
             {showForm ? <ProductAddUpdate onProductSubmit={onProductSubmit} product={props.el}/> : ''}
-        </div>
+        </>
     );
 };
 

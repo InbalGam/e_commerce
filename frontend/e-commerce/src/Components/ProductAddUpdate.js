@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SendIcon from '@mui/icons-material/Send';
+import styles from './Styles/ProductAddUpdate.css';
 
 
 function ProductAddUpdate(props) {
@@ -59,13 +60,13 @@ function ProductAddUpdate(props) {
 
 
     return (
-        <form>
-            <input id='productName' type='text' name='productName' value={productName} placeholder={'Enter product name'} onChange={handleProductNameChange} />
-            <input id='quantity' type='text' name='quantity' value={quantity} placeholder={'Enter quantity'} onChange={handleQuantityChange} />
-            <input id='price' type='text' name='price' value={price} placeholder={'Enter price'} onChange={handlePriceChange} />
-            <input id='discount' type='text' name='discount' value={discount} placeholder={'Enter discount if relevant'} onChange={handleDiscountChange} />
-            <label htmlFor="productImage">Enter product image - optional</label>
-            <input id="productImage" type="file" onChange={imageLoad}/>
+        <form className="productForm">
+            <input id='productName' type='text' name='productName' value={productName} placeholder={'Enter product name'} onChange={handleProductNameChange} className='formParams'/>
+            <input id='quantity' type='text' name='quantity' value={quantity} placeholder={'Enter quantity'} onChange={handleQuantityChange} className='formParams'/>
+            <input id='price' type='text' name='price' value={price} placeholder={'Enter price'} onChange={handlePriceChange} className='formParams'/>
+            <input id='discount' type='text' name='discount' value={discount} placeholder={'Enter discount if relevant'} onChange={handleDiscountChange} className='formParams'/>
+            <label htmlFor="productImage" className='formParams'>Enter product image - optional</label>
+            <input id="productImage" type="file" onChange={imageLoad} className='formParams'/>
             <button type="submit" value="Submit" className="submitButton" onClick={ProductSubmit}><SendIcon/></button>
         </form>
     );
