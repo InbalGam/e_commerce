@@ -2,6 +2,7 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import { useEffect } from "react";
 import {getAllCategories} from '../Api';
 import { useNavigate } from 'react-router-dom';
+import styles from './Styles/Home.css';
 
 
 function Home() {

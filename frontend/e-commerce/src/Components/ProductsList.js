@@ -8,6 +8,7 @@ import {loadImage, insertNewProduct} from '../Api';
 import { useParams, useNavigate } from 'react-router-dom';
 import Product from "./Product";
 import ProductAddUpdate from "./ProductAddUpdate";
+import styles from './Styles/ProductsList.css';
 
 
 function ProductsList() {
