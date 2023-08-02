@@ -68,7 +68,7 @@ function CategoryList() {
                 <div className="Categories">
                     <ul>
                         {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ? ''
-                            : <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} />))}
+                            : <li key={ind}><CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} /></li>))}
                     </ul>
                 </div>
                 {profile.is_admin ?
@@ -76,7 +76,7 @@ function CategoryList() {
                         <p>Archived Categories</p>
                         <ul>
                             {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
-                                <CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} /> : ''))}
+                                <li key={ind}><CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} /></li> : ''))}
                         </ul>
                     </div> : ''}
             </div>
