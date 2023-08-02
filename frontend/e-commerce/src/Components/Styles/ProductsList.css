@@ -1,3 +1,45 @@
+.productsContainer {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    gap: 30%;
+    flex-wrap: wrap;
+}
+
+.productsContainer p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.addProduct .add_product {
+    align-self: center;
+    border: 0.06rem solid #ccc;
+    border-radius: 4rem;
+    box-sizing: border-box;
+    box-shadow:  2px 1px -1px rgba(0,0,0,0.2);
+    font-weight: bold;
+    background-color: #a56690;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5rem;
+    color: white;
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+}
+
+.addProduct .add_product:hover {
+    background-color: #c5a1b9;
+    cursor: pointer;
+}
+
+.products ul{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
 .loader {
     align-self: center;
     position: absolute;

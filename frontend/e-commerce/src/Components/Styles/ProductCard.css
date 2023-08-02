@@ -1,0 +1,48 @@
+.productName {
+    font-family: 'Belanosima', sans-serif !important;
+    color: rgb(5, 44, 116);
+    text-align: center;
+    padding: 0;
+}
+
+.css-46bh2p-MuiCardContent-root {
+    padding: 0;
+}
+
+.css-46bh2p-MuiCardContent-root:last-child {
+    padding: 0;
+}
+
+.productCardButtons {
+    padding: 0;
+}
+
+.productCardActionButtons {
+    color: rgb(126, 90, 47) !important;
+    align-self: flex-end;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 4rem;
+}
+
+.productCardActionButtons:hover {
+    border-radius: 4rem;
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    cursor: pointer;
+}
+
+.productCardContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.productCard {
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 23.5rem;
+    height: 240px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
