@@ -4,6 +4,7 @@
     align-content: center;
     gap: 30%;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .productsContainer p {

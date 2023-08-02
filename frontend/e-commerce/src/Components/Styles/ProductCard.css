@@ -36,13 +36,15 @@
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
+    height: 35rem;
+    width: 23.5rem;
 }
 
 .productCard {
     background-size: cover;
     background-repeat: no-repeat;
     width: 23.5rem;
-    height: 240px;
+    height: 15rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
