@@ -5,7 +5,12 @@ import { useDispatch } from 'react-redux';
 import {loadCart} from '../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import {baseURL} from '../apiKey';
+import Typography from '@mui/material/Typography';
 
 function CartItem(props) {
     const [amount, setAmount] = useState({value: props.el.quantity, label: props.el.quantity});
@@ -55,18 +60,31 @@ function CartItem(props) {
     };
 
     return (
-        <li key={props.el.ind}>
-            <div>
-                <button className='deleteIcon' onClick={deleteProduct}><DeleteIcon/></button>
-                <p>{props.el.product_name}</p>
-                <p>Quantity:</p>
-                {props.el.inventory_quantity > props.el.quantity ? <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" /> : 
-                <Select options={[]} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />}
-                {amount.value !== props.el.quantity ? <button className='updateCart' onClick={updateProductInCart}>Submit</button> : ''}
-                <p>Price: {(props.el.discount_percentage ? props.el.price * props.el.quantity * (1 - (props.el.discount_percentage/100)) : props.el.price * props.el.quantity).toFixed(2)}$</p>
+        <>
+            <div className='productCardContainer'>
+                <Card sx={{ minWidth: 375 }} className='productCard' style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
+                </Card>
+                <CardContent>
+                    <Typography sx={{ fontSize: 24 }} gutterBottom className='productName'>
+                        {props.el.product_name}
+                    </Typography>
+                    <CardActions className='productCardButtons'>
+                        <Button className='deleteIcon' onClick={deleteProduct}><DeleteIcon /></Button>
+                    </CardActions>
+                    <Typography sx={{ fontSize: 24 }} gutterBottom className='productQuantity'>
+                        Quantity:
+                        {props.el.inventory_quantity > props.el.quantity ? <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" /> :
+                            <Select options={[]} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />}
+                        {amount.value !== props.el.quantity ? <button className='updateCart' onClick={updateProductInCart}>Submit</button> : ''}
+                    </Typography>
+                    <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
+                        Price: {(props.el.discount_percentage ? props.el.price * props.el.quantity * (1 - (props.el.discount_percentage / 100)) : props.el.price * props.el.quantity).toFixed(2)}$
+                    </Typography>
+                </CardContent>
             </div>
-        </li>
+        </>
     );
+
 };
 
 export default CartItem;

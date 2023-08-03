@@ -67,27 +67,31 @@ function Cart() {
         <div className="cartContainer">
             {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
                 <div className="cartInfo">
-                    <ul>
-                        {cart.map((el, ind) => <CartItem el={el} ind={ind} />)}
-                    </ul>
-                    <p className="cartTotal">Total: {total}$</p>
-                    {!profile.username ? <Link to='/login'>Login to place an order</Link> :
-                        <div>
-                            <h3>Shipping information</h3>
-                            <p>Shipping address:</p>
-                            <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
-                            {showAddressForm === false ? <p>{address}</p> :
-                                <div>
-                                    <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
-                                </div>}
-                            <p>Contact phone:</p>
-                            <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
-                            {showPhoneForm === false ? <p>{phone}</p> :
-                                <div>
-                                    <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
-                                </div>}
-                            <button type="submit" value="Submit" onClick={submitOrder} >Place Order</button>
-                        </div>}
+                    <div className="cartProducts">
+                        <ul>
+                            {cart.map((el, ind) => <li key={ind}><CartItem el={el} ind={ind} /></li>)}
+                        </ul>
+                    </div>
+                    <div className="cartSummary">
+                        <p className="cartTotal">Total: {total}$</p>
+                        {!profile.username ? <Link to='/login'>Login to place an order</Link> :
+                            <div>
+                                <h3>Shipping information</h3>
+                                <p>Shipping address:</p>
+                                <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
+                                {showAddressForm === false ? <p>{address}</p> :
+                                    <div>
+                                        <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
+                                    </div>}
+                                <p>Contact phone:</p>
+                                <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
+                                {showPhoneForm === false ? <p>{phone}</p> :
+                                    <div>
+                                        <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
+                                    </div>}
+                                <button type="submit" value="Submit" onClick={submitOrder} >Place Order</button>
+                            </div>}
+                    </div>
                 </div>)}
         </div>
     );
