@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import {updateProfile} from '../Api';
 import { useNavigate, Link } from 'react-router-dom';
 import OrdersList from "./OrdersList";
+import styles from './Styles/Profile.css';
 
 
 function Profile() {
@@ -111,7 +112,7 @@ function Profile() {
     return (
         <div>
             {profile.username ?
-                <div>
+                <div className="profileContainer">
                     {hasError ? 'Could not fetch profile, try again' :
                         (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
                             <div>
@@ -121,7 +122,7 @@ function Profile() {
                                 <div className="editContainer">
                                     <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
                                     {showAddressForm === false ? <p>{profile.address}</p> :
-                                        <div>
+                                        <div className="editDiv">
                                             <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
                                             <button type="submit" value="Submit" className="submitButton" onClick={submitAddressField}>submit</button>
                                         </div>}
@@ -129,15 +130,17 @@ function Profile() {
                                 <div className="editContainer">
                                     <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
                                     {showPhoneForm === false ? <p>{profile.phone}</p> :
-                                        <div>
+                                        <div className="editDiv">
                                             <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
                                             <button type="submit" value="Submit" className="submitButton" onClick={submitPhoneField}>submit</button>
                                         </div>}
                                 </div>
                                 {fieldsFilled ? '' : 'Address and phone needs to be filled'}
 
-                                <h3>Your orders</h3>
-                                <OrdersList />
+                                <div className="userOrders">
+                                    <h3>Your orders</h3>
+                                    <OrdersList />
+                                </div>
                             </div>
                         )}
                 </div> : <Link to='/login'>Login to view your profile</Link>}

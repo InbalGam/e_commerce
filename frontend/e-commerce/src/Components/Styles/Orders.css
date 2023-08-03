@@ -1,0 +1,21 @@
+.orderLink {
+    text-decoration: none;
+}
+
+.orderCard {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding: 3rem;
+    text-align: justify;
+    font-family: 'Raleway', sans-serif !important;
+    font-size: 1.5rem !important;
+}
+
+.orderCard:hover {
+    cursor: pointer;
+    background-color: rgb(245, 228, 207);;
+}
+
+.orderDataId {
+    font-weight: bold !important;
+}

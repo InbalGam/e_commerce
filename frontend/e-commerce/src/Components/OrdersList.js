@@ -22,7 +22,7 @@ function OrdersList() {
             (ordersIsLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
             <div>
                 <ul>
-                    {orders.map((el, ind) => <Orders el={el} ind={ind} />)}
+                    {orders.map((el, ind) => <li key={ind}><Orders el={el} ind={ind} /></li>)}
                 </ul>
             </div>)}
         </div>
