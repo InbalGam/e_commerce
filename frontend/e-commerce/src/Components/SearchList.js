@@ -2,13 +2,14 @@ import { useState } from 'react';
 import {  Link, useNavigate } from "react-router-dom";
 import {searchDB} from '../Api';
 import FadeLoader from 'react-spinners/FadeLoader';
-import Product from './Product';
+import ProductCard from "./ProductCard";
 import {selectProfile} from '../store/profileSlice';
 import { useSelector } from 'react-redux';
 import SearchIcon from '@mui/icons-material/Search';
+import styles from './Styles/Search.css';
 
 
-function SearchList(props) {
+function SearchList() {
     const [products, setProducts] = useState([]);
     const profile = useSelector(selectProfile);
     const [isLoading, setIsLoading] = useState(false);
@@ -43,12 +44,14 @@ function SearchList(props) {
 
 
     return (
-        <div>
-            <input placeholder='Search' id='search' className='searchInput' value={searchWord} onChange={handleWordChange}/>
-            <button onClick={onSearchSubmit}><SearchIcon /></button>
+        <div className='searchDiv'>
+            <div>
+                <input placeholder='Search' id='search' className='searchInput' value={searchWord} onChange={handleWordChange}/>
+                <button onClick={onSearchSubmit} className='searchButton'><SearchIcon /></button>
+            </div>
             <h2>Search Results</h2>
             <ul>
-                {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : products.map((el, ind) => el.is_archived ? '' : <Product el={el} ind={ind} admin={profile.is_admin} isArchived={el.is_archived}/>)}
+                {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : products.map((el, ind) => el.is_archived ? '' : <ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={el.is_archived}/>)}
             </ul>
         </div>
     )
