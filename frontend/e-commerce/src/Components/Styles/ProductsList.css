@@ -49,3 +49,11 @@
     z-index: 9999999;
     transform: translate(-50%, -50%);
 }
+
+@media only screen and (max-width: 550px) {
+
+    .productsContainer {
+        flex-direction: column;
+    }
+
+}
