@@ -461,7 +461,7 @@ storeRouter.get('/order/:order_id', async (req, res, next) => {
 storeRouter.post('/search', async (req, res, next) => { 
     const {searchWord} = req.body;
     try {
-        const result = await pool.query('select * from products where LOWER(product_name) like $1;', [`%${searchWord.toLowerCase()}%`]);
+        const result = await pool.query('select p.*, if.filename as imageName from products p left join image_files if on p.image_id = if.id where LOWER(p.product_name) like $1;', [`%${searchWord.toLowerCase()}%`]);
         if (result.rows.length === 0) {
             return res.status(400).json({ msg: 'There are no products matching the search' });
         }
