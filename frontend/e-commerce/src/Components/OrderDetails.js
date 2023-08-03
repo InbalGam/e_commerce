@@ -2,6 +2,7 @@ import { useParams, useNavigate} from 'react-router-dom';
 import {getSpecificOrder} from '../Api';
 import { useEffect, useState } from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
+import styles from './Styles/OrderDetails.css';
 
 
 function OrderDetails() {
@@ -32,12 +33,12 @@ function OrderDetails() {
     }, [])
 
     return (
-        <div>
+        <div className='orderDetailsContainer'>
            {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
            <ul>
                 {order.map((el,ind) => 
                 <li key={ind}> 
-                    <p>{el.product_name}</p>
+                    <p className='orderProductName'>{el.product_name}</p>
                     <p>quantity purchased: {el.quantity}</p>
                     <p>final price for item: {el.price.toFixed(2)}$</p>
                 </li>)}
