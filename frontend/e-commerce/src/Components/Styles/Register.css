@@ -1,0 +1,37 @@
+.register_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registerForm label {
+    font-weight: bold;
+}
+
+.registerForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registerForm input {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.registerForm button {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.06rem solid #ccc;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    font-weight: bold;
+    background-color: #030565;
+    color: white;
+    width: 70%;
+}
+
+.registerForm button:hover {
+    background-color: #3739b3;
+    cursor: pointer;
+}

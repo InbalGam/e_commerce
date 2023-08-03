@@ -3,7 +3,7 @@ import {register} from '../Api';
 import FadeLoader from 'react-spinners/FadeLoader';
 import {validateEmail} from '../utils';
 import { useNavigate} from 'react-router-dom';
-
+import styles from './Styles/Register.css';
 
 function Register() {
     const navigate = useNavigate();
@@ -97,7 +97,7 @@ function Register() {
 
     return (
     <div className="register_container">
-        <h2>WElcome to Shop Online!</h2>
+        <h2>Welcome to Shop Online!</h2>
         <form onSubmit={submitForm} className='registerForm'>
             <label htmlFor='username'>Email</label>
             <input id='username' type='text' name='username' value={username} placeholder={'Enter your email here'} onChange={handleUsernameChange} />
