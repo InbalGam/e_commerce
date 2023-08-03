@@ -34,7 +34,7 @@
     color: white !important;
     background-color: rgb(218, 146, 59) !important;
     align-self: flex-end;
-    margin-top: 0.25rem;
+    margin-top: 0.25rem !important;
     padding: 0.5rem;
     border-radius: 8rem !important;
 }
