@@ -301,7 +301,7 @@ storeRouter.get('/cart', async (req, res, next) => {
     } else {
         const productIds = req.session.cart.map(el => el.productId);
         try {
-            const result = await pool.query('select p.id, p.product_name, p.inventory_quantity, p.price, p.discount_percentage from products p where id = ANY ($1);', [productIds]);
+            const result = await pool.query('select p.id, p.product_name, p.inventory_quantity, p.price, p.discount_percentage, if.filename as imageName from products p left join image_files if on p.image_id = if.id where p.id = ANY ($1);', [productIds]);
             productsInfo = result.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
             res.status(200).json(productsInfo);
         } catch (e) {
