@@ -65,10 +65,10 @@
 .discountPercentage {
     position: absolute;     
     background-color: rgb(247, 215, 173);
-    width: 109px;
-    height: 34px;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+    width: 6.8rem;
+    height: 2.125rem;
+    border-top-right-radius: 1.56rem;
+    border-bottom-right-radius: 1.56rem;
     top: 15%;
     display: table;
 }

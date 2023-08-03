@@ -3,7 +3,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 4px solid #060565;
+    border-bottom: 0.25rem solid #060565;
     background-color: rgb(250, 244, 232);
     height: 4rem;
 }
