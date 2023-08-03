@@ -7,6 +7,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import CartItem from "./CartItem";
 import {addOrder, deleteUserCart} from '../Api';
 import EditIcon from '@mui/icons-material/Edit';
+import styles from './Styles/Cart.css';
 
 
 function Cart() {
@@ -64,9 +65,9 @@ function Cart() {
     };
 
     return (
-        <div className="cartContainer">
+        <>
             {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
-                <div className="cartInfo">
+                <div className="shoppingCartInfo">
                     <div className="cartProducts">
                         <ul>
                             {cart.map((el, ind) => <li key={ind}><CartItem el={el} ind={ind} /></li>)}
@@ -75,25 +76,29 @@ function Cart() {
                     <div className="cartSummary">
                         <p className="cartTotal">Total: {total}$</p>
                         {!profile.username ? <Link to='/login'>Login to place an order</Link> :
-                            <div>
+                            <div className="shippingInfo">
                                 <h3>Shipping information</h3>
-                                <p>Shipping address:</p>
-                                <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
-                                {showAddressForm === false ? <p>{address}</p> :
-                                    <div>
-                                        <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
-                                    </div>}
-                                <p>Contact phone:</p>
-                                <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
-                                {showPhoneForm === false ? <p>{phone}</p> :
-                                    <div>
-                                        <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
-                                    </div>}
-                                <button type="submit" value="Submit" onClick={submitOrder} >Place Order</button>
+                                <div className="shippingDetails">
+                                    <p>Shipping address:</p>
+                                    {showAddressForm === false ? <p>{address}</p> :
+                                        <div>
+                                            <input id='address' type='text' name='address' value={address} placeholder={address} onChange={handleAddressChange} />
+                                        </div>}
+                                    <button className='editIcon' onClick={showEditAddress}><EditIcon /></button>
+                                </div>
+                                <div className="shippingDetails">
+                                    <p>Contact phone:</p>
+                                    {showPhoneForm === false ? <p>{phone}</p> :
+                                        <div>
+                                            <input id='phone' type='text' name='phone' value={phone} placeholder={phone} onChange={handlePhoneChange} />
+                                        </div>}
+                                    <button className='editIcon' onClick={showEditPhone}><EditIcon /></button>
+                                </div>
+                                <button type="submit" value="Submit" onClick={submitOrder} className='placeOrder'>Place Order</button>
                             </div>}
                     </div>
                 </div>)}
-        </div>
+        </>
     );
 };
 
