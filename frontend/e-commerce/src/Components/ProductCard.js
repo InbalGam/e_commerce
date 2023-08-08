@@ -41,7 +41,6 @@ export default function ProductCard(props) {
     async function archive(e) {
         e.preventDefault();
         try {
-            console.log(props.el.id);
             const result = await archiveSpecificProduct(props.el.category_id, props.el.id, !props.isArchived);
             if (result.status === 401) {
               navigate('/login');
