@@ -29,18 +29,19 @@ function Root() {
                 {/* <p>Shop Online</p> */}
                 <NavLink to='/' className='mainLink'>Shop Online</NavLink>
                 <div className='nav-links'>
-                    {profile.username ? 
-                    <>
-                        <NavLink to='/profile' className='rootLink'>Profile</NavLink>
-                        <NavLink to='/logout' className='rootLink'>Log out</NavLink>
-                    </> : <NavLink to='/login' className='rootLink'>Log in</NavLink>}
-                    <button onClick={showSearchForm}><SearchIcon className="searchIcon" /></button>
-                    {showSearch ? <form action="/search">
+                    <button onClick={showSearchForm} className="searchbar"><SearchIcon className="searchIcon" /></button>
+                    {showSearch ? 
+                    <form action="/search">
                         <input type="text" id="query" name="query" />
-                        <button type="submit" value="Submit" /><button/>
+                        <input type="submit" value="Submit" className="searchbarSubmit"/>
                     </form> : ''}
+                    {profile.username ?
+                        <>
+                            <NavLink to='/profile' className='rootLink'>Profile</NavLink>
+                            <NavLink to='/logout' className='rootLink'>Log out</NavLink>
+                        </> : <NavLink to='/login' className='rootLink'>Log in</NavLink>}
                     <div className="cartInfo">
-                        <NavLink to='/cart' className='rootLink' > <ShoppingCartIcon className='cartIcon'/> </NavLink>
+                        <NavLink to='/cart' className='rootLink' > <ShoppingCartIcon className='cartIcon' /> </NavLink>
                         <p className="AmountItemsCart">{cart.length}</p>
                     </div>
                 </div>

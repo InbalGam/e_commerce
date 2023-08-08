@@ -46,12 +46,32 @@
     cursor: pointer;
 }
 
+.searchbar {
+    background-color: rgb(250, 244, 232);
+    border: none;
+    padding: 0;
+}
+
 .searchIcon {
     padding-left: 1rem;
     text-decoration: none;
     cursor: pointer;
     color: #060565;
     font-size: 1.75rem !important;
+}
+
+.searchbarSubmit {
+    color: black;
+    background-color: rgb(252, 226, 173);
+    border-radius: 4rem;
+    margin-left: 0.5rem;
+    border: 0.06rem solid #ccc;
+    padding: 0.5rem;
+}
+
+.searchbarSubmit:hover {
+    background-color: rgb(226, 189, 143);
+    cursor: pointer;
 }
 
 .searchIcon:hover {
