@@ -19,6 +19,7 @@ function CategoryList() {
     const profile = useSelector(selectProfile);
     const [showForm, setShowForm] = useState(false);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     
 
     useEffect(() => {
@@ -32,6 +33,7 @@ function CategoryList() {
 
 
     async function onCategorySubmit(categoryName, categoryImg) {
+        setLoading(true);
         let imgId;
         const data = new FormData();
         data.append('image', categoryImg );
@@ -47,9 +49,11 @@ function CategoryList() {
             if (result.status === 200) {
                 dispatch(loadCategories());
                 setShowForm(false);
+                setLoading(false);
             } else if (result.status === 401){
                 navigate('/login');
                 setShowForm(false);
+                setLoading(false);
             }
         } catch (e) {
             navigate('/error');
@@ -58,8 +62,9 @@ function CategoryList() {
 
 
     return (
-        <>
-            {profile.is_admin ?
+        <div>
+            {loading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : 
+            <div>{profile.is_admin ?
                 <div className="addCategory">
                     <button className='add_category' onClick={showAddCategory}><AddIcon /></button>
                     {showForm === false ? '' : <CategoryAddUpdate onCategorySubmit={onCategorySubmit} />}
@@ -68,7 +73,7 @@ function CategoryList() {
                 <div className="Categories">
                     <ul>
                         {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ? ''
-                            : <li key={ind}><CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} /></li>))}
+                            : <li key={ind}><CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} setLoading={setLoading} /></li>))}
                     </ul>
                 </div>
                 {profile.is_admin ?
@@ -76,11 +81,11 @@ function CategoryList() {
                         <p>Archived Categories</p>
                         <ul>
                             {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : categories.map((el, ind) => el.is_archived ?
-                                <li key={ind}><CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} /></li> : ''))}
+                                <li key={ind}><CategoryCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} setLoading={setLoading} /></li> : ''))}
                         </ul>
                     </div> : ''}
-            </div>
-        </>
+            </div></div>}
+        </div>
     );
 };
 

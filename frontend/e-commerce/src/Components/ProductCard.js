@@ -61,6 +61,7 @@ export default function ProductCard(props) {
     };
 
     async function onProductSubmit(productData, productImg) {
+        props.setLoading(true);
         let imgId;
         const data = new FormData();
         data.append('image', productImg );
@@ -78,9 +79,11 @@ export default function ProductCard(props) {
             if (result.status === 200) {
                 dispatch(loadProducts(props.el.category_id));
                 setShowForm(false);
+                props.setLoading(false);
             } else if (result.status === 401){
                 navigate('/login');
                 setShowForm(false);
+                props.setLoading(false);
             }
         } catch (e) {
             navigate('/error');
@@ -114,9 +117,6 @@ export default function ProductCard(props) {
                     <Typography sx={{ fontSize: 24 }} gutterBottom className='productName'>
                         {props.el.product_name}
                     </Typography>
-                    {/* <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
-                            {props.el.price}$
-                        </Typography> */}
                     <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
                         {priceCalc}$
                     </Typography>

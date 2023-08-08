@@ -19,6 +19,7 @@ function ProductsList() {
     const [showForm, setShowForm] = useState(false);
     const navigate = useNavigate();
     const { categoryId } = useParams();
+    const [loading, setLoading] = useState(false);
     
 
     useEffect(() => {
@@ -31,6 +32,7 @@ function ProductsList() {
     };
 
     async function onProductSubmit(productData, productImg) {
+        setLoading(true);
         let imgId;
         const data = new FormData();
         data.append('image', productImg );
@@ -48,9 +50,11 @@ function ProductsList() {
             if (result.status === 200) {
                 dispatch(loadProducts(categoryId));
                 setShowForm(false);
+                setLoading(false);
             } else if (result.status === 401){
                 navigate('/login');
                 setShowForm(false);
+                setLoading(false);
             }
         } catch (e) {
             navigate('/error');
@@ -59,29 +63,30 @@ function ProductsList() {
 
 
     return (
-        <>
-            {profile.is_admin ?
-                <div className="addProduct">
-                    <button className='add_product' onClick={showAddProduct}><AddIcon /></button>
-                    {showForm === false ? '' : <ProductAddUpdate onProductSubmit={onProductSubmit} />}
-                </div> : ''}
-            <div className="productsContainer">
-                <div className="products">
-                    <ul>
-                        {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
-                            products.length > 0 ? (products.map((el, ind) => el.is_archived ? '' : <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} /></li>)) : 'There are no products yet')}
-                    </ul>
-                </div>
-                {profile.is_admin ?
-                    <div className="products">
-                        <p>Archived Products</p>
-                        <ul>
-                            {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
-                                products.length > 0 ? (products.map((el, ind) => el.is_archived ? <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} /></li> : '')) : 'There are no products yet')}
-                        </ul>
+        <div>
+            {loading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
+                <div>{profile.is_admin ?
+                    <div className="addProduct">
+                        <button className='add_product' onClick={showAddProduct}><AddIcon /></button>
+                        {showForm === false ? '' : <ProductAddUpdate onProductSubmit={onProductSubmit} />}
                     </div> : ''}
-            </div>
-        </>
+                    <div className="productsContainer">
+                        <div className="products">
+                            <ul>
+                                {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
+                                    products.length > 0 ? (products.map((el, ind) => el.is_archived ? '' : <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} setLoading={setLoading}/></li>)) : 'There are no products yet')}
+                            </ul>
+                        </div>
+                        {profile.is_admin ?
+                            <div className="products">
+                                <p>Archived Products</p>
+                                <ul>
+                                    {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
+                                        products.length > 0 ? (products.map((el, ind) => el.is_archived ? <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} setLoading={setLoading} /></li> : '')) : 'There are no products yet')}
+                                </ul>
+                            </div> : ''}
+                    </div></div>}
+        </div>
     );
 };
 
