@@ -47,7 +47,7 @@ export default function CategoryCard(props) {
           }
     };
 
-    async function onCategorySubmit(categoryName, categoryImg) {
+    async function onCategorySubmit(category_name, categoryImg) {
       let imgId;
       const data = new FormData();
       data.append('image', categoryImg );
@@ -59,7 +59,7 @@ export default function CategoryCard(props) {
           } else {
               imgId = props.el.image_id;
           }
-          const result = await updateCategory(props.el.id, categoryName, imgId);
+          const result = await updateCategory(props.el.id, category_name, imgId);
           if (result.status === 200) {
               dispatch(loadCategories());
           } else if (result.status === 401){
@@ -78,7 +78,7 @@ export default function CategoryCard(props) {
                 </Card>
                 <CardContent>
                     <Typography sx={{ fontSize: 24 }} gutterBottom className='categoryName'>
-                        {props.el.categoryName}
+                        {props.el.category_name}
                     </Typography>
                 </CardContent>
             </Link>

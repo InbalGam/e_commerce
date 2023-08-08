@@ -18,20 +18,6 @@ export const loadCategories = createAsyncThunk(
 );
 
 
-const fetchData = (payload) => {
-    const data = payload.map(el => {
-        return {
-            id: el.id,
-            categoryName: el.category_name,
-            is_archived: el.is_archived,
-            imagename: el.imagename,
-            image_id: el.image_id
-        };
-    });
-    return data;
-};
-
-
 export const categorySlice = createSlice({
     name: 'categories',
     initialState: {
@@ -46,8 +32,7 @@ export const categorySlice = createSlice({
             state.hasError = false;
         },
         [loadCategories.fulfilled]: (state, action) => {
-            const data = fetchData(action.payload);
-            state.categories = data;
+            state.categories = action.payload;
             state.isLoading = false;
             state.hasError = false;
         },
