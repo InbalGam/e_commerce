@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {updateProductCart, deleteProductInCart} from '../Api';
 import { useDispatch } from 'react-redux';
 import {loadCart} from '../store/cartSlice';
@@ -20,12 +20,17 @@ function CartItem(props) {
 
 
     const amountOptions = [];
-    for (let i = 0; i <= props.el.inventory_quantity; i++) {
-        amountOptions.push({value: i, label:i});
-    }
+    useMemo(() => {
+        for (let i = 0; i <= props.el.inventory_quantity; i++) {
+            amountOptions.push({ value: i, label: i });
+        }
+    }, [props.el]);
+
     const changeHandler = value => {
         setAmount(value);
     };
+
+    const priceCalc = useMemo(() => (props.el.discount_percentage ? props.el.price * props.el.quantity * (1 - (props.el.discount_percentage / 100)) : props.el.price * props.el.quantity).toFixed(2), [props.el]);
 
 
     async function updateProductInCart(e) {
@@ -81,7 +86,7 @@ function CartItem(props) {
                             <Select options={[]} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />}
                         {amount.value !== props.el.quantity ? <Button className='updateCart' onClick={updateProductInCart}>Submit</Button> : ''}
                     <Typography sx={{ fontSize: 20 }} gutterBottom className='productPrice'>
-                        Price: {(props.el.discount_percentage ? props.el.price * props.el.quantity * (1 - (props.el.discount_percentage / 100)) : props.el.price * props.el.quantity).toFixed(2)}$
+                        Price: {priceCalc}$
                     </Typography>
                 </CardContent>
             </div>
