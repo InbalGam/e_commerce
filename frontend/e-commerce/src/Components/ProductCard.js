@@ -104,8 +104,8 @@ export default function ProductCard(props) {
         <>
             <div className='productCardContainer'>
                 <Card sx={{ minWidth: 375 }} className='productCard' style={{ backgroundImage: props.el.imagename ? `url(${baseURL}/image/${props.el.imagename})` : '' }}>
-                    <div className={props.el.discount ? 'discountPercentage' : ''}>
-                        <p>{props.el.discount ? props.el.discount + '% discount' : ''}</p>
+                    <div className={props.el.discount_percentage ? 'discountPercentage' : ''}>
+                        <p>{props.el.discount_percentage ? props.el.discount_percentage + '% discount' : ''}</p>
                     </div>
                 </Card>
                 <CardContent>
@@ -116,7 +116,7 @@ export default function ProductCard(props) {
                             {props.el.price}$
                         </Typography> */}
                     <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
-                        {(props.el.discount ? props.el.price * (1 - (props.el.discount / 100)) : props.el.price).toFixed(2)}$
+                        {(props.el.discount_percentage ? props.el.price * (1 - (props.el.discount_percentage / 100)) : props.el.price).toFixed(2)}$
                     </Typography>
                     <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />
                     <Button size="small" className='addToCart' onClick={insertToCart}>Add to cart</Button>
