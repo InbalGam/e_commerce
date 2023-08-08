@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import {  Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import {  Link, useNavigate, useSearchParams } from "react-router-dom";
 import {searchDB} from '../Api';
 import FadeLoader from 'react-spinners/FadeLoader';
 import ProductCard from "./ProductCard";
@@ -15,14 +15,19 @@ function SearchList() {
     const [isLoading, setIsLoading] = useState(false);
     const [searchWord, setSearchWord] = useState('');
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     function handleWordChange(e) {
         setSearchWord(e.target.value);
     };
 
+    useEffect(() => {
+        setSearchWord(searchParams.get("query"));
+        onSearchSubmit();
+    }, [])
 
-    async function onSearchSubmit(e) {
-        e.preventDefault();
+
+    async function onSearchSubmit() {
         try {
             setIsLoading(true);
             const result = await searchDB({searchWord});
