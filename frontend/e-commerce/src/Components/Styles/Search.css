@@ -26,3 +26,9 @@
     background-color: rgb(241, 166, 74) !important;
     cursor: pointer;
 }
+
+.searchForm {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+}
