@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {selectCart, loadCart} from '../store/cartSlice';
 import FadeLoader from 'react-spinners/FadeLoader';
@@ -21,9 +21,13 @@ function Cart() {
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [showPhoneForm, setShowPhoneForm] = useState(false);
 
-    const total = cart.map(el => {
-        return el.discount_percentage ? el.price * el.quantity * (1 - (el.discount_percentage/100)) : el.price * el.quantity;
-    }).reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2);
+    function calculateCartTotal(data) {
+        return data.map(el => {
+            return el.discount_percentage ? el.price * el.quantity * (1 - (el.discount_percentage/100)) : el.price * el.quantity;
+        }).reduce((accumulator, currentValue) => accumulator + currentValue, 0).toFixed(2);
+    };
+
+    let total = useMemo(() => calculateCartTotal(cart), [cart]);
 
     useEffect(() => {
         dispatch(loadCart());
