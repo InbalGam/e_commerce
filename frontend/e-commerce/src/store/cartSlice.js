@@ -7,13 +7,9 @@ import { useNavigate } from 'react-router-dom';
 export const loadCart = createAsyncThunk(
     'cart/loadCart',
     async () => {
-        try {
-            const results = await getCart();
-            const jsonData = await results.json();
-            return jsonData;
-        } catch (e) {
-            useNavigate('/error');
-        }
+        const results = await getCart();
+        const jsonData = await results.json();
+        return jsonData;
     }
 );
 

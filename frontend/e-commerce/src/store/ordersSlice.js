@@ -7,13 +7,9 @@ import { useNavigate } from 'react-router-dom';
 export const loadOrdersDetails = createAsyncThunk(
     'orders/loadOrders',
     async () => {
-        try {
-            const results = await getUserOrders();
-            const jsonData = await results.json();
-            return jsonData;
-        } catch (e) {
-            useNavigate('/error');
-        }
+        const results = await getUserOrders();
+        const jsonData = await results.json();
+        return jsonData;
     }
 );
 

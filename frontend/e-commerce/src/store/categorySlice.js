@@ -7,13 +7,9 @@ import { useNavigate } from 'react-router-dom';
 export const loadCategories = createAsyncThunk(
     'categories/loadCategories',
     async () => {
-        try {
-            const results = await getAllCategories();
-            const jsonData = await results.json();
-            return jsonData;
-        } catch (e) {
-            useNavigate('/error');
-        }
+        const results = await getAllCategories();
+        const jsonData = await results.json();
+        return jsonData;
     }
 );
 

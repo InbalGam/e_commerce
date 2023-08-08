@@ -6,13 +6,9 @@ import { useNavigate } from 'react-router-dom';
 export const loadProfile = createAsyncThunk(
     '/profile',
     async () => {
-        try {
-            const results = await userProfile();
-            const jsonData = await results.json();
-            return jsonData;
-        } catch (e) {
-            useNavigate('/error');
-        }
+        const results = await userProfile();
+        const jsonData = await results.json();
+        return jsonData;
     }
 );
 

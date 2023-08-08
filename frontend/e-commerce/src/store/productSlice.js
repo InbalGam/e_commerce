@@ -7,16 +7,12 @@ import { useNavigate } from 'react-router-dom';
 export const loadProducts = createAsyncThunk(
     'products/loadProducts',
     async (categoryId) => {
-        try {
-            const results = await getAllCategoryProducts(categoryId);
-            const jsonData = await results.json();
-            if (results.status === 200) {
-                return jsonData;
-            } else {
-                return [];
-            }
-        } catch (e) {
-            useNavigate('/error');
+        const results = await getAllCategoryProducts(categoryId);
+        const jsonData = await results.json();
+        if (results.status === 200) {
+            return jsonData;
+        } else {
+            return [];
         }
     }
 );
