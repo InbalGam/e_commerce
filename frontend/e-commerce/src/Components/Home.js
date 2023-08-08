@@ -13,8 +13,6 @@ function Home() {
             const result = await getAllCategories();
             if (result.status === 200) {
                 navigate('/category');
-            } else if (result.status === 401) {
-                navigate('/login');
             }
         } catch (e) {
             navigate('/error');
