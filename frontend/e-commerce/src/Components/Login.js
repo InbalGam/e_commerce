@@ -5,6 +5,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import FadeLoader from 'react-spinners/FadeLoader';
 import {baseURL} from '../apiKey';
 import styles from './Styles/Login.css';
+import { useDispatch } from 'react-redux';
+import {loadProfile} from '../store/profileSlice';
 
 
 function Login() {
@@ -14,6 +16,7 @@ function Login() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
 
     function handleUsernameChange(e) {
         setUsername(e.target.value);
@@ -30,6 +33,7 @@ function Login() {
         try {
             const result = await login(username, password);
             if (result === true) {
+                dispatch(loadProfile());
                 navigate('/profile');
                 setIsLoading(false);
             } else {
