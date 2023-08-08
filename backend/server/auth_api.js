@@ -51,6 +51,9 @@ authRouter.get("/login", (req, res) => {
 
 // Get user profile page
 authRouter.get("/profile", async (req, res) => {
+    if (req.user === undefined) {
+        res.status(200).json([{is_admin: false}]);
+    }
     try {
         const result = await pool.query('select * from users where id = $1', [req.user.id]);
         res.status(200).json(result.rows);

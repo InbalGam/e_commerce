@@ -13,6 +13,14 @@ storeRouter.use(['/order', '/order/:order_id'], (req, res, next) => {
     next();
 });
 
+const checkAdmin = async (req, res, next) => {
+    if (req.user.is_admin) {
+        next();
+    } else {
+        res.status(401).json({ msg: 'Unauthorized' });
+    }
+};
+
 
 storeRouter.use('/category/:category_id', async (req, res, next) => {
     try {
@@ -83,14 +91,14 @@ storeRouter.post('/category', async (req, res, next) => {
 
 // Category
 // Get a specific category-
-storeRouter.get('/category/:category_id', async (req, res, next) => { 
-    try {
-        const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
-        res.status(200).json(result.rows);
-    } catch (e) {
-        res.status(500).json({msg: 'Server error'});
-    }
-});
+// storeRouter.get('/category/:category_id', async (req, res, next) => { 
+//     try {
+//         const result = await pool.query('select * from category where id = $1;', [req.params.category_id]);
+//         res.status(200).json(result.rows);
+//     } catch (e) {
+//         res.status(500).json({msg: 'Server error'});
+//     }
+// });
 
 
 // Get a specific category, ALL products-
@@ -127,13 +135,7 @@ storeRouter.put('/category/:category_id', async (req, res, next) => {
 
 
 // Archive / Un-Archive a specific category
-storeRouter.delete('/category/:category_id/archive', async (req, res, next) => {
-    if (req.user.is_admin) {
-        next();
-    } else {
-        res.status(401).json({ msg: 'Unauthorized' });
-    }
-}, async (req, res, next) => {
+storeRouter.delete('/category/:category_id/archive', checkAdmin, async (req, res, next) => {
     const { status } = req.body;
     const timestamp = new Date(Date.now());
     try {
@@ -260,13 +262,7 @@ storeRouter.put('/category/:category_id/products/:product_id', async (req, res, 
 });
 
 // Archive / Un-archive a specific product
-storeRouter.delete('/category/:category_id/products/:product_id/archive', async (req, res, next) => {
-    if (req.user.is_admin) {
-        next();
-    } else {
-        res.status(401).json({ msg: 'Unauthorized' });
-    }
-}, async (req, res, next) => {
+storeRouter.delete('/category/:category_id/products/:product_id/archive', checkAdmin, async (req, res, next) => {
     const { status } = req.body;
     const timestamp = new Date(Date.now());
         try {
@@ -281,6 +277,9 @@ storeRouter.delete('/category/:category_id/products/:product_id/archive', async 
 
 // Cart
 
+const combineCartProductsWithQuantity = (data, req) => {
+    return data.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
+};
 // Get cart-
 storeRouter.get('/cart', async (req, res, next) => {
     if (!req.session.cart) {
@@ -289,7 +288,7 @@ storeRouter.get('/cart', async (req, res, next) => {
         const productIds = req.session.cart.map(el => el.productId);
         try {
             const result = await pool.query('select p.id, p.product_name, p.inventory_quantity, p.price, p.discount_percentage, if.filename as imageName from products p left join image_files if on p.image_id = if.id where p.id = ANY ($1);', [productIds]);
-            productsInfo = result.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
+            const productsInfo = combineCartProductsWithQuantity(result, req);
             res.status(200).json(productsInfo);
         } catch (e) {
             console.log(e);
@@ -354,7 +353,12 @@ storeRouter.put('/cart/:product_id', async (req, res, next) => {
             return res.status(400).json({msg: 'Not enough in stock'});
         }
 
-        req.session.cart.filter(el => el.productId === product_id)[0].quantity = quantity;
+        let productToUpdate = req.session.cart.filter(el => el.productId === product_id)[0];
+        if (productToUpdate.productId){
+            productToUpdate.quantity = quantity;
+        } else {
+            return res.status(400).json({ msg: 'Product does not exist in cart' });
+        }
 
         res.status(200).json({msg: 'Updated product in cart'});
     } catch (e) {
@@ -402,7 +406,7 @@ storeRouter.post('/order', async (req, res, next) => {
     try {
         const productIds = req.session.cart.map(el => el.productId);
         let productsData = await pool.query('select * from products where id = ANY ($1)', [productIds]);
-        productsData = productsData.rows.map(el => { return { ...el, quantity: req.session.cart.filter(pr => pr.productId === el.id)[0].quantity } });
+        productsData = combineCartProductsWithQuantity(productsData, req);
 
         const productsInfo = productsData.map(el => {
             const finalPrice = el.discount_percentage ? el.price * el.quantity * (1 - (el.discount_percentage/100)) : el.price * el.quantity;
@@ -450,7 +454,7 @@ storeRouter.post('/search', async (req, res, next) => {
     try {
         const result = await pool.query('select p.*, if.filename as imageName from products p left join image_files if on p.image_id = if.id where LOWER(p.product_name) like $1;', [`%${searchWord.toLowerCase()}%`]);
         if (result.rows.length === 0) {
-            return res.status(400).json({ msg: 'There are no products matching the search' });
+            return res.status(200).json({msg: 'no matching products'});
         }
         res.status(200).json(result.rows);
     } catch (e) {
