@@ -1,0 +1,100 @@
+.productName {
+    font-family: 'Belanosima', sans-serif !important;
+    color: rgb(5, 44, 116);
+    text-align: center;
+    padding: 0;
+}
+
+.css-46bh2p-MuiCardContent-root {
+    padding: 0;
+}
+
+.css-46bh2p-MuiCardContent-root:last-child {
+    padding: 0;
+}
+
+.productCardButtons {
+    padding: 0;
+}
+
+.cartActionButton {
+    color: rgb(126, 90, 47) !important;
+    align-self: flex-end;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 8rem !important;
+}
+
+.cartActionButton:hover {
+    background-color: rgb(240, 192, 134) !important;
+    cursor: pointer;
+}
+
+.updateCart {
+    color: white !important;
+    background-color: rgb(218, 146, 59) !important;
+    align-self: flex-end;
+    margin-top: 0.25rem !important;
+    padding: 0.5rem;
+    border-radius: 8rem !important;
+}
+
+.updateCart:hover {
+    background-color: rgb(240, 192, 134) !important;
+    cursor: pointer;
+}
+
+.productCardContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 35rem;
+    width: 23.5rem;
+}
+
+.productCard {
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 23.5rem;
+    height: 15rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.addToCart {
+    background-color: rgb(179, 138, 87) !important;
+    margin-top: 0.5rem !important;
+    padding: 0.5rem;
+    border-radius: 4rem !important;
+    color: white !important;
+    padding: 0.5rem !important;
+}
+
+.addToCart:hover {
+    background-color: rgb(241, 166, 74) !important;
+    cursor: pointer;
+}
+
+.discountPercentage {
+    position: absolute;     
+    background-color: rgb(247, 215, 173);
+    width: 6.8rem;
+    height: 2.125rem;
+    border-top-right-radius: 1.56rem;
+    border-bottom-right-radius: 1.56rem;
+    top: 15%;
+    display: table;
+}
+
+.discountPercentage p {
+    text-align:center; 
+    vertical-align: middle;
+    display: table-cell; 
+    font-size: 1rem;
+}
+
+.productNameDelete {
+    display: flex;
+    align-items: flex-end;
+}

@@ -1,0 +1,50 @@
+.categoryContainer {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 30%;
+    flex-wrap: wrap;
+}
+
+.categoryContainer p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.addCategory .add_category {
+    align-self: center;
+    border: 0.06rem solid #ccc;
+    border-radius: 4rem;
+    box-sizing: border-box;
+    font-weight: bold;
+    background-color: rgb(126, 89, 14);
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5rem;
+    color: white;
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+}
+
+.addCategory .add_category:hover {
+    background-color: rgb(218, 154, 26);
+    cursor: pointer;
+}
+
+.Categories ul{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.loader {
+    align-self: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 9999999;
+    transform: translate(-50%, -50%);
+}

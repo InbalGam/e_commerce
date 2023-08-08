@@ -1,0 +1,37 @@
+.productForm {
+    display: flex;
+    flex-direction: column;
+    width: 18rem;
+    margin-left: 1rem;
+    margin-top: 0.25rem;
+    border: 0.06rem solid #ccc;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    text-align: left;
+    background-color: rgb(250, 244, 232);
+    padding: 0.25rem;
+}
+
+.formParams {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Raleway', sans-serif !important;
+    font-weight: bold;
+}
+
+.submitButton {
+    width: 20%;
+    height: 2rem;
+    border: 0.06rem solid #ccc;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    align-self: center;
+    background-color: rgb(185, 141, 52);
+    font-family: 'Roboto', sans-serif;
+}
+
+.submitButton:hover {
+    background-color: rgb(218, 154, 26);
+    cursor: pointer;
+}
+

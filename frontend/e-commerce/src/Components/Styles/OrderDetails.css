@@ -1,0 +1,10 @@
+.orderDetailsContainer ul{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.orderDetailsContainer .orderProductName {
+    font-weight: bold;
+}

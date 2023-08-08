@@ -1,0 +1,51 @@
+.categoryItem {
+    display: inline-block;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.category {
+    width: 70%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.categoryInfo {
+    display: flex;
+    align-items: flex-end;
+}
+
+.categoryLink {
+    align-self: flex-end;
+}
+
+.buttons {
+    display: flex;
+}
+
+.archiveButton {
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    border: none;
+    background-color: white;
+}
+
+.archiveButton:hover {
+    border-radius: 4rem;
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+}
+
+.editButton {
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    border: none;
+    background-color: white;
+}
+
+.editButton:hover {
+    border-radius: 4rem;
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+}

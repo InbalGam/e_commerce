@@ -1,0 +1,120 @@
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.25rem solid #060565;
+    background-color: rgb(250, 244, 232);
+    height: 4rem;
+}
+
+.nav-bar .mainLink {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-left: 7rem;
+    color: #060565;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-bar .mainLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    margin-right: 2rem;
+    align-items: center;
+}
+
+.nav-links .rootLink {
+    padding-left: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    color: #060565;
+}
+
+.nav-links .rootLink:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.searchbar {
+    background-color: rgb(250, 244, 232);
+    border: none;
+    padding: 0;
+}
+
+.searchIcon {
+    padding-left: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    color: #060565;
+    font-size: 1.75rem !important;
+}
+
+.searchbarSubmit {
+    color: black;
+    background-color: rgb(252, 226, 173);
+    border-radius: 4rem;
+    margin-left: 0.5rem;
+    border: 0.06rem solid #ccc;
+    padding: 0.5rem;
+}
+
+.searchbarSubmit:hover {
+    background-color: rgb(226, 189, 143);
+    cursor: pointer;
+}
+
+.searchIcon:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.cartInfo {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.AmountItemsCart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    text-decoration: none;
+    content:attr(value);
+    font-size: 0.85rem;
+    color: #fff;
+    background: rgb(247, 170, 17);
+    border-radius:50%;
+    position:relative;
+    left:-0.5rem;
+    top:-0.625rem;
+    /* opacity:0.9; */
+}
+
+.cartIcon {
+    font-size: 1.75rem !important;
+}
+
+@media only screen and (max-width: 550px) {
+
+    .nav-links .rootLink {
+        font-size: 0.8rem;
+    }
+
+    .nav-bar .mainLink {
+        padding: 0.25rem;
+    }
+}

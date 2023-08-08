@@ -1,0 +1,34 @@
+.searchDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.searchInput {
+    border: 0.06rem solid #ccc;
+    border-radius: 0.25rem;
+    width: 18.75rem;
+}
+
+.searchButton {
+    background-color: rgb(179, 138, 87);
+    margin-top: 0.5rem ;
+    padding: 0.5rem;
+    border-radius: 4rem ;
+    border: none;
+    color: white ;
+    padding: 0.5rem ;
+    margin-left: 1rem;
+}
+
+.searchButton:hover {
+    background-color: rgb(241, 166, 74) !important;
+    cursor: pointer;
+}
+
+.searchForm {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+}
