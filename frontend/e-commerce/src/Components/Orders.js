@@ -12,23 +12,23 @@ function Orders(props) {
 
     return (
         <>
-            <Link to={`/myOrders/${props.el.orderId}`} className={'orderLink'}>
+            <Link to={`/myOrders/${props.el.id}`} className={'orderLink'}>
                 <Card sx={{ minWidth: 375 }} className='orderCard'>
                     <CardContent>
                         <Typography sx={{ fontSize: 24 }} gutterBottom className='orderDataId'>
-                            Order id {props.el.orderId}
+                            Order id {props.el.id}
                         </Typography>
                         <Typography sx={{ fontSize: 24 }} gutterBottom className='orderData'>
-                            submitted on {dateFormat(new Date(props.el.createdAt), "mmmm dS, yyyy")}
+                            submitted on {dateFormat(new Date(props.el.created_at), "mmmm dS, yyyy")}
                         </Typography>
                         <Typography sx={{ fontSize: 24 }} gutterBottom className='orderData'>
-                            Total of {props.el.orderTotal.toFixed(2)}$
+                            Total of {props.el.total.toFixed(2)}$
                         </Typography>
                         <Typography sx={{ fontSize: 24 }} gutterBottom className='orderData'>
-                            Shipping address {props.el.shippedTo}
+                            Shipping address {props.el.shipping_address}
                         </Typography>
                         <Typography sx={{ fontSize: 24 }} gutterBottom className='orderData'>
-                            Contact number {props.el.contactPhone}
+                            Contact number {props.el.phone}
                         </Typography>
                     </CardContent>
                 </Card>
