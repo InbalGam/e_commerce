@@ -5,7 +5,6 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import ProductCard from "./ProductCard";
 import {selectProfile} from '../store/profileSlice';
 import { useSelector } from 'react-redux';
-import SearchIcon from '@mui/icons-material/Search';
 import styles from './Styles/Search.css';
 
 
@@ -13,21 +12,16 @@ function SearchList() {
     const [products, setProducts] = useState([]);
     const profile = useSelector(selectProfile);
     const [isLoading, setIsLoading] = useState(false);
-    const [searchWord, setSearchWord] = useState('');
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
-    function handleWordChange(e) {
-        setSearchWord(e.target.value);
-    };
 
     useEffect(() => {
-        setSearchWord(searchParams.get("query"));
-        onSearchSubmit();
-    }, [])
+        onSearchSubmit(searchParams.get("query"));
+    }, []);
 
 
-    async function onSearchSubmit() {
+    async function onSearchSubmit(searchWord) {
         try {
             setIsLoading(true);
             const result = await searchDB({searchWord});
@@ -54,10 +48,6 @@ function SearchList() {
 
     return (
         <div className='searchDiv'>
-            <div>
-                <input placeholder='Search' id='search' className='searchInput' value={searchWord} onChange={handleWordChange}/>
-                <button onClick={onSearchSubmit} className='searchButton'><SearchIcon /></button>
-            </div>
             <h2>Search Results</h2>
             <ul>
                 {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : (products[0] === 'no matching products' ? 'There are no matching products' : products.map((el, ind) => el.is_archived ? '' : <ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={el.is_archived}/>))}
