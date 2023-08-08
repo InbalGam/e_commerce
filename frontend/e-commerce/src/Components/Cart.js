@@ -71,7 +71,7 @@ function Cart() {
 
     return (
         <>
-            {hasError ? 'Could not fetch categories, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
+            {hasError ? 'Could not fetch cart, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
                 <div className="shoppingCartInfo">
                     <div className="cartProducts">
                         <ul>
