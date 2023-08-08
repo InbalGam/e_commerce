@@ -23,14 +23,18 @@ function SearchList() {
 
     async function onSearchSubmit(e) {
         e.preventDefault();
-        console.log(searchWord);
         try {
             setIsLoading(true);
             const result = await searchDB({searchWord});
             const jsonData = await result.json();
             if (result.status === 200) {
-                setProducts(jsonData);
-                setIsLoading(false);
+                if (jsonData.msg) {
+                    setProducts([jsonData.msg]);
+                    setIsLoading(false);
+                } else {
+                    setProducts(jsonData);
+                    setIsLoading(false);
+                }
             } else if (result.status === 401){
                 navigate('/login');
                 setIsLoading(false);
@@ -51,7 +55,7 @@ function SearchList() {
             </div>
             <h2>Search Results</h2>
             <ul>
-                {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : products.map((el, ind) => el.is_archived ? '' : <ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={el.is_archived}/>)}
+                {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> : (products[0] === 'no matching products' ? 'There are no matching products' : products.map((el, ind) => el.is_archived ? '' : <ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={el.is_archived}/>))}
             </ul>
         </div>
     )
