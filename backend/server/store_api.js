@@ -27,19 +27,6 @@ storeRouter.use('/category/:category_id', async (req, res, next) => {
 });
 
 
-storeRouter.use('/category/:category_id/products', async (req, res, next) => {
-    try {
-        const result = await pool.query('select p.* from category c join products p on c.id = p.category_id where p.category_id = $1;', [req.params.category_id]);
-        if (result.rows.length === 0) {
-            return res.status(400).json({ msg: 'invalid category id' });
-        }
-        next();
-    } catch (e) {
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
-
-
 storeRouter.use('/category/:category_id/products/:product_id', async (req, res, next) => {
     try {
         const result = await pool.query('select * from products where id = $1 and category_id = $2;', [req.params.product_id, req.params.category_id]);
