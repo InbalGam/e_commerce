@@ -56,7 +56,7 @@ function Login() {
                 <input id='username' type='text' name='username' value={username} placeholder={'username'} onChange={handleUsernameChange} />
                 <label for='password'>Password</label>
                 <input id='password' type='password' name='password' value={password} placeholder={'password'} onChange={handlePasswordChange} />
-                {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='submitLoader'/> : <button type="submit" value="Submit">Log in</button>}
+                {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader'/> : <button type="submit" value="Submit">Log in</button>}
             </form>
             <div className={'authStatus'}>
                 {authFailed ? 'Username or Password are incorrect, try again' : ''}

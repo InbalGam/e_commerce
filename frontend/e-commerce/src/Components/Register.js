@@ -116,7 +116,7 @@ function Register() {
             <input id='address' type='text' name='address' value={address} placeholder={'Enter your address here'} onChange={handleAddressChange} />
             <label htmlFor='phone'>Phone number</label>
             <input id='phone' type='text' name='phone' value={phone} placeholder={'Enter your phone here'} onChange={handlePhoneChange} />
-            {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='submitLoader'/> : <button type="submit" value="Submit" className="submitButton">Register</button>}
+            {isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader'/> : <button type="submit" value="Submit" className="submitButton">Register</button>}
             {registerAuth ? 'Could not register' : ''}
             {msg ? msg : ''}
             {fieldsFilled ? '' : 'There are missing fields'}

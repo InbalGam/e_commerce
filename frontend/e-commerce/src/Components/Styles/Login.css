@@ -72,7 +72,7 @@
     font-weight: bold;
 }
 
-.submitLoader {
+.loader {
     align-self: center;
     position: absolute;
     top: 50%;
