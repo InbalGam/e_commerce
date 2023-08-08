@@ -25,12 +25,6 @@ export const loggedOutProfile = createAsyncThunk(
 );
 
 
-const fetchData = (payload) => {
-    const data = payload[0];
-    return data;
-};
-
-
 export const profileSlice = createSlice({
     name: 'profile',
     initialState: {
@@ -45,8 +39,7 @@ export const profileSlice = createSlice({
             state.hasError = false;
         },
         [loadProfile.fulfilled]: (state, action) => {
-            const data = fetchData(action.payload);
-            state.profile = data;
+            state.profile = action.payload[0];
             state.isLoading = false;
             state.hasError = false;
         },
