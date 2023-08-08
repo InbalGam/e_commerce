@@ -14,20 +14,6 @@ export const loadOrdersDetails = createAsyncThunk(
 );
 
 
-const fetchData = (payload) => {
-    const data = payload.map(el => {
-        return {
-            orderId: el.id,
-            orderTotal: el.total,
-            shippedTo: el.shipping_address,
-            contactPhone: el.phone,
-            createdAt: el.created_at
-        };
-    });
-    return data;
-};
-
-
 export const ordersSlice = createSlice({
     name: 'orders',
     initialState: {
@@ -42,8 +28,7 @@ export const ordersSlice = createSlice({
             state.ordersHasError = false;
         },
         [loadOrdersDetails.fulfilled]: (state, action) => {
-            const data = fetchData(action.payload);
-            state.orders = data;
+            state.orders = action.payload;
             state.ordersIsLoading = false;
             state.ordersHasError = false;
         },
