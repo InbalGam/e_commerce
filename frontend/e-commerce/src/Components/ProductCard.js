@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {archiveSpecificProduct} from '../Api';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
 import { useParams, useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -30,13 +30,16 @@ export default function ProductCard(props) {
 
 
     const amountOptions = [];
-    for (let i = 0; i <= props.el.inventory_quantity; i++) {
-        amountOptions.push({value: i, label:i});
-    }
+    useMemo(() => {
+        for (let i = 0; i <= props.el.inventory_quantity; i++) {
+            amountOptions.push({value: i, label:i});
+        }
+    }, [props.el]);
     const changeHandler = value => {
         setAmount(value);
     };
 
+    const priceCalc = useMemo(() => (props.el.discount_percentage ? props.el.price * (1 - (props.el.discount_percentage / 100)) : props.el.price).toFixed(2), [props.el]);
 
     async function archive(e) {
         e.preventDefault();
@@ -115,7 +118,7 @@ export default function ProductCard(props) {
                             {props.el.price}$
                         </Typography> */}
                     <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
-                        {(props.el.discount_percentage ? props.el.price * (1 - (props.el.discount_percentage / 100)) : props.el.price).toFixed(2)}$
+                        {priceCalc}$
                     </Typography>
                     <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />
                     <Button size="small" className='addToCart' onClick={insertToCart}>Add to cart</Button>
