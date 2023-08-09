@@ -39,12 +39,3 @@
     gap: 2rem;
     margin-top: 2rem;
 }
-
-.loader {
-    align-self: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 9999999;
-    transform: translate(-50%, -50%);
-}
