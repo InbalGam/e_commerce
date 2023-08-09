@@ -59,7 +59,7 @@ function SearchList() {
                 <button onClick={showSearchForm} className='searchButton'><SearchIcon /></button>
                 {showSearch ?
                     <form action="/search">
-                        <input type="text" id="query" name="query" />
+                        <input type="text" id="query" name="query" className='searchInput'/>
                         <input type="submit" value="Submit" className="searchbarSubmit" />
                     </form> : ''}
             </div>
