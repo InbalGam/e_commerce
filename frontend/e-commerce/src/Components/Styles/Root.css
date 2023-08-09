@@ -79,6 +79,12 @@
     cursor: pointer;
 }
 
+.searchBarInput {
+    border: 0.06rem solid #ccc;
+    border-radius: 0.25rem;
+    width: 50%;
+}
+
 .cartInfo {
     flex-wrap: wrap;
     display: flex;
@@ -116,5 +122,20 @@
 
     .nav-bar .mainLink {
         padding: 0.25rem;
+    }
+
+    .cartInfo {
+        flex-wrap: nowrap;
+    }
+
+    .nav-links .rootLink {
+        padding-left: 0.25rem;
+    }
+    .nav-links .searchbarSubmit {
+        padding: 0.25rem;
+    }
+
+    .searchBarForm {
+        width: 170px;
     }
 }

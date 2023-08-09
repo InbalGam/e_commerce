@@ -31,8 +31,8 @@ function Root() {
                 <div className='nav-links'>
                     <button onClick={showSearchForm} className="searchbar"><SearchIcon className="searchIcon" /></button>
                     {showSearch ? 
-                    <form action="/search">
-                        <input type="text" id="query" name="query" />
+                    <form action="/search" className="searchBarForm">
+                        <input type="text" id="query" name="query" className="searchBarInput"/>
                         <input type="submit" value="Submit" className="searchbarSubmit"/>
                     </form> : ''}
                     {profile.username ?
