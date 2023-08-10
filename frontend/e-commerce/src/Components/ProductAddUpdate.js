@@ -36,7 +36,7 @@ function ProductAddUpdate(props) {
     async function setProduct(product) {
         setProductName(product.product_name);
         setPrice(product.price);
-        setDiscount(product.discount);
+        setDiscount(product.discount_percentage);
         setQuantity(product.inventory_quantity);
     };
 
