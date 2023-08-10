@@ -29,11 +29,12 @@ export default function ProductCard(props) {
     const [amount, setAmount] = useState(0);
 
 
-    const amountOptions = [];
-    useMemo(() => {
+    const amountOptions = useMemo(() => {
+        const temp = []
         for (let i = 0; i <= props.el.inventory_quantity; i++) {
-            amountOptions.push({value: i, label:i});
+            temp.push({value: i, label:i});
         }
+        return temp;
     }, [props.el]);
     const changeHandler = value => {
         setAmount(value);
@@ -118,6 +119,7 @@ export default function ProductCard(props) {
                         {props.el.product_name}
                     </Typography>
                     <Typography sx={{ fontSize: 24 }} gutterBottom className='productPrice'>
+                        <div className='priceBeforeDiscount'>{props.el.discount_percentage ? props.el.price.toFixed(2)+'$' : ''}</div>
                         {priceCalc}$
                     </Typography>
                     <Select options={amountOptions} value={amount} onChange={changeHandler} placeholder='select amount' className="selectAmount" />

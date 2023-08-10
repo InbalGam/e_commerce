@@ -79,3 +79,10 @@
     display: table-cell; 
     font-size: 1rem;
 }
+
+.priceBeforeDiscount {
+    display: inline-block;
+    text-decoration: line-through;
+    color: grey;
+    margin-right: 1rem;
+}
