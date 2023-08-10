@@ -18,7 +18,7 @@ function CategoryAddUpdate(props) {
 
 
     async function setCategory(category) {
-        setCategoryName(category.categoryName);
+        setCategoryName(category.category_name);
     };
 
 
