@@ -20,6 +20,7 @@ function ProductsList() {
     const navigate = useNavigate();
     const { categoryId } = useParams();
     const [loading, setLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
     
 
     useEffect(() => {
@@ -50,10 +51,14 @@ function ProductsList() {
             if (result.status === 200) {
                 dispatch(loadProducts(categoryId));
                 setShowForm(false);
+                setIsError(false);
                 setLoading(false);
             } else if (result.status === 401){
                 navigate('/login');
                 setShowForm(false);
+                setLoading(false);
+            } else if (result.status === 400) {
+                setIsError(true);
                 setLoading(false);
             }
         } catch (e) {
@@ -69,12 +74,13 @@ function ProductsList() {
                     <div className="addProduct">
                         <button className='add_product' onClick={showAddProduct}><AddIcon /></button>
                         {showForm === false ? '' : <ProductAddUpdate onProductSubmit={onProductSubmit} />}
+                        {isError === false ? '' : 'Enter a product name - must be different from existing names'}
                     </div> : ''}
                     <div className="productsContainer">
                         <div className="products">
                             <ul>
                                 {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
-                                    products.length > 0 ? (products.map((el, ind) => el.is_archived ? '' : <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} setLoading={setLoading}/></li>)) : 'There are no products yet')}
+                                    products.length > 0 ? (products.map((el, ind) => el.is_archived ? '' : <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={false} setLoading={setLoading} setIsError={setIsError}/></li>)) : 'There are no products yet')}
                             </ul>
                         </div>
                         {profile.is_admin ?
@@ -82,7 +88,7 @@ function ProductsList() {
                                 <p>Archived Products</p>
                                 <ul>
                                     {hasError ? 'Could not fetch products, try again' : (isLoading ? <FadeLoader color={'#3c0c21'} size={150} className='loader' /> :
-                                        products.length > 0 ? (products.map((el, ind) => el.is_archived ? <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} setLoading={setLoading} /></li> : '')) : 'There are no products yet')}
+                                        products.length > 0 ? (products.map((el, ind) => el.is_archived ? <li key={ind}><ProductCard el={el} ind={ind} admin={profile.is_admin} isArchived={true} setLoading={setLoading} setIsError={setIsError}/></li> : '')) : 'There are no products yet')}
                                 </ul>
                             </div> : ''}
                     </div></div>}

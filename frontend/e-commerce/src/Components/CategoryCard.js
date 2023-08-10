@@ -47,7 +47,7 @@ export default function CategoryCard(props) {
     };
 
     async function onCategorySubmit(category_name, categoryImg) {
-        props.setLoading(true);
+      props.setLoading(true);
       let imgId;
       const data = new FormData();
       data.append('image', categoryImg );
@@ -63,10 +63,14 @@ export default function CategoryCard(props) {
           if (result.status === 200) {
               dispatch(loadCategories());
               props.setLoading(false);
+              props.setIsError(false);
           } else if (result.status === 401){
               navigate('/login');
               props.setLoading(false);
-          }
+          } else if (result.status === 400) {
+            props.setIsError(true);
+            props.setLoading(false);
+        }
       } catch (e) {
           navigate('/error');
       }

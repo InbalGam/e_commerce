@@ -81,10 +81,14 @@ export default function ProductCard(props) {
             if (result.status === 200) {
                 dispatch(loadProducts(props.el.category_id));
                 setShowForm(false);
+                props.setIsError(false);
                 props.setLoading(false);
             } else if (result.status === 401){
                 navigate('/login');
                 setShowForm(false);
+                props.setLoading(false);
+            } else if (result.status === 400) {
+                props.setIsError(true);
                 props.setLoading(false);
             }
         } catch (e) {

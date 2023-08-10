@@ -122,6 +122,12 @@ storeRouter.put('/category/:category_id', async (req, res, next) => {
 
         const timestamp = new Date(Date.now());
         try {
+            const check = await pool.query('select * from category where category_name = $1 and id <> $2', [categoryName, req.params.category_id]);
+            if (check.rows.length > 0) {
+                return res.status(400).json({ msg: 'Please enter a different name this already exist' });
+            }
+
+
             await pool.query('update category set category_name = $2, image_id = $3, modified_at = $4 where id = $1;', [req.params.category_id, categoryName, imgId, timestamp]);
             res.status(200).json({ msg: 'Updated category' });
         } catch (e) {
@@ -249,6 +255,10 @@ storeRouter.put('/category/:category_id/products/:product_id', async (req, res, 
         };
 
         try {
+            const check = await pool.query('select * from products where product_name = $1 and id <> $2', [productName, req.params.product_id]);
+            if (check.rows.length > 0) {
+                return res.status(400).json({ msg: 'Please enter a different name this already exist' });
+            }
             const timestamp = new Date(Date.now());
             await pool.query('update products set product_name = $2, inventory_quantity = $3, price =$4, discount_percentage =$5, category_id = $6, image_id = $7, modified_at = $8 where id = $1;',
                 [req.params.product_id, productName, inventoryQuantity, price, discountPercetage, req.params.category_id, imgId, timestamp]);
