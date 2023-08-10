@@ -19,11 +19,12 @@ function CartItem(props) {
     const navigate = useNavigate();
 
 
-    const amountOptions = [];
-    useMemo(() => {
+    const amountOptions = useMemo(() => {
+        const temp = []
         for (let i = 0; i <= props.el.inventory_quantity; i++) {
-            amountOptions.push({ value: i, label: i });
+            temp.push({value: i, label:i});
         }
+        return temp;
     }, [props.el]);
 
     const changeHandler = value => {
