@@ -42,8 +42,6 @@ function Profile() {
 
     async function submitAddressField(e) {
         e.preventDefault();
-        console.log(address);
-        console.log(profile.phone);
 
         if (!address) {
             setFieldsFilled(false);
@@ -75,8 +73,6 @@ function Profile() {
 
     async function submitPhoneField(e) {
         e.preventDefault();
-        console.log(profile.address);
-        console.log(phone);
 
         if (!phone) {
             setFieldsFilled(false);

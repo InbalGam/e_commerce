@@ -71,8 +71,6 @@ passport.use(new GoogleStrategy({
 },
   async function (issuer, profile, done) {
     try {
-      console.log('hello- server.js');
-      console.log(profile);
       const check = await pool.query('SELECT * FROM federated_credentials WHERE provider = $1 AND subject = $2', [issuer, profile.id]);
       if (check.rows.length === 0) {
         // The Google account has not logged in to this app before.

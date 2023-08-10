@@ -28,7 +28,6 @@ export default function CategoryCard(props) {
     async function archive(e) {
         e.preventDefault();
         try {
-            console.log(props.el.id);
             const result = await archiveSpecificCategory(props.el.id, !props.isArchived);
             if (result.status === 401) {
               navigate('/login');

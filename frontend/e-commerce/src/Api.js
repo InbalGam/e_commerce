@@ -81,7 +81,6 @@ async function archiveSpecificCategory(categoryId, status) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({status})
     });
-    console.log(response);
     return response;
 };
 
@@ -129,7 +128,6 @@ async function archiveSpecificProduct(categoryId, productId, status) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({status})
     });
-    console.log(response);
     return response;
 };
 
