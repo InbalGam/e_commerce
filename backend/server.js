@@ -59,7 +59,7 @@ passport.use(
       return done(null, results.rows[0]);
     }
     catch (e) {
-      done(err);
+      done(e);
     }
   })
 );
@@ -107,7 +107,7 @@ passport.deserializeUser(async (id, done) => {
     const results = await pool.query('select * from users where id = $1', [id]);
     done(null, results.rows[0]);
   } catch(e) {
-    done(err);
+    done(e);
   }
 });
 
