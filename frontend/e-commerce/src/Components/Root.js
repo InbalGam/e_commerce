@@ -6,7 +6,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useSelector, useDispatch } from 'react-redux';
 import {selectCart, loadCart} from '../store/cartSlice';
 import {selectProfile} from '../store/profileSlice';
-
+import SendIcon from '@mui/icons-material/Send';
 
 function Root() {
     const cart = useSelector(selectCart);
@@ -33,7 +33,7 @@ function Root() {
                     {showSearch ? 
                     <form action="/search" className="searchBarForm">
                         <input type="text" id="query" name="query" className="searchBarInput"/>
-                        <input type="submit" value="Submit" className="searchbarSubmit"/>
+                        <button type="submit" value="Submit" className="searchbarSubmit"> <SendIcon/> </button>
                     </form> : ''}
                     {profile.username ?
                         <>

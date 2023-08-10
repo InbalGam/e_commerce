@@ -7,7 +7,7 @@ import {selectProfile} from '../store/profileSlice';
 import { useSelector } from 'react-redux';
 import styles from './Styles/Search.css';
 import SearchIcon from '@mui/icons-material/Search';
-
+import SendIcon from '@mui/icons-material/Send';
 
 function SearchList() {
     const [products, setProducts] = useState([]);
@@ -55,12 +55,12 @@ function SearchList() {
 
     return (
         <div className='searchDiv'>
-            <div className='searchForm'>
+            <div className='searchFormContainer'>
                 <button onClick={showSearchForm} className='searchButton'><SearchIcon /></button>
                 {showSearch ?
-                    <form action="/search">
+                    <form action="/search" className='searchForm'>
                         <input type="text" id="query" name="query" className='searchInput'/>
-                        <input type="submit" value="Submit" className="searchbarSubmit" />
+                        <button type="submit" value="Submit" className="searchbarSubmit"> <SendIcon/> </button>
                     </form> : ''}
             </div>
             <h2>Search Results for: {searchParams.get("query")}</h2>

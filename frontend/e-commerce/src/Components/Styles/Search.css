@@ -9,6 +9,7 @@
     border: 0.06rem solid #ccc;
     border-radius: 0.25rem;
     width: 18.75rem;
+    height: 2rem;
 }
 
 .searchButton {
@@ -27,8 +28,13 @@
     cursor: pointer;
 }
 
-.searchForm {
+.searchFormContainer {
     display: flex;
     flex-direction: row-reverse;
     align-items: flex-end;
+}
+
+.searchForm {
+    display: flex;
+    align-items: center;
 }
