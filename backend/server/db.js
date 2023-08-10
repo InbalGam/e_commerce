@@ -9,6 +9,7 @@ const pool = new Pool({
   database: process.env.DB || 'e_commerce_project',
   password: process.env.DB_PASS,
   port: process.env.DB_PORT,
+  ssl: true
 });
 
 

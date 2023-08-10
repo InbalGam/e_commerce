@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(
   session({
     secret: "f4z4gs$Gcg",
-    cookie: { maxAge: 300000000, secure: false },
+    cookie: { maxAge: 300000000, httpOnly: true, secure: true, sameSite: 'none' },
     saveUninitialized: false,
     resave: false,
     store,
