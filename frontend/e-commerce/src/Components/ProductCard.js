@@ -23,6 +23,7 @@ import styles from './Styles/ProductCard.css';
 
 export default function ProductCard(props) {
     const [deleteFailed, setDeleteFailed] = useState(false);
+    const [cartInsert, setCartInsert] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -93,16 +94,20 @@ export default function ProductCard(props) {
 
 
     async function insertToCart() {
-        try {
-            const result = await addToCart({product_id: props.el.id, quantity: amount.value});
-            if (result.status === 200) {
-                dispatch(loadProducts(props.el.category_id));
-                dispatch(loadCart());
-            } else if (result.status === 401){
-                navigate('/login');
+        if (amount.value > 0) {
+            try {
+                const result = await addToCart({ product_id: props.el.id, quantity: amount.value });
+                if (result.status === 200) {
+                    dispatch(loadProducts(props.el.category_id));
+                    dispatch(loadCart());
+                } else if (result.status === 401) {
+                    navigate('/login');
+                }
+            } catch (e) {
+                navigate('/error');
             }
-        } catch(e) {
-            navigate('/error');
+        } else {
+            setCartInsert(true);
         }
     };
 
@@ -131,6 +136,7 @@ export default function ProductCard(props) {
                 </CardActions>
             </div>
             {deleteFailed === false ? '' : 'Could not archive product'}
+            {cartInsert === false ? '' : 'Cannot add to cart without choosing quantity'}
             {showForm ? <ProductAddUpdate onProductSubmit={onProductSubmit} product={props.el} /> : ''}
         </>
     );
