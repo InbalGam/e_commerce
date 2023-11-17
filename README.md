@@ -18,8 +18,7 @@ His email will be set as the email and his google display name will be set as th
 The admin user can create categories and products. I used the Multer package in order to implement image upload. This way when an admin user creates a category / product he can also add an image to it.
 The images are saved in an 'images' folder in the backend server. The images information is saved to the DB to a specific images table. Each cateogry / product that an image was uploaded to it will get the image_id in the DB.
 
-![categories page](./images/img1.png)
-![products page](./images/img2.png)
+![adding product](./images/img5.png)
 
 **User session used for cart data**
 When a user shops on the web app, the products and the quantity is not saved to a table in the DB, it is saved to the user session.
@@ -28,4 +27,15 @@ If the user wants to make a purchase it will use the products data saved to the 
 **Search for products**
 Users can search for products. Once a user enter a search word it will be queried in the products table in the DB and the relevant products, and their information, will be displayed.
 
+![categories page](./images/img1.png)
+![products page](./images/img2.png)
+
 ### Main features- Frontend
+**Redux**
+In this web app there's a lot of data that is used across components. That is why Redux cam in handy. I used it in order to manage the state of the different components- categories, products, user profile, orders and cart.
+It allowed me to update the components states much more easily and maintain practices of clean code.
+
+**useMemo**
+This react hook was used for calculcation of amount of products and total price. Each time a user added a product the amount and price were added using this hook. The value is memoized, cached, and when a product or cart are changed it uses it in the calculation.
+
+![profile page](./images/img4.png)
