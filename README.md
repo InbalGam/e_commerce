@@ -20,7 +20,7 @@ The images are saved in an 'images' folder in the backend server. The images inf
 
 ![adding product](./images/img5.png)
 
-**User session used for cart data**
+**Sessions used for user cart data**
 When a user shops on the web app, the products and the quantity is not saved to a table in the DB, it is saved to the user session.
 If the user wants to make a purchase it will use the products data saved to the user session to retrieve relvenat information from the DB. For example, using the product id it will get the current price, and discount if relevant.
 
